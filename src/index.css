@@ -1,0 +1,276 @@
+/* ===== Font imports (privacy-friendly) — must be first ===== */
+@import url('https://api.fonts.coollabs.io/css2?family=Outfit:wght@300;400;500;600;700&family=Work+Sans:wght@300;400;500;600;700&display=swap');
+
+@import "tailwindcss";
+
+/* ===== Theme CSS Variables ===== */
+@theme {
+  --color-primary: var(--theme-primary);
+  --color-primary-light: var(--theme-primary-light);
+  --color-primary-dark: var(--theme-primary-dark);
+  --color-accent: var(--theme-accent);
+  --color-accent-light: var(--theme-accent-light);
+  --color-surface: var(--theme-surface);
+  --color-surface-alt: var(--theme-surface-alt);
+  --color-surface-hover: var(--theme-surface-hover);
+  --color-text: var(--theme-text);
+  --color-text-muted: var(--theme-text-muted);
+  --color-text-inverse: var(--theme-text-inverse);
+  --color-border: var(--theme-border);
+  --color-bg: var(--theme-bg);
+  --color-bg-alt: var(--theme-bg-alt);
+
+  /* Status colors */
+  --color-success: #16a34a;
+  --color-error: #dc2626;
+  --color-warning: #d97706;
+
+  /* Answer indicator colors */
+  --color-indicator-too-few: #38bdf8;
+  --color-indicator-correct: var(--theme-primary);
+  --color-indicator-too-many: #ef4444;
+
+  --font-heading: 'Outfit', system-ui, sans-serif;
+  --font-body: 'Work Sans', system-ui, sans-serif;
+}
+
+/* ===== Color Theme Definitions ===== */
+
+/* Ocean (default) */
+:root, [data-color-theme="ocean"] {
+  --theme-primary: #1e40af;
+  --theme-primary-light: #3b82f6;
+  --theme-primary-dark: #1e3a8a;
+  --theme-accent: #0ea5e9;
+  --theme-accent-light: #7dd3fc;
+}
+
+[data-color-theme="forest"] {
+  --theme-primary: #166534;
+  --theme-primary-light: #22c55e;
+  --theme-primary-dark: #14532d;
+  --theme-accent: #10b981;
+  --theme-accent-light: #6ee7b7;
+}
+
+[data-color-theme="sunset"] {
+  --theme-primary: #c2410c;
+  --theme-primary-light: #f97316;
+  --theme-primary-dark: #9a3412;
+  --theme-accent: #f59e0b;
+  --theme-accent-light: #fcd34d;
+}
+
+[data-color-theme="violet"] {
+  --theme-primary: #6d28d9;
+  --theme-primary-light: #8b5cf6;
+  --theme-primary-dark: #5b21b6;
+  --theme-accent: #a855f7;
+  --theme-accent-light: #c4b5fd;
+}
+
+/* ===== Light Mode (default) ===== */
+:root {
+  --theme-surface: #ffffff;
+  --theme-surface-alt: #f1f5f9;
+  --theme-surface-hover: #e2e8f0;
+  --theme-text: #0f172a;
+  --theme-text-muted: #64748b;
+  --theme-text-inverse: #f8fafc;
+  --theme-border: #cbd5e1;
+  --theme-bg: #f8fafc;
+  --theme-bg-alt: #f1f5f9;
+  color-scheme: light;
+}
+
+/* ===== Dark Mode ===== */
+.dark {
+  --theme-surface: #1e293b;
+  --theme-surface-alt: #0f172a;
+  --theme-surface-hover: #334155;
+  --theme-text: #f1f5f9;
+  --theme-text-muted: #94a3b8;
+  --theme-text-inverse: #0f172a;
+  --theme-border: #334155;
+  --theme-bg: #0f172a;
+  --theme-bg-alt: #020617;
+  color-scheme: dark;
+}
+
+/* ===== Base Styles ===== */
+body {
+  font-family: var(--font-body);
+  background-color: var(--theme-bg);
+  color: var(--theme-text);
+  transition: background-color 0.3s ease, color 0.3s ease;
+  min-height: 100dvh;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+}
+
+/* ===== Skip link ===== */
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 100;
+  padding: 0.75rem 1.5rem;
+  background: var(--theme-primary);
+  color: white;
+  border-radius: 0 0 0.5rem 0.5rem;
+  font-weight: 600;
+  transition: top 0.2s;
+}
+
+.skip-link:focus {
+  top: 0;
+}
+
+/* ===== Reduced motion ===== */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ===== Smooth page transitions ===== */
+.page-enter {
+  animation: pageIn 0.3s ease-out;
+}
+
+@keyframes pageIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ===== Custom scrollbar ===== */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--theme-bg-alt);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--theme-border);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--theme-text-muted);
+}
+.scrollbar-thin {
+  overflow-x: scroll;
+  scrollbar-width: thin;
+  scrollbar-color: var(--theme-border) transparent;
+}
+.scrollbar-thin::-webkit-scrollbar {
+  height: 4px;
+  -webkit-appearance: none;
+}
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: var(--theme-bg-alt);
+  border-radius: 2px;
+}
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background: var(--theme-border);
+  border-radius: 2px;
+}
+
+/* ===== Option card styles ===== */
+.option-card {
+  cursor: pointer;
+  border: 2px solid var(--theme-border);
+  border-radius: 0.75rem;
+  padding: 1rem 1.25rem;
+  transition: all 0.2s ease;
+  background: var(--theme-surface);
+}
+
+.option-card:hover {
+  border-color: var(--theme-primary-light);
+  background: var(--theme-surface-hover);
+}
+
+.option-card:focus-visible {
+  outline: 3px solid var(--theme-primary-light);
+  outline-offset: 2px;
+}
+
+.option-card[aria-checked="true"],
+.option-card.selected {
+  border-color: var(--theme-primary);
+  background: color-mix(in srgb, var(--theme-primary) 8%, var(--theme-surface));
+  box-shadow: 0 0 0 1px var(--theme-primary);
+}
+
+/* ===== Category button styles ===== */
+.category-btn {
+  cursor: pointer;
+  padding: 0.5rem 1rem;
+  border-radius: 9999px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  border: 2px solid var(--theme-border);
+  background: var(--theme-surface);
+  color: var(--theme-text);
+  transition: all 0.2s ease;
+}
+
+.category-btn:hover {
+  border-color: var(--theme-primary-light);
+}
+
+.category-btn.active {
+  background: var(--theme-primary);
+  color: white;
+  border-color: var(--theme-primary);
+}
+
+/* ===== Print styles ===== */
+@media print {
+  .print\:hidden {
+    display: none !important;
+  }
+
+  body {
+    background: white !important;
+    color: black !important;
+    font-size: 11pt;
+  }
+
+  * {
+    color-adjust: exact !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  .min-h-dvh {
+    min-height: auto;
+  }
+
+  /* Remove backdrop blur and sticky positioning */
+  header, footer {
+    position: static !important;
+    backdrop-filter: none !important;
+  }
+
+  /* Clean up card borders */
+  .rounded-2xl, .rounded-xl, .rounded-lg {
+    box-shadow: none !important;
+  }
+
+  /* Prevent page breaks inside question reviews */
+  .space-y-4 > div {
+    break-inside: avoid;
+  }
+}

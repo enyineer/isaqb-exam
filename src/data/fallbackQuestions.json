@@ -1,0 +1,2331 @@
+[
+  {
+    "id": "Q-20-04-01",
+    "type": "pick",
+    "points": 1,
+    "stem": {
+      "de": "Wie viele Definitionen des Begriffes \"Softwarearchitektur\" gibt es?",
+      "en": "How many definitions of “software architecture” exist?"
+    },
+    "options": [
+      {
+        "id": "A",
+        "text": {
+          "de": "Genau eine für alle Arten von Systemen.",
+          "en": "Exactly one for all kinds of systems."
+        },
+        "correct": false
+      },
+      {
+        "id": "B",
+        "text": {
+          "de": "Eine für jede Art von Softwaresystem (z. B. \"eingebettet\",\"Echtzeit\", \"Entscheidungsunterstützung\", \"Web\", \"Batch\", …).",
+          "en": "One for every kind of software system (e.g. “embedded”, “real-time”, “decision support”, “web”, “batch”, …)."
+        },
+        "correct": false
+      },
+      {
+        "id": "C",
+        "text": {
+          "de": "Ein Dutzend oder mehr unterschiedliche Definitionen.",
+          "en": "A dozen ore more different definitions."
+        },
+        "correct": true
+      }
+    ],
+    "explanation": {
+      "de": "Die Vielfalt der Definitionen von Softwarearchitektur resultiert unter anderem aus unterschiedlichen Perspektiven, Zielgruppen und Entwicklungsmethoden.",
+      "en": "The variety of definitions of software architecture results, among other things, from different perspectives, target groups and development methods."
+    },
+    "lgs": [
+      "01-01",
+      "1-1"
+    ]
+  },
+  {
+    "id": "Q-20-04-02",
+    "type": "pick",
+    "points": 1,
+    "stem": {
+      "de": "Welche der folgenden Aspekte werden durch den Begriff „Softwarearchitektur“ abgedeckt?",
+      "en": "Which of the following aspects are covered by the term “software architecture”?"
+    },
+    "options": [
+      {
+        "id": "A",
+        "text": {
+          "de": "Komponenten",
+          "en": "Components"
+        },
+        "correct": true
+      },
+      {
+        "id": "B",
+        "text": {
+          "de": "Querschnittskonzepte",
+          "en": "Cross-cutting concepts"
+        },
+        "correct": true
+      },
+      {
+        "id": "C",
+        "text": {
+          "de": "(interne und externe) Schnittstellen",
+          "en": "(internal and external) Interfaces"
+        },
+        "correct": true
+      },
+      {
+        "id": "D",
+        "text": {
+          "de": "Programmierkonventionen (\"coding conventions\")",
+          "en": "Coding conventions"
+        },
+        "correct": false
+      },
+      {
+        "id": "E",
+        "text": {
+          "de": "Hardware-Sizing",
+          "en": "Hardware sizing"
+        },
+        "correct": false
+      }
+    ],
+    "explanation": {
+      "de": "Programmierkonventionen und Hardware-Sizing sind in der Regel keine Hauptbestandteile der Softwarearchitektur, da die Architektur sich auf die logische Struktur des Systems konzentriert, während diese Aspekte eher auf der Implementierungsebene und den Ressourcenanforderungen liegen.",
+      "en": "Coding conventions and hardware sizing are usually not major components of software architecture, since architecture focuses on the logical structure of the system, while these aspects are more at the implementation level and resource requirements."
+    },
+    "lgs": [
+      "01-01",
+      "1-1"
+    ]
+  },
+  {
+    "id": "Q-17-13-01",
+    "type": "pick",
+    "points": 2,
+    "stem": {
+      "de": "Welche VIER der folgenden Aussagen zu (Querschnitts-) Konzepten sind am zutreffendsten?",
+      "en": "Which FOUR of the following statements about (crosscutting) concepts are most appropriate?"
+    },
+    "options": [
+      {
+        "id": "A",
+        "text": {
+          "de": "Durch die einheitliche Verwendung von Konzepten wird die Kopplung zwischen Bausteinen verringert.",
+          "en": "Uniform usage of concepts reduces coupling between building blocks."
+        },
+        "correct": false
+      },
+      {
+        "id": "B",
+        "text": {
+          "de": "Durch die Definition von geeigneten Konzepten wird die Mustertreue der Architektur sichergestellt.",
+          "en": "The definition of appropriate concepts ensures the pattern compliance of the architecture."
+        },
+        "correct": false
+      },
+      {
+        "id": "C",
+        "text": {
+          "de": "Eine einheitliche Ausnahmebehandlung (Exception Handling) kann man gut erreichen,\n        indem die Architekt:innen mit den Entwickler:innen vor der Implementierung ein\n        geeignetes Konzept vereinbaren.",
+          "en": "Uniform exception handling can be achieved when architects agree with developers\n        upon a suitable concept prior to implementation."
+        },
+        "correct": true
+      },
+      {
+        "id": "D",
+        "text": {
+          "de": "Für jedes Qualitätsziel sollte es ein explizit dokumentiertes Konzept geben.",
+          "en": "For each quality goal there should be an explicitly documented concept."
+        },
+        "correct": false
+      },
+      {
+        "id": "E",
+        "text": {
+          "de": "Konzepte sind ein Mittel zur Erhöhung der Konsistenz.",
+          "en": "Concepts are a means to increase consistency."
+        },
+        "correct": true
+      },
+      {
+        "id": "F",
+        "text": {
+          "de": "Ein Konzept kann Einschränkungen für die Umsetzung vieler Bausteine definieren.",
+          "en": "A concept can define constraints for the implementation of many building blocks."
+        },
+        "correct": true
+      },
+      {
+        "id": "G",
+        "text": {
+          "de": "Ein Konzept kann durch einen einzigen Baustein umgesetzt werden.",
+          "en": "A concept might be implemented by a single building block."
+        },
+        "correct": true
+      }
+    ],
+    "explanation": {
+      "de": "A) Die einheitliche Verwendung von Konzepten verringert nicht unbedingt die Kopplung. Sie kann die Kopplung sogar erhöhen, wenn mehrere Bausteine das gleiche Konzept verwenden.\n      (B) Konzepte fördern in der Regel die Konsistenz, können aber nicht die Einhaltung von Architekturmustern garantieren. \"Mustertreue\" ist ein frei erfundener Begriff, der wie etwas Wünschenswertes klingt, aber im iSAQB-Lehrplan nicht einmal erwähnt wird.\n      (C) Die Abstimmung zu wichtigen Konzepten wie z. B. für die Fehlerbehandlung vor der Implementierung sorgt für Einheitlichkeit und Wartbarkeit und sollte generell als gute Praxis angesehen werden.\n      (D) Auch wenn es Konzepte für ausgewählte Qualitätsziele geben kann, ist nicht für jedes Qualitätsziel ein eigenes Konzept erforderlich. Diese können auf verschiedene Weise berücksichtigt werden.\n      (E) Der Hauptzweck der Verwendung von Querschnittskonzepten in der Softwarearchitektur besteht darin, die Konsistenz zwischen den verschiedenen Teilen des Systems sicherzustellen. Wenn Konzepte wie Logging, Fehlerbehandlung oder Datenzugriffsmuster einheitlich angewandt werden, tragen sie dazu bei, dass im gesamten System ein einheitlicher Lösungsansatz verwendet wird.\n      (F) Ein übergreifendes Konzept legt oft bestimmte Beschränkungen fest, die mehrere Bausteine betreffen. Ein Sicherheitskonzept kann zum Beispiel festlegen, dass alle Datenzugriffsmethoden Authentifizierungsprüfungen beinhalten müssen, und damit die Art und Weise, wie diese Methoden im gesamten System implementiert werden, einschränken.\n      (G) Während viele übergreifende Konzepte mehrere Bausteine betreffen, können einige Konzepte vollständig in einem einzigen Baustein gekapselt sein. So könnte z. B. eine bestimmte Utility-Klasse, die für die Verschlüsselung zuständig ist, die Umsetzung eines Sicherheitskonzepts innerhalb eines einzigen Bausteins darstellen.",
+      "en": "(A) Uniform usage of concepts does not necessarily reduce coupling. It might even increase coupling if multiple building blocks rely on the same concept.\n      (B) Concepts usually promote consistency but can not guarantee compliance with architectural patterns. Also note, that \"pattern compliance\" is a totally made up thing that sounds like something desireable. It is not even mentioned in the iSAQB curriculum.\n      (C) Agreeing on concepts like exception handling before implementation ensures uniformity and maintainability and should generally be considered a good practice.\n      (D) While there might be concepts to address selected quality goals, not every quality goal requires a dedicated concept. They can be addressed in various ways.\n      (E) The primary purposes of using crosscutting concepts in software architecture is to ensure consistency across different parts of the system. For example, concepts like logging, error handling, or data access patterns, when uniformly applied, help maintain a consistent approach throughout the system.\n      (F) A crosscutting concept often imposes certain constraints that affect multiple building blocks. For instance, a security concept might define that all data access methods must include authentication checks, thus constraining the way those methods are implemented across the system.\n      (G) While many crosscutting concepts affect multiple building blocks, some concepts might be fully encapsulated within a single building block. For example, a specific utility class that handles encryption could represent the implementation of a security concept within a single building block."
+    },
+    "lgs": [
+      "03-10",
+      "2-4"
+    ]
+  },
+  {
+    "id": "Q-17-13-02",
+    "type": "category",
+    "points": 1,
+    "stem": {
+      "de": "Bei Ihrem Projekt arbeiten drei Architekt:innen und sieben\n      Entwickler:innen an der Dokumentation der\n      Softwarearchitektur. Welche Methoden eignen sich zur\n      Gewährleistung einer konsistenten und zweckmäßigen Dokumentation\n      und welche nicht?",
+      "en": "In your project, three architects and seven developers are working on the\n      documentation of the software architecture. Which methods are\n      appropriate in order to achieve a consistent and adequate\n      documentation, and which are not?"
+    },
+    "categories": [
+      {
+        "label": "a",
+        "text": {
+          "de": "Geeignet",
+          "en": "appropriate"
+        }
+      },
+      {
+        "label": "b",
+        "text": {
+          "de": "Nicht geeignet",
+          "en": "not appropriate"
+        }
+      }
+    ],
+    "statements": [
+      {
+        "id": "A",
+        "text": {
+          "de": "Die/der leitende Architekt:in koordiniert die Erstellung der Dokumentation.",
+          "en": "The lead architect coordinates the creation of the documentation."
+        },
+        "correctCategory": "a"
+      },
+      {
+        "id": "B",
+        "text": {
+          "de": "Für die Dokumentation werden identische Vorlagen verwendet.",
+          "en": "Identical templates are used for the documentation."
+        },
+        "correctCategory": "a"
+      },
+      {
+        "id": "C",
+        "text": {
+          "de": "Alle Teile der Dokumentation werden automatisch aus dem Quellcode extrahiert.",
+          "en": "All parts of the documentation are automatically extracted from the source code."
+        },
+        "correctCategory": "b"
+      }
+    ],
+    "explanation": {
+      "de": "Um eine konsistente und zweckmäßige Dokumentation sicherzustellen, eignet sich die Koordination durch die leitende Architekt:in sowie die Verwendung identischer Vorlagen. Die automatische Extraktion aller Teile der Dokumentation aus dem Quellcode ist weniger empfehlenswert, da dies möglicherweise nicht alle relevanten Informationen oder Kontexte berücksichtigt und die Qualität der Dokumentation beeinträchtigen kann.\n      Aspekte wie Begründungen oder Alternativen sind nicht im Code enthalten, sondern müssen in die Dokumentation aufgenommen werden, daher können nicht alle Teile der Dokumentation aus dem Quellcode extrahiert werden.",
+      "en": "To ensure consistent and useful documentation, coordination by the lead architect and the use of identical templates are recommended. Automatic extraction of all parts of the documentation from the source code is less recommended, as this may not include all relevant information or contexts and may affect the quality of the documentation.\n      Things like reasoning or alternatives won’t be contained in code, but need to be included in documentation, therefore not all parts of documentation can be extracted from source code."
+    },
+    "lgs": [
+      "04-02",
+      "3-2"
+    ]
+  },
+  {
+    "id": "Q-17-13-03",
+    "type": "pick",
+    "points": 2,
+    "stem": {
+      "de": "Welche der folgenden Techniken sind am besten zur Darstellung von Abläufen oder Laufzeitverhalten geeignet?",
+      "en": "Which of the following techniques are best suited to illustrate the workflow or behavior of the system at runtime?"
+    },
+    "options": [
+      {
+        "id": "A",
+        "text": {
+          "de": "Flussdiagramme",
+          "en": "Flowcharts"
+        },
+        "correct": true
+      },
+      {
+        "id": "B",
+        "text": {
+          "de": "Aktivitätsdiagramme",
+          "en": "Activity Diagrams"
+        },
+        "correct": true
+      },
+      {
+        "id": "C",
+        "text": {
+          "de": "Darstellung von Screenflows (Abfolge von Benutzerinteraktionen)",
+          "en": "Depiction of screen flows (sequence of user interactions)"
+        },
+        "correct": false
+      },
+      {
+        "id": "D",
+        "text": {
+          "de": "Sequenzdiagramm",
+          "en": "Sequence diagram"
+        },
+        "correct": true
+      },
+      {
+        "id": "E",
+        "text": {
+          "de": "Lineares Venn-Diagramm",
+          "en": "Linear Venn diagram"
+        },
+        "correct": false
+      },
+      {
+        "id": "F",
+        "text": {
+          "de": "Nummerierte Liste aufeinanderfolgender Schritte",
+          "en": "Numbered list of sequential steps"
+        },
+        "correct": true
+      },
+      {
+        "id": "G",
+        "text": {
+          "de": "Tabellarische Schnittstellenbeschreibung",
+          "en": "Tabular description of interfaces"
+        },
+        "correct": false
+      },
+      {
+        "id": "H",
+        "text": {
+          "de": "Klassendiagramme",
+          "en": "Class diagrams"
+        },
+        "correct": false
+      }
+    ],
+    "explanation": {
+      "de": "Flussdiagramme, Aktivitätsdiagramme, Sequenzdiagramme und nummerierte Listen von aufeinanderfolgenden Schritten eignen sich am besten zur Veranschaulichung von Prozessabläufen oder des Systemverhaltens zur Laufzeit, da sie den Kontrollfluss, die Abläufe und die Interaktionen zwischen den Komponenten im Zeitverlauf klar darstellen. Im Gegensatz dazu sind Optionen wie Screenflows, Venn-Diagramme, tabellarische Beschreibungen von Schnittstellen und Klassendiagramme für diesen Zweck weniger oder nicht geeignet, da sie auf Benutzerinteraktionen, logische Beziehungen, statische Strukturen oder Schnittstellendetails fokussieren und nicht auf dynamisches Verhalten.",
+      "en": "Flowcharts, activity diagrams, sequence diagrams, and numbered lists of sequential steps are best suited to illustrate system workflow or behavior at runtime because they clearly depict the flow of control, operations, and interactions between components over time. In contrast, options like screen flows, Venn diagrams, tabular descriptions of interfaces, and class diagrams are not appropriate for this purpose as they focus on user interactions, logical relationships, static structure, or interface details rather than dynamic behavior."
+    },
+    "lgs": [
+      "04-03",
+      "04-05",
+      "3-3",
+      "3-4"
+    ]
+  },
+  {
+    "id": "Q-17-13-04",
+    "type": "pick",
+    "points": 1,
+    "stem": {
+      "de": "Welche der folgenden Grundsätze gelten für das Testen?",
+      "en": "Which of the following principles apply to testing?"
+    },
+    "options": [
+      {
+        "id": "A",
+        "text": {
+          "de": "Im Allgemeinen ist es nicht möglich, sämtliche Fehler eines Systems zu finden.",
+          "en": "In general, it is not possible to discover all errors in the system."
+        },
+        "correct": true
+      },
+      {
+        "id": "B",
+        "text": {
+          "de": "Bei Komponenten mit vielen bekannten vorherigen Fehlern sind die Chancen für\nzusätzliche Fehler hoch.",
+          "en": "In components with many known previous errors, the chances for additional errors are\nhigh."
+        },
+        "correct": true
+      },
+      {
+        "id": "C",
+        "text": {
+          "de": "Durch ausreichendes Testen kann aufgezeigt werden, dass ein Programm fehlerfrei\nist.",
+          "en": "Sufficient testing can show that a program is free of errors."
+        },
+        "correct": false
+      },
+      {
+        "id": "D",
+        "text": {
+          "de": "Durch Testen kann nur die Existenz von Fehlern aufgezeigt werden, nicht jedoch ihre\nAbwesenheit.",
+          "en": "Testing shows the existence of errors rather than the absence of errors."
+        },
+        "correct": true
+      },
+      {
+        "id": "E",
+        "text": {
+          "de": "Die funktionale Programmierung erlaubt keine automatisierten Tests.",
+          "en": "Functional programming does not allow automated testing."
+        },
+        "correct": false
+      }
+    ],
+    "explanation": {
+      "de": "Grundsätzlich wird es als unmöglich angesehen, alle Fehler in einem nicht-trivialen System zu finden. Komponenten, die in der Vergangenheit viele Fehler beinhaltet haben, weisen wahrscheinlich zusätzliche Fehler auf. Das liegt oft daran, dass diese besonders komplex oder schlecht verständlich sind oder dass Architekturprobleme existieren, die zu häufigen Änderungen durch verschiedene Personen führen (z. B. unzureichende SoC oder ungeeignete Abstraktionen).\n      Beim Testen geht es in erster Linie darum, das Vorhandensein von Fehlern aufzudecken und nicht darum, deren Abwesenheit zu beweisen. Entgegen mancher Fehlannahmen kann ausreichendes Testen nicht garantieren, dass ein Programm fehlerfrei ist. Funktionale Programmierung unterstützt tatsächlich automatisierte Tests.",
+      "en": "Testing principles acknowledge that it’s generally impossible to find all errors in a system. Components with a history of many errors are likely to have additional faults. This is often because these areas may be particularly complex or poorly understood or can be caused by architectural issues leading to frequent changes by different people (e.g. insufficient SoC or inappropriate abstractions).\n      Testing primarily reveals the presence of errors rather than proving their absence. Contrary to some misconceptions, sufficient testing cannot guarantee a program is error-free, and functional programming indeed supports automated testing."
+    },
+    "lgs": [
+      "prerequisite",
+      "05-02",
+      "prerequisite",
+      "4-4"
+    ]
+  },
+  {
+    "id": "Q-17-13-05",
+    "type": "category",
+    "points": 2,
+    "stem": {
+      "de": "Welche der folgenden Aussagen zum Entwurfsprinzip \"Information Hiding\" sind richtig und welche falsch?",
+      "en": "Which of the following statements regarding the information hiding principle are true and which are false?"
+    },
+    "categories": [
+      {
+        "label": "a",
+        "text": {
+          "de": "Richtig",
+          "en": "true"
+        }
+      },
+      {
+        "label": "b",
+        "text": {
+          "de": "Falsch",
+          "en": "false"
+        }
+      }
+    ],
+    "statements": [
+      {
+        "id": "A",
+        "text": {
+          "de": "Durch die Befolgung des Prinzips \"Information Hiding\" wird die Flexibilität für Änderungen erhöht.",
+          "en": "Adhering to the information hiding principle increases flexibility for modifications."
+        },
+        "correctCategory": "a"
+      },
+      {
+        "id": "B",
+        "text": {
+          "de": "Beim Information Hiding werden absichtlich Informationen vor Aufrufern oder Konsumenten des Bausteins verborgen.",
+          "en": "Information hiding involves deliberately hiding information from callers or consumers of the building block."
+        },
+        "correctCategory": "a"
+      },
+      {
+        "id": "C",
+        "text": {
+          "de": "Information Hiding erschwert das Bottom-Up Vorgehen.",
+          "en": "Information hiding makes it harder to work bottom-up."
+        },
+        "correctCategory": "b"
+      },
+      {
+        "id": "D",
+        "text": {
+          "de": "Information Hiding ist abgeleitet vom Ansatz der inkrementellen Verfeinerung entlang des Kontrollflusses.",
+          "en": "Information hiding is a derivative of the approach of incremental refinement along the control flow."
+        },
+        "correctCategory": "b"
+      }
+    ],
+    "explanation": {
+      "de": "Information Hiding erhöht die Flexibilität bei Änderungen, indem es interne Details kapselt und so Änderungen innerhalb einer Komponente ermöglicht, ohne den Rest des Systems zu beeinträchtigen. Dabei wird der Zugriff auf interne Details für Aufrufer bewusst eingeschränkt, was die Modularität fördert und Abhängigkeiten reduziert. Entgegen der Behauptung, dass Information Hiding die Bottom-up-Entwicklung erschwert, kann es solche Ansätze ggfs. sogar unterstützen, indem es Entwicklern ermöglicht, isoliert an einzelnen Komponenten zu arbeiten. Die letzte Option ist falsch und irreführend. Sie hat nichts mit inkrementeller Verfeinerung zu tun und scheint eine erfundene oder irrelevante Idee zu sein.",
+      "en": "Information hiding increases flexibility for modifications by encapsulating internal details, allowing changes within a component without affecting the rest of the system. It involves deliberately restricting access to internal details from callers, promoting modularity and reducing dependencies. Contrary to the claim that information hiding makes bottom-up development harder, it actually might supports such approaches by enabling developers to work on individual components in isolation. The last option is incorrect and misleading, as it is not related to incremental refinement and appears to be a fabricated or irrelevant idea."
+    },
+    "lgs": [
+      "03-04",
+      "2-6"
+    ]
+  },
+  {
+    "id": "Q-20-04-03",
+    "type": "pick",
+    "points": 1,
+    "stem": {
+      "de": "Was sind die wichtigsten Ziele von Softwarearchitektur?",
+      "en": "What are the most important goals of software architecture?"
+    },
+    "options": [
+      {
+        "id": "A",
+        "text": {
+          "de": "Verbesserung der Genauigkeit von Mustern in Struktur und Implementierung.",
+          "en": "Improve accuracy of patterns in structure and implementation."
+        },
+        "correct": false
+      },
+      {
+        "id": "B",
+        "text": {
+          "de": "Erreichung der Qualitätsanforderungen auf nachvollziehbare Weise.",
+          "en": "Achieve quality requirements in a comprehensible way."
+        },
+        "correct": true
+      },
+      {
+        "id": "C",
+        "text": {
+          "de": "Ermöglichung von kosteneffizienten Integrations- und Abnahmetests des Systems.",
+          "en": "Enable cost-effective integration and acceptance tests of the system."
+        },
+        "correct": false
+      },
+      {
+        "id": "D",
+        "text": {
+          "de": "Ermöglichung eines grundlegenden Verständnisses der Strukturen und Konzepte für das Entwicklungsteam und andere Beteiligte.",
+          "en": "Enable a basic understanding of structures and concepts for the development team and other stakeholders."
+        },
+        "correct": true
+      }
+    ],
+    "explanation": {
+      "de": "Die zwei Hauptziele der Softwarearchitektur sind die nachvollziehbare Erfüllung von Qualitätsanforderungen und die Schaffung eines gemeinsamen Verständnisses der Systemstruktur für alle Beteiligten. Die anderen Optionen sind zwar auch wichtig, stellen aber keine Hauptziele der Architektur dar. Die Verbesserung von Mustern ist ein Mittel zum Zweck, nicht ein Hauptziel, und effiziente Tests sind eher eine Folge guter Architektur als ein primäres Ziel.",
+      "en": "The two main goals of software architecture are achieving quality requirements in a traceable way and creating a shared understanding of system structure for all stakeholders. While the other options are important, they don't represent primary architectural goals. Improving patterns is a means to an end, not a main goal, and efficient testing is more a consequence of good architecture rather than a primary objective."
+    },
+    "lgs": [
+      "01-02",
+      "1-2"
+    ]
+  },
+  {
+    "id": "Q-20-04-12",
+    "type": "category",
+    "points": 1,
+    "stem": {
+      "de": "Stellen Sie sich vor, Sie sind Softwarearchitekt:in für eine große und verteilte Geschäftsanwendung im Banken- oder Versicherungsbereich. Welche der folgenden Aussagen sind für diese Situation richtig und welche falsch?",
+      "en": "Put yourself in the position of a software architect for a large, distributed business application in the banking or insurance domain. Which of the following statements is true and which is false?"
+    },
+    "categories": [
+      {
+        "label": "a",
+        "text": {
+          "de": "Richtig",
+          "en": "true"
+        }
+      },
+      {
+        "label": "b",
+        "text": {
+          "de": "Falsch",
+          "en": "false"
+        }
+      }
+    ],
+    "statements": [
+      {
+        "id": "A",
+        "text": {
+          "de": "Die Architektur sollte so aufgebaut sein, dass häufig vorkommende Änderungen an den entsprechenden Geschäftsprozessen ohne umfangreiche Umstrukturierungen der Softwarearchitektur möglich sind.",
+          "en": "The architect collaborates with the stakeholders to determine where the requirements and constraints will change often (e.g., business processes, technologies), and designs the architecture such that changes can occur without requiring extensive restructuring of the software architecture."
+        },
+        "correctCategory": "a"
+      },
+      {
+        "id": "B",
+        "text": {
+          "de": "Erforderliche Produktqualitäten sollten Ihre architektonischen Entscheidungen leiten.",
+          "en": "Required product qualities should drive your architectural decisions."
+        },
+        "correctCategory": "a"
+      },
+      {
+        "id": "C",
+        "text": {
+          "de": "Die Softwarearchitektur kann völlig unabhängig von Hardware und Infrastruktur entworfen werden.",
+          "en": "The software architecture can be designed completely independent of the hardware and infrastructure."
+        },
+        "correctCategory": "b"
+      }
+    ],
+    "explanation": {
+      "de": "In großen verteilten Geschäftsanwendungen ist es essentiell, die Architektur so zu gestalten, dass sie flexibel auf häufige Änderungen reagieren kann. Die Qualitätsanforderungen des Produkts sind dabei wichtige Treiber für architektonische Entscheidungen. Die Architektur kann jedoch nicht völlig unabhängig von der Hardware und Infrastruktur entworfen werden, da diese wichtige Randbedingungen darstellen, die berücksichtigt werden müssen.",
+      "en": "In large distributed business applications, it is essential to design the architecture so that it can flexibly accommodate frequent changes. The product's quality requirements are important drivers for architectural decisions. However, the architecture cannot be designed completely independently of hardware and infrastructure, as these represent important constraints that must be taken into account."
+    },
+    "lgs": [
+      "03-01",
+      "2-8"
+    ]
+  },
+  {
+    "id": "Q-20-04-04",
+    "type": "pick",
+    "points": 1,
+    "stem": {
+      "de": "Was sind Ihre wichtigsten Verantwortlichkeiten als Softwarearchitekt:in in Bezug auf Anforderungen?",
+      "en": "What are your most important responsibilities as a software architect with respect to requirements?"
+    },
+    "options": [
+      {
+        "id": "A",
+        "text": {
+          "de": "Unterstützung der Fachexpert:innen dabei, Qualitätsanforderungen konkret und explizit zu formulieren.",
+          "en": "Support the business people to specify explicit and concrete quality requirements."
+        },
+        "correct": true
+      },
+      {
+        "id": "B",
+        "text": {
+          "de": "Hilfe bei der Identifizierung von neuen Geschäftsmöglichkeiten anhand Ihres technischen Know-hows.",
+          "en": "Help to identify new business opportunities based on your technology know-how."
+        },
+        "correct": true
+      },
+      {
+        "id": "C",
+        "text": {
+          "de": "Ablehnung von Anforderungen, die technische Risiken enthalten.",
+          "en": "Reject business requirements that contain technical risks."
+        },
+        "correct": false
+      },
+      {
+        "id": "D",
+        "text": {
+          "de": "Umformulierung aller Geschäftsanforderungen, so dass sie für Ihr Entwicklungsteam verständlich sind.",
+          "en": "Capture all business requirements in a terminology that can be understood by your development team."
+        },
+        "correct": false
+      },
+      {
+        "id": "E",
+        "text": {
+          "de": "Überprüfung der Anforderungen auf technische Machbarkeit.",
+          "en": "Check requirements for technological feasibility."
+        },
+        "correct": true
+      }
+    ],
+    "explanation": {
+      "de": "Die Hauptaufgaben von Softwarearchitekt:innen in Bezug auf Anforderungen sind: 1) Die Unterstützung bei der konkreten Formulierung von Qualitätsanforderungen, da diese oft zu vage definiert sind, 2) Die Nutzung des technischen Wissens, um neue Geschäftsmöglichkeiten zu identifizieren, und 3) Die Prüfung der technischen Machbarkeit. Es ist dabei nicht die Aufgabe, Anforderungen nur aufgrund technischer Risiken abzulehnen - diese Risiken sollten stattdessen kommuniziert und diskutiert werden. Auch die vollständige Umformulierung aller Geschäftsanforderungen ist nicht zielführend, da dies zu Informationsverlust oder Missverständnissen führen könnte.",
+      "en": "The main responsibilities of software architects regarding requirements are: 1) Supporting the concrete formulation of quality requirements, as these are often defined too vaguely, 2) Using technical knowledge to identify new business opportunities, and 3) Checking technical feasibility. It is not their task to reject requirements just because they contain technical risks - instead, these risks should be communicated and discussed. Also, completely reformulating all business requirements is not purposeful as this could lead to loss of information or misunderstandings."
+    },
+    "lgs": [
+      "02-02",
+      "2-3"
+    ]
+  },
+  {
+    "id": "Q-20-04-07",
+    "type": "pick",
+    "points": 1,
+    "stem": {
+      "de": "Sie sind als Architekt:in dafür zuständig, ein Altsystem entsprechend den laufenden Betriebsanforderungen am Laufen zu halten. Was sind Ihre wichtigsten Aufgaben?",
+      "en": "You are responsible as an architect for keeping a legacy system up and running according to the ongoing requirements of your business. What are the most important action items on your agenda?"
+    },
+    "options": [
+      {
+        "id": "A",
+        "text": {
+          "de": "Verhandlung des Wartungsbudgets für Ihr Team",
+          "en": "Negotiating the maintenance budget for your team"
+        },
+        "correct": false
+      },
+      {
+        "id": "B",
+        "text": {
+          "de": "Sicherstellung einer aktuellen Dokumentation des ausgelieferten Systems",
+          "en": "Assuring up-to-date documentation of the deployed system"
+        },
+        "correct": true
+      },
+      {
+        "id": "C",
+        "text": {
+          "de": "Analyse der Auswirkungen von neuen Anforderungen auf das aktuelle System",
+          "en": "Analyzing the impact of new requirements on the current system"
+        },
+        "correct": true
+      },
+      {
+        "id": "D",
+        "text": {
+          "de": "Ermunterung der Teammitglieder, neue Programmiersprachen zu lernen",
+          "en": "Encouraging the team members to learn new programming languages"
+        },
+        "correct": false
+      },
+      {
+        "id": "E",
+        "text": {
+          "de": "Ihren Vorgesetzten technologische Updates zusätzlich zu den Geschäftsanforderungen vorschlagen",
+          "en": "Suggesting technology updates in addition to the business requirements to your management"
+        },
+        "correct": true
+      }
+    ],
+    "explanation": {
+      "de": "Bei der Wartung eines Altsystems sind die wichtigsten Aufgaben einer Architekt:in: 1) Die Dokumentation aktuell zu halten, um das Systemverständnis zu sichern, 2) Die Auswirkungen neuer Anforderungen sorgfältig zu analysieren, um unerwartete Seiteneffekte zu vermeiden, und 3) Proaktiv technologische Aktualisierungen vorzuschlagen, um technische Schulden zu reduzieren und das System zukunftsfähig zu halten. Die Ermutigung zum Lernen neuer Fähigkeiten ist zwar wichtig für die langfristige Entwicklung des Teams, hat aber weniger direkte Priorität für die unmittelbare Wartung des Systems. Budgetverhandlungen sind typischerweise Aufgabe des Projektmanagements.",
+      "en": "When maintaining a legacy system, the most important tasks of an architect are: 1) Keeping documentation up-to-date to ensure system understanding, 2) Carefully analyzing the impact of new requirements to avoid unexpected side effects, and 3) Proactively suggesting technological updates to reduce technical debt and keep the system future-proof. While encouraging learning new skills is important for the team's long-term development, it has less immediate priority for system maintenance. Budget negotiations are typically the responsibility of project management."
+    },
+    "lgs": [
+      "01-03",
+      "03-02",
+      "04-01",
+      "1-4",
+      "2-2",
+      "3-1"
+    ]
+  },
+  {
+    "id": "Q-21-05-01",
+    "type": "category",
+    "points": 2,
+    "stem": {
+      "de": "Welche der folgenden Aussagen zu Architekturentscheidungen sind wahr, welche falsch?",
+      "en": "Which of the following statements regarding architecture decisions are true, which are false?"
+    },
+    "categories": [
+      {
+        "label": "a",
+        "text": {
+          "de": "Wahr",
+          "en": "true"
+        }
+      },
+      {
+        "label": "b",
+        "text": {
+          "de": "Falsch",
+          "en": "false"
+        }
+      }
+    ],
+    "statements": [
+      {
+        "id": "A",
+        "text": {
+          "de": "Architekturentscheidungen müssen nie aufgeschrieben werden, da diese bereits dem Entwicklungsteam bekannt sind.",
+          "en": "Architecture decisions never need to be written down because they are already known to the development team."
+        },
+        "correctCategory": "b"
+      },
+      {
+        "id": "B",
+        "text": {
+          "de": "Architecture Decision Records helfen dabei, Entscheidungen in ihrem Kontext nachzuvollziehen.",
+          "en": "An architecture decision record helps to make the decision's context understood."
+        },
+        "correctCategory": "a"
+      },
+      {
+        "id": "C",
+        "text": {
+          "de": "Nachdem man sich für ein zentrales Framework (z.B. Persistenzframework) entschieden hat, darf diese Entscheidung nicht mehr geändert werden.",
+          "en": "Once a decision has been made on a central or fundamental framework (e.g. persistence framework), that decision must not be changed."
+        },
+        "correctCategory": "b"
+      },
+      {
+        "id": "D",
+        "text": {
+          "de": "Qualitätsanforderungen helfen maßgeblich bei Architekturentscheidungen.",
+          "en": "Quality requirements help significantly with architecture decisions."
+        },
+        "correctCategory": "a"
+      }
+    ],
+    "explanation": {
+      "de": "Architekturentscheidungen sollten dokumentiert werden, da das Team sich ändern kann und die Gründe für Entscheidungen über die Zeit vergessen werden können. ADRs (Architecture Decision Records) sind ein bewährtes Mittel, um den Kontext und die Begründung von Entscheidungen festzuhalten. Entscheidungen, auch zu grundlegenden Frameworks, können sich im Laufe der Zeit ändern, wenn sich die Anforderungen oder der Kontext ändern. Qualitätsanforderungen sind ein wichtiger Treiber für Architekturentscheidungen, da sie oft bestimmen, welche architektonischen Lösungen am besten geeignet sind.",
+      "en": "Architecture decisions should be documented as team members may change and the reasons for decisions can be forgotten over time. ADRs (Architecture Decision Records) are a proven way to capture the context and rationale of decisions. Decisions, even about fundamental frameworks, can change over time as requirements or context evolve. Quality requirements are a key driver for architecture decisions as they often determine which architectural solutions are most appropriate."
+    },
+    "lgs": [
+      "04-08",
+      "3-8"
+    ]
+  },
+  {
+    "id": "Q-20-04-09",
+    "type": "category",
+    "points": 2,
+    "stem": {
+      "de": "Geben Sie für jede der folgenden Aussagen an, ob sie richtig oder falsch ist.",
+      "en": "Decide for each of the following statements whether it is true or false."
+    },
+    "categories": [
+      {
+        "label": "a",
+        "text": {
+          "de": "Richtig",
+          "en": "true"
+        }
+      },
+      {
+        "label": "b",
+        "text": {
+          "de": "Falsch",
+          "en": "false"
+        }
+      }
+    ],
+    "statements": [
+      {
+        "id": "A",
+        "text": {
+          "de": "Jede Iteration eines agilen Entwicklungsvorgehens kann Auswirkungen auf architektonische Grundsatzentscheidungen haben.",
+          "en": "Each iteration of an agile development approach could have an impact on the fundamental architecture decisions."
+        },
+        "correctCategory": "a"
+      },
+      {
+        "id": "B",
+        "text": {
+          "de": "Der Gesamtaufwand für Architekturarbeit ist bei iterativen Projekten wesentlich höher als bei Wasserfall-Projekten.",
+          "en": "The total effort spent on architectural work is much higher in iterative projects compared to waterfall projects."
+        },
+        "correctCategory": "b"
+      },
+      {
+        "id": "C",
+        "text": {
+          "de": "Agile Projekte benötigen keine Architekturdokumente, da das Entwicklungsteam in täglichen Standup-Meetings Entscheidungen kommuniziert.",
+          "en": "Agile projects do not need architecture documents since the development team uses daily standup-meetings to communicate decisions."
+        },
+        "correctCategory": "b"
+      },
+      {
+        "id": "D",
+        "text": {
+          "de": "Wenn Ihr System aus einer Reihe von Microservices besteht, ist kein zentrales Architekturdokument erforderlich, da jeder Service seine Technologien auswählen kann.",
+          "en": "If your systems consist of a set of microservices there is no need for a central architecture document since each service is free to choose its technologies."
+        },
+        "correctCategory": "b"
+      }
+    ],
+    "explanation": {
+      "de": "Die erste Aussage ist richtig, da iterative Entwicklung explizit darauf ausgelegt ist, Entscheidungen basierend auf Feedback und neuen Erkenntnissen anzupassen. Die anderen Aussagen sind falsch: Der Architekturaufwand hängt nicht vom Vorgehensmodell ab, agile Projekte benötigen sehr wohl Architekturdokumentation (wenn auch möglicherweise in anderer Form), und auch Microservice-Architekturen brauchen eine übergreifende Dokumentation der Gesamtarchitektur.",
+      "en": "The first statement is true since iterative development is explicitly designed to adapt decisions based on feedback and new insights. The other statements are false: Architecture effort does not depend on the process model, agile projects do need architecture documentation (though possibly in a different form), and microservice architectures also need overarching documentation of the overall architecture."
+    },
+    "lgs": [
+      "03-05",
+      "1-6"
+    ]
+  },
+  {
+    "id": "Q-20-04-10",
+    "type": "category",
+    "points": 2,
+    "stem": {
+      "de": "Geben Sie an, welche der folgenden Aussagen zu Projektzielen und Architekturzielen richtig und welche falsch sind.",
+      "en": "Which of the following statements regarding project goals and architectural goals is true and which is false."
+    },
+    "categories": [
+      {
+        "label": "a",
+        "text": {
+          "de": "Richtig",
+          "en": "true"
+        }
+      },
+      {
+        "label": "b",
+        "text": {
+          "de": "Falsch",
+          "en": "false"
+        }
+      }
+    ],
+    "statements": [
+      {
+        "id": "A",
+        "text": {
+          "de": "Projektziele können funktionale Anforderungen sowie Qualitätsanforderungen umfassen.",
+          "en": "Project Goals can include functional requirements as well as quality requirements."
+        },
+        "correctCategory": "a"
+      },
+      {
+        "id": "B",
+        "text": {
+          "de": "Architekturziele leiten sich von den Qualitätsanforderungen für das System oder Produkt ab.",
+          "en": "Architectural goals are derived from the quality requirements for the system or product."
+        },
+        "correctCategory": "a"
+      },
+      {
+        "id": "C",
+        "text": {
+          "de": "Stakeholder aus dem Business sollten sich auf Geschäftsziele konzentrieren und sich nicht mit Architekturzielen auseinandersetzen.",
+          "en": "Business stakeholders should concentrate on business goals and not interfere with architectural goals."
+        },
+        "correctCategory": "b"
+      },
+      {
+        "id": "D",
+        "text": {
+          "de": "Zur Vermeidung von Konflikten sollten Geschäfts- und Architekturziele einander nicht überlappen.",
+          "en": "To avoid conflicts, business goals and architectural goals should be non-overlapping sets."
+        },
+        "correctCategory": "b"
+      }
+    ],
+    "explanation": {
+      "de": "Die erste Aussage ist richtig, da Projektziele natürlich sowohl funktionale als auch qualitative Aspekte umfassen können. Die zweite Aussage ist korrekt, weil Architekturziele typischerweise aus den Qualitätsanforderungen des Systems abgeleitet werden. Die dritte Aussage ist falsch, da Business-Stakeholder durchaus Ziele wie Performance, Flexibilität oder Sicherheit haben können, die als \"Architekturziele\" betrachtet werden. Die letzte Aussage ist ebenfalls falsch, da sich Geschäfts- und Architekturziele häufig überlappen können und sollten - wichtig ist nicht die strikte Trennung, sondern das gemeinsame Verständnis und die Abstimmung der Ziele.",
+      "en": "The first statement is correct because project goals can naturally include both functional and quality aspects. The second statement is accurate as architectural goals are typically derived from the system's quality requirements. The third statement is false because business stakeholders might very well have goals like performance, flexibility or security, which are considered \"architecture goals\". The last statement is also false, as business and architecture goals can and should often overlap - what's important is not strict separation but mutual understanding and alignment of goals."
+    },
+    "lgs": [
+      "02-01",
+      "1-7"
+    ]
+  },
+  {
+    "id": "Q-20-04-11",
+    "type": "pick",
+    "points": 1,
+    "stem": {
+      "de": "Was bedeutet die Regel „explizit, nicht implizit\" für die Architekturarbeit? Wählen Sie die passendsten Antworten aus.",
+      "en": "What does the rule \"explicit, not implicit\" mean for architecture work? Choose the best-fitting answers."
+    },
+    "options": [
+      {
+        "id": "A",
+        "text": {
+          "de": "Architekt:innen sollten rekursive Strukturen vermeiden und durch explizite Schleifen ersetzen.",
+          "en": "Architects should avoid recursive structures and replace them by explicit loops."
+        },
+        "correct": false
+      },
+      {
+        "id": "B",
+        "text": {
+          "de": "Architekt:innen sollten die Annahmen, die zu Entscheidungen führen, explizit machen.",
+          "en": "Architects should make the assumptions leading to decisions explicit."
+        },
+        "correct": true
+      },
+      {
+        "id": "C",
+        "text": {
+          "de": "Architekt:innen sollten explizit auf Erläuterungen (d.h. Kommentare) in natürlicher Sprache für jeden Baustein bestehen.",
+          "en": "Architects should explicitly insist on natural language explanations (i.e. comments) for each building block."
+        },
+        "correct": false
+      },
+      {
+        "id": "D",
+        "text": {
+          "de": "Architekt:innen sollten explizit auf schriftlichen oder zumindest mündlichen Begründungen für Aufwandschätzungen der Entwicklung von ihrem Team bestehen.",
+          "en": "Architects should explicitly insist on written or at least verbal justifications for development effort estimates from their team."
+        },
+        "correct": false
+      },
+      {
+        "id": "E",
+        "text": {
+          "de": "Architekt:innen sollten die Voraussetzungen für ihre Entscheidungen explizit darlegen.",
+          "en": "Architects should make prerequisites for their decisions explicit."
+        },
+        "correct": true
+      }
+    ],
+    "explanation": {
+      "de": "Die Regel \"explizit, nicht implizit\" bezieht sich darauf, dass wichtige architektonische Überlegungen und Entscheidungen klar ausformuliert werden sollten. Dies umfasst sowohl die Annahmen, die zu Entscheidungen führen (Option B), als auch die Voraussetzungen für diese Entscheidungen (Option E). Die anderen Optionen beschreiben entweder technische Implementierungsdetails (A) oder übermäßig spezifische Dokumentationsanforderungen (C, D), die nicht den Kern des Prinzips treffen.",
+      "en": "The rule \"explicit, not implicit\" refers to the need to clearly articulate important architectural considerations and decisions. This includes both the assumptions leading to decisions (option B) and the prerequisites for these decisions (option E). The other options either describe technical implementation details (A) or overly specific documentation requirements (C, D) that do not capture the essence of the principle."
+    },
+    "lgs": [
+      "02-05",
+      "1-8"
+    ]
+  },
+  {
+    "id": "Q-20-04-32",
+    "type": "pick",
+    "points": 1,
+    "stem": {
+      "de": "Es gibt zahlreiche Ansätze, die zu einer Softwarearchitektur führen. Welche der folgenden Ansätze kommen in der Praxis am häufigsten vor?",
+      "en": "There are many approaches that lead to a software architecture. Which of the following are the most often found in practice?"
+    },
+    "options": [
+      {
+        "id": "A",
+        "text": {
+          "de": "User-Interface Driven Design",
+          "en": "User interface driven design"
+        },
+        "correct": false
+      },
+      {
+        "id": "B",
+        "text": {
+          "de": "Domain-driven Design",
+          "en": "Domain driven design"
+        },
+        "correct": true
+      },
+      {
+        "id": "C",
+        "text": {
+          "de": "Sichtenbasierte Architekturentwicklung",
+          "en": "View based architecture development"
+        },
+        "correct": true
+      },
+      {
+        "id": "D",
+        "text": {
+          "de": "Bottom-up Design",
+          "en": "Bottom-up design"
+        },
+        "correct": true
+      },
+      {
+        "id": "E",
+        "text": {
+          "de": "Mehrheitsentscheid",
+          "en": "Majority voting"
+        },
+        "correct": false
+      }
+    ],
+    "explanation": {
+      "de": "Domain-driven Design, sichtenbasierte Architekturentwicklung und Bottom-up Design sind etablierte und häufig verwendete Ansätze in der Praxis. User-Interface Driven Design ist kein üblicher Architekturansatz, da die Benutzeroberfläche nur einen Aspekt des Systems darstellt und nicht als primärer Treiber für Architekturentscheidungen dienen sollte. Mehrheitsentscheid ist keine Methode zur Architekturentwicklung, sondern bestenfalls ein Entscheidungsfindungsprozess.",
+      "en": "Domain-driven design, view-based architecture development and bottom-up design are established and frequently used approaches in practice. User interface driven design is not a common architectural approach since the user interface represents only one aspect of the system and should not serve as the primary driver for architectural decisions. Majority voting is not a method for architecture development, but at best a decision-making process."
+    },
+    "lgs": [
+      "03-03",
+      "2-1"
+    ]
+  },
+  {
+    "id": "Q-20-04-38",
+    "type": "pick",
+    "points": 1,
+    "stem": {
+      "de": "Diverse Architekturentwicklungsmethoden schlagen einen sichtenbasierten Ansatz vor. Welche der folgenden Sichten werden am häufigsten verwendet?",
+      "en": "Several architecture development methods suggest a view-based approach. Which of the following views are most often used?"
+    },
+    "options": [
+      {
+        "id": "A",
+        "text": {
+          "de": "Physische Datenbanksicht",
+          "en": "Physical database view"
+        },
+        "correct": false
+      },
+      {
+        "id": "B",
+        "text": {
+          "de": "Kontextsicht",
+          "en": "Context view"
+        },
+        "correct": true
+      },
+      {
+        "id": "C",
+        "text": {
+          "de": "Bausteinsicht oder Komponentensicht",
+          "en": "Building Block/Component view"
+        },
+        "correct": true
+      },
+      {
+        "id": "D",
+        "text": {
+          "de": "Testbasierte Sicht",
+          "en": "Test-driven view"
+        },
+        "correct": false
+      },
+      {
+        "id": "E",
+        "text": {
+          "de": "Konfigurationssicht",
+          "en": "Configuration view"
+        },
+        "correct": false
+      },
+      {
+        "id": "F",
+        "text": {
+          "de": "Laufzeitsicht",
+          "en": "Runtime view"
+        },
+        "correct": true
+      }
+    ],
+    "explanation": {
+      "de": "Die drei wichtigsten und am häufigsten verwendeten Architektursichten sind:\n      1. Die Kontextsicht, die das System in seiner Umgebung zeigt\n      2. Die Baustein-/Komponentensicht, die die internen Strukturen des Systems zeigt\n      3. Die Laufzeitsicht, die das dynamische Verhalten des Systems zeigt\n\n      Die anderen genannten Sichten (Datenbank-, Test- und Konfigurationssicht) können zwar in bestimmten Projekten nützlich sein, gehören aber nicht zu den grundlegenden Architektursichten, die in den meisten Methoden verwendet werden.",
+      "en": "The three most important and commonly used architectural views are:\n      1. The context view, showing the system in its environment\n      2. The building block/component view, showing the internal structures of the system\n      3. The runtime view, showing the dynamic behavior of the system\n\n      While the other views mentioned (database, test, and configuration views) might be useful in certain projects, they are not among the fundamental architectural views used in most methods."
+    },
+    "lgs": [
+      "04-05",
+      "3-4"
+    ]
+  },
+  {
+    "id": "Q-20-04-22",
+    "type": "pick",
+    "points": 1,
+    "stem": {
+      "de": "Sie dokumentieren einen Baustein einer Softwarearchitektur. Welche Informationen sollten in seiner Black-Box-Beschreibung enthalten sein?",
+      "en": "When documenting a building block of your software architecture, what information should the black-box description contain?"
+    },
+    "options": [
+      {
+        "id": "A",
+        "text": {
+          "de": "Öffentliche Schnittstellen.",
+          "en": "Public interfaces."
+        },
+        "correct": true
+      },
+      {
+        "id": "B",
+        "text": {
+          "de": "Verantwortlichkeiten des Bausteins.",
+          "en": "Responsibility of the building block."
+        },
+        "correct": true
+      },
+      {
+        "id": "C",
+        "text": {
+          "de": "Interne Struktur des Bausteins.",
+          "en": "Internal structure of the building block."
+        },
+        "correct": false
+      },
+      {
+        "id": "D",
+        "text": {
+          "de": "Spezifikation von Implementierungsdetails.",
+          "en": "Specification of the implementation details."
+        },
+        "correct": false
+      }
+    ],
+    "explanation": {
+      "de": "Eine Black-Box-Beschreibung konzentriert sich ausschließlich auf die nach außen sichtbaren Aspekte eines Bausteins - also seine Schnittstellen und seine Verantwortlichkeiten. Die interne Struktur und Implementierungsdetails sind definitionsgemäß nicht Teil einer Black-Box-Beschreibung, da diese bewusst von den internen Details abstrahiert. Diese Details würden stattdessen in einer White-Box-Beschreibung behandelt werden.",
+      "en": "A black-box description focuses exclusively on the externally visible aspects of a building block - its interfaces and responsibilities. By definition, internal structure and implementation details are not part of a black-box description, as it deliberately abstracts from internal details. These details would instead be covered in a white-box description."
+    },
+    "lgs": [
+      "03-02",
+      "2-2"
+    ]
+  },
+  {
+    "id": "Q-20-04-17",
+    "type": "pick",
+    "points": 1,
+    "stem": {
+      "de": "Welche Voraussetzungen müssen vor der Entwicklung einer Softwarearchitektur erfüllt sein? Wählen Sie die passendsten Antworten aus.",
+      "en": "Which prerequisites have to be fulfilled before developing a software architecture? Pick the most appropriate answers."
+    },
+    "options": [
+      {
+        "id": "A",
+        "text": {
+          "de": "Die Anforderungsspezifikation für das System ist vollständig, detailliert und konsistent.",
+          "en": "The requirements specification for the system is complete, detailed and consistent."
+        },
+        "correct": false
+      },
+      {
+        "id": "B",
+        "text": {
+          "de": "Die wichtigsten Qualitätsanforderungen an das System sind bekannt.",
+          "en": "The most important qualities for the system are known."
+        },
+        "correct": true
+      },
+      {
+        "id": "C",
+        "text": {
+          "de": "Die organisatorischen Randbedingungen sind bekannt.",
+          "en": "Organizational constraints are known."
+        },
+        "correct": true
+      },
+      {
+        "id": "D",
+        "text": {
+          "de": "Die Programmiersprache wurde ausgewählt.",
+          "en": "The programming language has been selected."
+        },
+        "correct": false
+      },
+      {
+        "id": "E",
+        "text": {
+          "de": "Die Hardware für das Entwicklungsteam ist verfügbar.",
+          "en": "Hardware for the development team is available."
+        },
+        "correct": false
+      }
+    ],
+    "explanation": {
+      "de": "Die wichtigsten Voraussetzungen für die Entwicklung einer Softwarearchitektur sind die Kenntnis der wesentlichen Qualitätsanforderungen und der organisatorischen Randbedingungen. Eine vollständige, detaillierte Anforderungsspezifikation ist in den meisten Fällen unrealistisch und auch nicht notwendig - oft reicht ein Überblick und die Kenntnis bestimmter Details (z.B. der Qualitätsanforderungen). \n\n      Die Auswahl der Programmiersprache und die Verfügbarkeit der Hardware für das Entwicklungsteam sind eher technische Implementierungsdetails, die für die grundlegenden architektonischen Entscheidungen ggfs. noch nicht relevant sind. Diese Entscheidungen können und sollten oft erst nach den grundlegenden Architekturentscheidungen getroffen werden.",
+      "en": "The most important prerequisites for developing a software architecture are knowledge of the essential quality requirements and organizational constraints. A complete, detailed requirements specification is unrealistic in most cases and not necessary - often an overview and knowledge of certain details (e.g. quality requirements) is sufficient.\n\n      The choice of programming language and availability of hardware for the development team are rather technical implementation details that sometimes may be not yet relevant for fundamental architectural decisions. These decisions can and often should only be made after the fundamental architectural decisions."
+    },
+    "lgs": [
+      "02-02",
+      "2-3"
+    ]
+  },
+  {
+    "id": "Q-20-04-18",
+    "type": "pick",
+    "points": 1,
+    "stem": {
+      "de": "Welche Faktoren können den Entwurf einer Softwarearchitektur beeinflussen? Wählen Sie die passendsten Antworten aus.",
+      "en": "Which factors can influence the design of a software architecture? Pick the most appropriate answers."
+    },
+    "options": [
+      {
+        "id": "A",
+        "text": {
+          "de": "Politische.",
+          "en": "Political."
+        },
+        "correct": true
+      },
+      {
+        "id": "B",
+        "text": {
+          "de": "Organisatorische.",
+          "en": "Organizational."
+        },
+        "correct": true
+      },
+      {
+        "id": "C",
+        "text": {
+          "de": "Technische.",
+          "en": "Technical."
+        },
+        "correct": true
+      },
+      {
+        "id": "D",
+        "text": {
+          "de": "Virtuelle.",
+          "en": "Virtual."
+        },
+        "correct": false
+      }
+    ],
+    "explanation": {
+      "de": "Politische, organisatorische und technische Faktoren haben direkten Einfluss auf den Entwurf einer Softwarearchitektur. Sie bilden wichtige Randbedingungen und können die Architekturentscheidungen maßgeblich beeinflussen. \"Virtuelle\" Faktoren hingegen sind ein erfundener Begriff ohne konkrete Bedeutung im Kontext von Softwarearchitektur.",
+      "en": "Political, organizational and technical factors have a direct influence on software architecture design. They form important constraints and can significantly influence architectural decisions. \"Virtual\" factors, on the other hand, are a made-up term without concrete meaning in the context of software architecture."
+    },
+    "lgs": [
+      "02-02",
+      "2-3"
+    ]
+  },
+  {
+    "id": "Q-20-04-19",
+    "type": "pick",
+    "points": 1,
+    "stem": {
+      "de": "Welche der folgenden Eigenschaften lässt sich am ehesten durch eine Schichtenarchitektur verbessern?",
+      "en": "Which of the following qualities can most likely be improved by using a layered architecture?"
+    },
+    "options": [
+      {
+        "id": "A",
+        "text": {
+          "de": "Laufzeiteffizienz (Performance).",
+          "en": "Runtime efficiency (performance)."
+        },
+        "correct": false
+      },
+      {
+        "id": "B",
+        "text": {
+          "de": "Flexibilität bei der Modifizierung oder Änderung des Systems.",
+          "en": "Flexibility in modifying or changing the system."
+        },
+        "correct": true
+      },
+      {
+        "id": "C",
+        "text": {
+          "de": "Flexibilität bei der Laufzeit (Konfigurierbarkeit).",
+          "en": "Flexibility at runtime (configurability)."
+        },
+        "correct": false
+      },
+      {
+        "id": "D",
+        "text": {
+          "de": "Nichtabstreitbarkeit.",
+          "en": "Non-repudiability."
+        },
+        "correct": false
+      }
+    ],
+    "explanation": {
+      "de": "Eine Schichtenarchitektur verbessert primär die Modifizierbarkeit und Wartbarkeit eines Systems, da Änderungen in einer Schicht die anderen Schichten nicht beeinflussen müssen, solange die Schnittstellen stabil bleiben. Die Schichtenarchitektur kann sich sogar negativ auf die Performance auswirken, da Aufrufe durch mehrere Schichten geleitet werden müssen. Konfigurierbarkeit zur Laufzeit und Nichtabstreitbarkeit sind keine primären Ziele der Schichtenarchitektur.",
+      "en": "A layered architecture primarily improves the modifiability and maintainability of a system, as changes in one layer don't need to affect other layers as long as interfaces remain stable. The layered architecture might actually have a negative impact on performance since calls need to be routed through multiple layers. Runtime configurability and non-repudiability are not primary goals of the layered architecture."
+    },
+    "lgs": [
+      "03-08",
+      "2-5"
+    ]
+  },
+  {
+    "id": "Q-20-04-33",
+    "type": "pick",
+    "points": 1,
+    "stem": {
+      "de": "Für welche Entwurfsprobleme bietet das Pipes & Filter Pattern Lösungsansätze?",
+      "en": "Which type of problems provide a good fit for the Pipes & Filter Pattern?"
+    },
+    "options": [
+      {
+        "id": "A",
+        "text": {
+          "de": "Verwaltung von globalem Anwendungszustand",
+          "en": "Management of global application state"
+        },
+        "correct": false
+      },
+      {
+        "id": "B",
+        "text": {
+          "de": "Strukturierung von IT-Systemen die Datenströme verarbeiten",
+          "en": "IT systems which process data streams"
+        },
+        "correct": true
+      },
+      {
+        "id": "C",
+        "text": {
+          "de": "Entkopplung von Verarbeitungsschritten",
+          "en": "Decoupling multiple steps of an execution"
+        },
+        "correct": true
+      },
+      {
+        "id": "D",
+        "text": {
+          "de": "Entkopplung von zeitlichen Abhängigkeiten",
+          "en": "Temporal decoupling of an application"
+        },
+        "correct": false
+      }
+    ],
+    "explanation": {
+      "de": "Das Pipes & Filter Pattern eignet sich besonders für die Verarbeitung von Datenströmen und die Entkopplung von Verarbeitungsschritten. Die Filter arbeiten unabhängig voneinander und kommunizieren nur über die Pipes, was eine klare Trennung der Verarbeitungsschritte ermöglicht. Das Pattern ist jedoch nicht für die Verwaltung von globalem Zustand ausgelegt, da die Filter zustandslos sein sollten. Auch die zeitliche Entkopplung ist kein primäres Ziel des Patterns, da die Verarbeitung typischerweise sequentiell erfolgt.",
+      "en": "The Pipes & Filter Pattern is particularly well-suited for processing data streams and decoupling processing steps. The filters work independently and communicate only through pipes, enabling a clear separation of processing steps. However, the pattern is not designed for managing global state, as filters should be stateless. Temporal decoupling is also not a primary goal of the pattern, as processing typically occurs sequentially."
+    },
+    "lgs": [
+      "03-08",
+      "2-5"
+    ]
+  },
+  {
+    "id": "Q-20-04-20",
+    "type": "pick",
+    "points": 1,
+    "stem": {
+      "de": "Welche Ziele versuchen Sie mit dem Dependency-Inversion-Prinzip zu erreichen?",
+      "en": "Which goals are you trying to achieve with the dependency inversion principle?"
+    },
+    "options": [
+      {
+        "id": "A",
+        "text": {
+          "de": "Große Bausteine sollen nicht von kleinen Bausteinen abhängen.",
+          "en": "Big building blocks shall not depend on small building blocks."
+        },
+        "correct": false
+      },
+      {
+        "id": "B",
+        "text": {
+          "de": "Komponenten sollen in der Lage sein, abhängige Komponenten leichter zu erstellen.",
+          "en": "Components shall be able to create dependent components more easily."
+        },
+        "correct": false
+      },
+      {
+        "id": "C",
+        "text": {
+          "de": "Bausteine sollen nur über Abstraktionen voneinander abhängen.",
+          "en": "Building blocks shall only depend on each other via abstractions."
+        },
+        "correct": true
+      }
+    ],
+    "explanation": {
+      "de": "Das Dependency-Inversion-Prinzip zielt darauf ab, dass Bausteine nur über Abstraktionen (wie Schnittstellen oder abstrakte Klassen) voneinander abhängen sollten, nicht über konkrete Implementierungen. Die Größe der Bausteine spielt dabei keine Rolle - es geht nicht um die Richtung der Abhängigkeiten von groß nach klein. Die einfachere Erstellung von Komponenten ist ebenfalls kein Hauptziel des Prinzips, auch wenn dies manchmal ein positiver Nebeneffekt sein kann.",
+      "en": "The Dependency Inversion Principle aims to ensure that building blocks only depend on each other through abstractions (such as interfaces or abstract classes), not through concrete implementations. The size of the building blocks is irrelevant - it's not about the direction of dependencies from large to small. Easier creation of components is also not a main goal of the principle, even though this might sometimes be a positive side effect."
+    },
+    "lgs": [
+      "03-04",
+      "2-6"
+    ]
+  },
+  {
+    "id": "Q-20-04-21",
+    "type": "category",
+    "points": 2,
+    "stem": {
+      "de": "Was sind die Eigenschaften von enger (hoher) bzw. loser (niedriger) Kopplung?",
+      "en": "What are characteristics of tight (high) or loose (low) coupling?"
+    },
+    "categories": [
+      {
+        "label": "a",
+        "text": {
+          "de": "enge Kopplung",
+          "en": "tight coupling"
+        }
+      },
+      {
+        "label": "b",
+        "text": {
+          "de": "lose Kopplung",
+          "en": "loose coupling"
+        }
+      }
+    ],
+    "statements": [
+      {
+        "id": "A",
+        "text": {
+          "de": "Bausteine können abhängige Bausteine direkt, d.h. ohne Umwege über Schnittstellen oder Abstraktionen, aufrufen.",
+          "en": "Building blocks directly call dependent building blocks, i.e., without using indirect calls via interfaces or abstractions."
+        },
+        "correctCategory": "a"
+      },
+      {
+        "id": "B",
+        "text": {
+          "de": "Bausteine verwenden gemeinsame komplexe Datenstrukturen.",
+          "en": "Building blocks use shared complex data structures."
+        },
+        "correctCategory": "a"
+      },
+      {
+        "id": "C",
+        "text": {
+          "de": "Bausteine verwenden eine gemeinsame Tabelle (für Schreib- und Leseoperationen) innerhalb einer relationalen Datenbank.",
+          "en": "Building blocks use a shared table (for read- and write operations) within a relational database."
+        },
+        "correctCategory": "a"
+      },
+      {
+        "id": "D",
+        "text": {
+          "de": "Beim Baustein-Design haben Sie das Dependency-Inversion-Prinzip konsequent umgesetzt.",
+          "en": "When designing building blocks, you have consistently applied the dependency inversion principle."
+        },
+        "correctCategory": "b"
+      }
+    ],
+    "explanation": {
+      "de": "Enge Kopplung entsteht durch direkte Abhängigkeiten zwischen Bausteinen, gemeinsam genutzte komplexe Datenstrukturen und gemeinsam genutzte Ressourcen wie Datenbanktabellen. Diese Art der Kopplung macht das System schwerer zu ändern und zu warten. Lose Kopplung wird durch die Anwendung von Prinzipien wie dem Dependency-Inversion-Prinzip erreicht, bei dem Abhängigkeiten über Abstraktionen erfolgen. Dies ermöglicht eine bessere Wartbarkeit und Flexibilität des Systems.",
+      "en": "Tight coupling occurs through direct dependencies between building blocks, shared complex data structures, and shared resources like database tables. This type of coupling makes the system harder to change and maintain. Loose coupling is achieved through the application of principles like the Dependency Inversion Principle, where dependencies are managed through abstractions. This enables better maintainability and flexibility of the system."
+    },
+    "lgs": [
+      "03-06",
+      "2-7"
+    ]
+  },
+  {
+    "id": "Q-20-04-14",
+    "type": "pick",
+    "points": 1,
+    "stem": {
+      "de": "Welche Aussagen zum „Don't repeat yourself\"-Prinzip (DRY) treffen am ehesten zu? Anders gesagt: Was könnte passieren, wenn Teile des Quellcodes oder der Konfiguration im System mehrfach vorhanden sind?",
+      "en": "Which statements about the principle \"Don't repeat yourself\" (DRY) fit best? In other words: What could happen, if parts of the source code or configuration do exist in multiple copies in the system?"
+    },
+    "options": [
+      {
+        "id": "A",
+        "text": {
+          "de": "DRY verringert die Sicherheit.",
+          "en": "DRY reduces security."
+        },
+        "correct": false
+      },
+      {
+        "id": "B",
+        "text": {
+          "de": "Die strenge Einhaltung von DRY könnte zu höherer Kopplung führen.",
+          "en": "Strict adherence to DRY could lead to higher coupling."
+        },
+        "correct": true
+      },
+      {
+        "id": "C",
+        "text": {
+          "de": "Die Komponenten des Systems mit redundantem Code können unabhängig voneinander verbessert werden.",
+          "en": "The components of the system that contain redundant code can be improved independently of each other."
+        },
+        "correct": true
+      },
+      {
+        "id": "D",
+        "text": {
+          "de": "Die Einhaltung von DRY führt zu einer Verringerung der Angriffsvektoren in der IT-Sicherheit.",
+          "en": "Adherence to DRY leads to additional attack vectors in IT security."
+        },
+        "correct": false
+      },
+      {
+        "id": "E",
+        "text": {
+          "de": "Die Anwendung der Schichtenmuster ermöglicht eine konsistente Anwendung des DRY-Prinzips.",
+          "en": "Applying the Layer patterns allows a consistent application of the DRY principle."
+        },
+        "correct": false
+      }
+    ],
+    "explanation": {
+      "de": "Während das DRY-Prinzip generell eine gute Praxis ist, kann eine zu strenge Anwendung zu unerwünschten Abhängigkeiten zwischen Komponenten führen (erhöhte Kopplung). Redundanter Code ermöglicht zwar unabhängige Änderungen, erschwert aber die Wartung. Die anderen Optionen stellen keine korrekten Zusammenhänge zwischen DRY und Sicherheit bzw. Architekturmustern her.",
+      "en": "While the DRY principle is generally good practice, strict adherence can lead to unwanted dependencies between components (increased coupling). Redundant code allows for independent changes but makes maintenance more difficult. The other options do not establish correct relationships between DRY and security or architectural patterns."
+    },
+    "lgs": [
+      "03-04",
+      "2-6"
+    ]
+  },
+  {
+    "id": "Q-20-04-15",
+    "type": "category",
+    "points": 2,
+    "stem": {
+      "de": "Sie können Aspekte Ihrer Softwarearchitektur mündlich und/oder schriftlich kommunizieren. In welchem Zusammenhang stehen diese Möglichkeiten zueinander? Geben Sie für jede der folgenden Aussagen an, ob sie richtig oder falsch ist.",
+      "en": "You can communicate aspects of your software architecture verbally and/or in writing. How do these variants correlate? Decide for each of the following statements whether it is true or false."
+    },
+    "categories": [
+      {
+        "label": "a",
+        "text": {
+          "de": "Richtig",
+          "en": "true"
+        }
+      },
+      {
+        "label": "b",
+        "text": {
+          "de": "Falsch",
+          "en": "false"
+        }
+      }
+    ],
+    "statements": [
+      {
+        "id": "A",
+        "text": {
+          "de": "Mündliche Kommunikation sollte schriftliche Dokumentation ergänzen.",
+          "en": "Verbal communication should supplement written documentation."
+        },
+        "correctCategory": "a"
+      },
+      {
+        "id": "B",
+        "text": {
+          "de": "Feedback zu Architekturentscheidungen sollte zur Sicherstellung der Nachverfolgbarkeit grundsätzlich schriftlich erfolgen.",
+          "en": "Feedback to architecture decisions should always be done in writing to ensure traceability."
+        },
+        "correctCategory": "b"
+      },
+      {
+        "id": "C",
+        "text": {
+          "de": "Schriftliche Dokumentation sollte immer mündlicher Kommunikation vorausgehen.",
+          "en": "Written documentation should always precede verbal communication."
+        },
+        "correctCategory": "b"
+      },
+      {
+        "id": "D",
+        "text": {
+          "de": "Architekt:innen sollten sich eine Variante (mündlich oder schriftlich) aussuchen und während der gesamten Entwicklung dabei bleiben.",
+          "en": "Architects should pick one variant (verbal or written) and stick to this choice during the whole development."
+        },
+        "correctCategory": "b"
+      }
+    ],
+    "explanation": {
+      "de": "Mündliche und schriftliche Kommunikation sollten sich ergänzen, nicht gegenseitig ausschließen. Es gibt keine feste Regel, dass eine Form der anderen vorausgehen muss. Feedback kann und sollte sowohl mündlich als auch schriftlich erfolgen - eine Beschränkung auf ausschließlich schriftliches Feedback würde die Kommunikation unnötig einschränken. Die Form der Kommunikation sollte flexibel an die jeweilige Situation angepasst werden können.",
+      "en": "Verbal and written communication should complement each other, not exclude each other. There is no fixed rule that one form must precede the other. Feedback can and should be given both verbally and in writing - restricting feedback to written form only would unnecessarily constrain communication. The form of communication should be flexible and adaptable to each situation."
+    },
+    "lgs": [
+      "04-02",
+      "3-02"
+    ]
+  },
+  {
+    "id": "Q-20-04-37",
+    "type": "category",
+    "points": 2,
+    "stem": {
+      "de": "Welche der folgenden Aussagen zu Notationen für Architektursichten sind richtig und welche falsch?",
+      "en": "Which of the following statements about notations for architectural views is true and which is false?"
+    },
+    "categories": [
+      {
+        "label": "a",
+        "text": {
+          "de": "Richtig",
+          "en": "true"
+        }
+      },
+      {
+        "label": "b",
+        "text": {
+          "de": "Falsch",
+          "en": "false"
+        }
+      }
+    ],
+    "statements": [
+      {
+        "id": "A",
+        "text": {
+          "de": "Business Process Model & Notation (BPMN) sollte nur von Business-Analysten und nicht zur Architekturdokumentation verwendet werden.",
+          "en": "Business Process Model & Notation (BPMN) should only be used by Business Analysts and not for architecture documentation."
+        },
+        "correctCategory": "b"
+      },
+      {
+        "id": "B",
+        "text": {
+          "de": "UML-Verteilungsdiagramme sind die einzige Möglichkeit zur Dokumentation des Mappings der Softwarekomponenten in Bezug auf die Infrastruktur.",
+          "en": "UML deployment models are the only way to document the mapping of software components to infrastructure."
+        },
+        "correctCategory": "b"
+      },
+      {
+        "id": "C",
+        "text": {
+          "de": "UML-Paketdiagramme können zum Festhalten der Bausteinsicht der Softwarearchitektur verwendet werden.",
+          "en": "UML Package Diagrams can be used to capture the building-block view of software architectures."
+        },
+        "correctCategory": "a"
+      },
+      {
+        "id": "D",
+        "text": {
+          "de": "Solange die Notation (z. B. mithilfe einer Legende) erläutert wird, kann eine beliebige Notation ausreichen, um Bausteinstrukturen und Zusammenarbeit zu beschreiben.",
+          "en": "As long as the notation is explained (e.g. by a legend), any notation can be sufficient to describe building block structures and collaboration."
+        },
+        "correctCategory": "a"
+      }
+    ],
+    "explanation": {
+      "de": "BPMN kann durchaus für die Architekturdokumentation verwendet werden, insbesondere für Laufzeitsichten. UML-Verteilungsdiagramme sind eine von mehreren Möglichkeiten, das Mapping von Software auf Infrastruktur zu dokumentieren. UML-Paketdiagramme sind tatsächlich eine gängige Möglichkeit, Bausteinsichten darzustellen. Eine beliebige Notation kann ausreichend sein, solange sie angemessen dokumentiert und erklärt wird.",
+      "en": "BPMN can indeed be used for architecture documentation, especially for runtime views. UML deployment diagrams are one of several ways to document the mapping of software to infrastructure. UML package diagrams are indeed a common way to represent building block views. Any notation can be sufficient as long as it is properly documented and explained."
+    },
+    "lgs": [
+      "04-03",
+      "04-05",
+      "3-3",
+      "3-4"
+    ]
+  },
+  {
+    "id": "Q-20-04-13",
+    "type": "pick",
+    "points": 1,
+    "stem": {
+      "de": "Welche Architektursichten haben die beste praktische Anwendung für die Entwicklung von Softwarearchitekturen?",
+      "en": "Which architectural views have the most practical application for developing software architectures?"
+    },
+    "options": [
+      {
+        "id": "A",
+        "text": {
+          "de": "Pattern-Sicht.",
+          "en": "Pattern View."
+        },
+        "correct": false
+      },
+      {
+        "id": "B",
+        "text": {
+          "de": "Beobachtersicht (Observer-View).",
+          "en": "Observer View."
+        },
+        "correct": false
+      },
+      {
+        "id": "C",
+        "text": {
+          "de": "Bausteinsicht (Komponentensicht).",
+          "en": "Building-Block View (Component View)."
+        },
+        "correct": true
+      },
+      {
+        "id": "D",
+        "text": {
+          "de": "Verteilungssicht.",
+          "en": "Deployment View."
+        },
+        "correct": true
+      }
+    ],
+    "explanation": {
+      "de": "Die Baustein- und Verteilungssicht sind fundamentale Sichten in der Softwarearchitektur. Die Bausteinsicht zeigt die strukturelle Dekomposition des Systems, während die Verteilungssicht die technische Infrastruktur und das Mapping der Software auf diese Infrastruktur darstellt. Pattern-Sicht und Beobachtersicht sind keine standardisierten oder weithin verwendeten Architektursichten.",
+      "en": "The building-block and deployment views are fundamental views in software architecture. The building-block view shows the structural decomposition of the system, while the deployment view represents the technical infrastructure and mapping of software onto this infrastructure. Pattern view and observer view are not standardized or widely used architectural views."
+    },
+    "lgs": [
+      "04-05",
+      "3-4"
+    ]
+  },
+  {
+    "id": "Q-20-04-23",
+    "type": "pick",
+    "points": 1,
+    "stem": {
+      "de": "In der Kontextsicht können Sie einen geschäftlichen Kontext („business context\") und einen technischen Kontext verwenden. Wählen Sie die am besten passenden Antworten für den technischen Kontext aus.",
+      "en": "The context view might contain a business context and a technical context, or both. Pick the most appropriate answers that apply to the technical context."
+    },
+    "options": [
+      {
+        "id": "A",
+        "text": {
+          "de": "Der technische Kontext enthält die physischen Übertragungskanäle zwischen Ihrem System und der Umgebung.",
+          "en": "The technical context contains the physical channels between your system and its environment."
+        },
+        "correct": true
+      },
+      {
+        "id": "B",
+        "text": {
+          "de": "Der technische Kontext enthält die gesamte Infrastruktur, über die die Komponenten Ihres Systems verteilt werden.",
+          "en": "The technical context contains all the infrastructure on which the components of your system are deployed."
+        },
+        "correct": false
+      },
+      {
+        "id": "C",
+        "text": {
+          "de": "Der technische Kontext sollte die Hardware-Preisliste oder die Preisgestaltung von Cloud-Diensten, die als Infrastruktur für Ihre Architektur verwendet werden, enthalten.",
+          "en": "The technical context should include hardware pricing or pricing of cloud services used as infrastructure for your architecture."
+        },
+        "correct": false
+      },
+      {
+        "id": "D",
+        "text": {
+          "de": "Der technische Kontext enthält Informationen zur gewählten Programmiersprache sowie allen zur Implementierung Ihrer Softwarearchitektur verwendeten Frameworks.",
+          "en": "The technical context contains information about the chosen programming language as well as all frameworks used to implement your software architecture."
+        },
+        "correct": false
+      },
+      {
+        "id": "E",
+        "text": {
+          "de": "Der technische Kontext enthält gegebenenfalls andere Elemente als der Geschäftskontext (\"business context\").",
+          "en": "The technical context might contain different elements than the business context."
+        },
+        "correct": true
+      }
+    ],
+    "explanation": {
+      "de": "Der technische Kontext konzentriert sich auf die technischen Aspekte der Systemintegration, insbesondere die physischen Verbindungen und Schnittstellen zu anderen Systemen. Er unterscheidet sich vom Geschäftskontext und kann andere Elemente enthalten. Infrastrukturdetails, Preisgestaltung und Implementierungsdetails gehören nicht zum technischen Kontext, da diese eher Bestandteil der Verteilungssicht oder der Implementierungsdokumentation sind.",
+      "en": "The technical context focuses on the technical aspects of system integration, particularly the physical connections and interfaces to other systems. It differs from the business context and may contain different elements. Infrastructure details, pricing information, and implementation details do not belong to the technical context as these are rather part of the deployment view or implementation documentation."
+    },
+    "lgs": [
+      "04-05",
+      "3-4"
+    ]
+  },
+  {
+    "id": "Q-20-04-24",
+    "type": "pick",
+    "points": 1,
+    "stem": {
+      "de": "Die Dokumentation der Softwarearchitektur sollte Beschreibungen der Querschnittskonzepte enthalten. Wählen Sie die besten Gründe, warum die Dokumentation von Querschnittskonzepten sinnvoll ist.",
+      "en": "Software architecture documentation could contain descriptions of cross-cutting concerns. Pick the best reasons why documentation of cross-cutting concerns is useful."
+    },
+    "options": [
+      {
+        "id": "A",
+        "text": {
+          "de": "Querschnittskonzepte sollten sich auf die Fachdomäne konzentrieren und frei von technischen Informationen sein.",
+          "en": "Cross-cutting concepts should focus on the domain and be free of technical information."
+        },
+        "correct": false
+      },
+      {
+        "id": "B",
+        "text": {
+          "de": "Aspekte oder Konzepte, die in mehreren Teilen Ihrer Softwarearchitektur verwendet werden, sollten auf nicht redundante Weise beschrieben werden.",
+          "en": "Aspects or concepts that are used in multiple parts of your software architecture should be described in a non-redundant way."
+        },
+        "correct": true
+      },
+      {
+        "id": "C",
+        "text": {
+          "de": "Querschnittskonzepte können in weiteren Produkten innerhalb der gleichen Organisation erneut verwendet werden.",
+          "en": "Cross-cutting concepts can be reused in more products within the same organization."
+        },
+        "correct": true
+      },
+      {
+        "id": "D",
+        "text": {
+          "de": "Querschnittskonzepte sollten von Spezialist:innen implementiert werden. Daher ist eine separate Dokumentation hilfreich.",
+          "en": "Cross-cutting concepts should be implemented by specialists. Therefore, separate documentation is useful."
+        },
+        "correct": false
+      }
+    ],
+    "explanation": {
+      "de": "",
+      "en": ""
+    },
+    "lgs": [
+      "04-07",
+      "3-6"
+    ]
+  },
+  {
+    "id": "Q-20-04-25",
+    "type": "category",
+    "points": 2,
+    "stem": {
+      "de": "Was sind Richtlinien für ein gutes Schnittstellen-Design? Kreuzen Sie an, welche der folgenden Aussagen richtig und welche falsch sind.",
+      "en": "What are guidelines for good interface design? Check which of the following statements are true and which are false."
+    },
+    "categories": [
+      {
+        "label": "a",
+        "text": {
+          "de": "richtig",
+          "en": "true"
+        }
+      },
+      {
+        "label": "b",
+        "text": {
+          "de": "falsch",
+          "en": "false"
+        }
+      }
+    ],
+    "statements": [
+      {
+        "id": "A",
+        "text": {
+          "de": "Die Verwendung der Schnittstellen sollte einfach zu erlernen sein.",
+          "en": "Use of interfaces should be easy to learn."
+        },
+        "correctCategory": "a"
+      },
+      {
+        "id": "B",
+        "text": {
+          "de": "Es soll möglich sein, angemessen verständlichen Client-Code für diese Schnittstelle zu schreiben.",
+          "en": "It should be possible to write client code for the interface, that is reasonably easy to understand."
+        },
+        "correctCategory": "a"
+      },
+      {
+        "id": "C",
+        "text": {
+          "de": "Eine Schnittstelle soll Zugriff auf eine umfassende Menge von Implementierungsdetails ermöglichen.",
+          "en": "An interface should provide access to a comprehensive set of implementation details."
+        },
+        "correctCategory": "b"
+      },
+      {
+        "id": "D",
+        "text": {
+          "de": "Schnittstellenspezifikationen sollten funktionale und nichtfunktionale Aspekte enthalten.",
+          "en": "Interface specifications should contain functional and non-functional aspects."
+        },
+        "correctCategory": "a"
+      },
+      {
+        "id": "E",
+        "text": {
+          "de": "Lokale und entfernte (\"remote\") Aufrufe einer Schnittstelle sollen sich in allen Belangen identisch verhalten.",
+          "en": "Local and remote calls to an interface should behave identically in all aspects."
+        },
+        "correctCategory": "b"
+      }
+    ],
+    "explanation": {
+      "de": "Die Schnittstellen sollten leicht erlernbar sein und die Erstellung von verständlichem Client-Code ermöglichen. Sie sollten funktionale und nicht-funktionale Aspekte spezifizieren. Jedoch sollten sie nicht unnötig Implementierungsdetails offenlegen. Die Annahme, dass lokale und entfernte Aufrufe sich identisch verhalten können, ist technisch nicht realisierbar - besonders in Bezug auf Latenz und Antwortzeiten. Eine detailliertere Erklärung findet sich in den bekannten \"Fallacies of Distributed Computing\".",
+      "en": "Interfaces should be easy to learn and allow for creation of understandable client code. They should specify both functional and non-functional aspects. However, they should not unnecessarily expose implementation details. The assumption that local and remote calls can behave identically is technically not feasible - especially regarding latency and response times. A more detailed explanation can be found in the (rather famous) \"Fallacies of Distributed Computing\"."
+    },
+    "lgs": [
+      "03-07",
+      "2-09"
+    ]
+  },
+  {
+    "id": "Q-20-04-26",
+    "type": "category",
+    "points": 2,
+    "stem": {
+      "de": "Eine Definition lautet: „Softwarearchitektur ist die Summe aller während der Entwicklung gefällten Entscheidungen\". Kreuzen Sie an, welche der folgenden Aussagen zu Architektur- /Designentscheidungen richtig und welche falsch sind.",
+      "en": "One definition says: \"Software architecture is the sum of all the decisions you have taken during development.\" Check which of the following statements about architectural/design decisions are true and which are false."
+    },
+    "categories": [
+      {
+        "label": "a",
+        "text": {
+          "de": "Richtig",
+          "en": "true"
+        }
+      },
+      {
+        "label": "b",
+        "text": {
+          "de": "Falsch",
+          "en": "false"
+        }
+      }
+    ],
+    "statements": [
+      {
+        "id": "A",
+        "text": {
+          "de": "Architektonische Entscheidungen können sich in der Struktur der Bausteine oder Komponenten niederschlagen.",
+          "en": "Architectural decisions can impact the structure of the building block or components."
+        },
+        "correctCategory": "a"
+      },
+      {
+        "id": "B",
+        "text": {
+          "de": "Softwarearchitekt:innen sollten alle Entwurfsentscheidungen schriftlich begründen.",
+          "en": "Software architects shall justify all design decisions in writing."
+        },
+        "correctCategory": "b"
+      },
+      {
+        "id": "C",
+        "text": {
+          "de": "Architektonische Entscheidungen können untereinander Wechselwirkungen haben.",
+          "en": "Architectural decisions can have interdependencies between each other."
+        },
+        "correctCategory": "a"
+      },
+      {
+        "id": "D",
+        "text": {
+          "de": "Kompromisse zwischen zueinander in Konflikt stehenden Qualitätsanforderungen sollten explizite Entscheidungen sein.",
+          "en": "Tradeoffs between conflicting quality requirements should be explicit decisions."
+        },
+        "correctCategory": "a"
+      }
+    ],
+    "explanation": {
+      "de": "Nicht alle Entscheidungen müssen schriftlich begründet werden - die Anforderung an schriftliche Dokumentation hängt von der Situation, dem Team, dem System und anderen Faktoren ab.",
+      "en": "Not all decisions need to be justified in writing - as the requirement for written documentation depends on the situation, the team, the system and other factors."
+    },
+    "lgs": [
+      "04-08",
+      "3-8"
+    ]
+  },
+  {
+    "id": "Q-20-04-31",
+    "type": "category",
+    "points": 2,
+    "stem": {
+      "de": "Welche der folgenden Aussagen sind typische Gründe zur Einführung einer Architekturdokumentation und welche nicht?",
+      "en": "Which of the following statements are typical reasons for introducing an architecture documentation and which are not typical reasons?"
+    },
+    "categories": [
+      {
+        "label": "a",
+        "text": {
+          "de": "typisch",
+          "en": "typical"
+        }
+      },
+      {
+        "label": "b",
+        "text": {
+          "de": "nicht typisch",
+          "en": "not typical"
+        }
+      }
+    ],
+    "statements": [
+      {
+        "id": "A",
+        "text": {
+          "de": "Unterstützung des Onboardings neuer Entwickler:innen.",
+          "en": "To support onboarding of new developers."
+        },
+        "correctCategory": "a"
+      },
+      {
+        "id": "B",
+        "text": {
+          "de": "Unterstützung der Testautomatisierung des Systems.",
+          "en": "To support the automated testing approach of the system."
+        },
+        "correctCategory": "b"
+      },
+      {
+        "id": "C",
+        "text": {
+          "de": "Unterstützung der Arbeit von verteilten Teams.",
+          "en": "To support the work of distributed teams."
+        },
+        "correctCategory": "a"
+      },
+      {
+        "id": "D",
+        "text": {
+          "de": "Unterstützung von späteren Verbesserungen des Systems.",
+          "en": "To assist in future enhancements of the product."
+        },
+        "correctCategory": "a"
+      },
+      {
+        "id": "E",
+        "text": {
+          "de": "Einhaltung regulatorischer Vorgaben.",
+          "en": "To conform to regulatory or legal constraints."
+        },
+        "correctCategory": "a"
+      },
+      {
+        "id": "F",
+        "text": {
+          "de": "Sicherstellung der gleichmäßigen Auslastung des Teams.",
+          "en": "To ensure that developers have enough work to do."
+        },
+        "correctCategory": "b"
+      }
+    ],
+    "explanation": {
+      "de": "Die typischen Gründe für eine Architekturdokumentation sind direkt mit den Hauptzielen der Softwarearchitektur verbunden: Die Unterstützung des Entwicklungsteams (durch Onboarding und Zusammenarbeit), die Ermöglichung der Weiterentwicklung des Systems und die Erfüllung regulatorischer Anforderungen. Dagegen sind Testautomatisierung und Teamauslastung keine primären Gründe für die Erstellung einer Architekturdokumentation.",
+      "en": "The typical reasons for architecture documentation are directly connected to the main goals of software architecture: Supporting the development team (through onboarding and collaboration), enabling system evolution, and fulfilling regulatory requirements. In contrast, test automation and team workload are not primary reasons for creating architecture documentation."
+    },
+    "lgs": [
+      "04-01",
+      "04-02",
+      "3-01",
+      "3-02"
+    ]
+  },
+  {
+    "id": "Q-20-04-30",
+    "type": "category",
+    "points": 2,
+    "stem": {
+      "de": "Welche der folgenden Eigenschaftspaare stehen üblicherweise miteinander in Konflikt und welche nicht?",
+      "en": "Which of the following pairs of qualities are usually in conflict to each other, and which are not?"
+    },
+    "categories": [
+      {
+        "label": "a",
+        "text": {
+          "de": "Konflikt",
+          "en": "conflict"
+        }
+      },
+      {
+        "label": "b",
+        "text": {
+          "de": "Kein Konflikt",
+          "en": "no conflict"
+        }
+      }
+    ],
+    "statements": [
+      {
+        "id": "A",
+        "text": {
+          "de": "Verständlichkeit – Lesbarkeit",
+          "en": "Understandability – Readability"
+        },
+        "correctCategory": "b"
+      },
+      {
+        "id": "B",
+        "text": {
+          "de": "Benutzerfreundlichkeit – Sicherheit",
+          "en": "Usability – Security"
+        },
+        "correctCategory": "a"
+      },
+      {
+        "id": "C",
+        "text": {
+          "de": "Laufzeitkonfigurierbarkeit – Robustheit",
+          "en": "Runtime configurability – Robustness"
+        },
+        "correctCategory": "a"
+      },
+      {
+        "id": "D",
+        "text": {
+          "de": "Sicherheit – Funktionale Korrektheit",
+          "en": "Security – Functional correctness"
+        },
+        "correctCategory": "b"
+      }
+    ],
+    "explanation": {
+      "de": "Verständlichkeit und Lesbarkeit unterstützen sich gegenseitig. Benutzerfreundlichkeit und Sicherheit können in Konflikt stehen, da Sicherheitsmaßnahmen die Benutzerfreundlichkeit einschränken können. Laufzeitkonfigurierbarkeit und Robustheit stehen oft im Konflikt, da mehr Konfigurationsmöglichkeiten die Robustheit beeinträchtigen können. Sicherheit und funktionale Korrektheit stehen nicht grundsätzlich im Konflikt - ein System kann sowohl sicher als auch funktional korrekt sein.",
+      "en": "Understandability and readability support each other. Usability and security can conflict as security measures may limit usability. Runtime configurability and robustness often conflict as more configuration options can impact robustness. Security and functional correctness are not inherently in conflict - a system can be both secure and functionally correct."
+    },
+    "lgs": [
+      "02-03",
+      "4-1"
+    ]
+  },
+  {
+    "id": "Q-20-04-27",
+    "type": "pick",
+    "points": 1,
+    "stem": {
+      "de": "ISO 25010 enthält allgemeine Qualitätseigenschaften für Softwaresysteme. Wie können Qualitätsanforderungen zu diesen Eigenschaften konkretisiert werden?",
+      "en": "ISO 25010 provides generic quality characteristics for software systems. How can quality requirements concerning these characteristics be made more concrete?"
+    },
+    "options": [
+      {
+        "id": "A",
+        "text": {
+          "de": "Durch Entwickeln von UI-Prototypen.",
+          "en": "By developing UI prototypes."
+        },
+        "correct": false
+      },
+      {
+        "id": "B",
+        "text": {
+          "de": "Durch Definieren expliziter Schnittstellen.",
+          "en": "By defining explicit interfaces."
+        },
+        "correct": false
+      },
+      {
+        "id": "C",
+        "text": {
+          "de": "Durch Erstellen, Verfassen oder Diskutieren von Qualitätsszenarien.",
+          "en": "By discussing or writing quality scenarios."
+        },
+        "correct": true
+      },
+      {
+        "id": "D",
+        "text": {
+          "de": "Durch Erstellen automatisierter Tests.",
+          "en": "By creating automated tests."
+        },
+        "correct": false
+      }
+    ],
+    "explanation": {
+      "de": "Qualitätsszenarien sind etablierte Methoden zur Konkretisierung von Qualitätsanforderungen. Sie helfen dabei, abstrakte Qualitätseigenschaften in überprüfbare Anforderungen zu überführen. UI-Prototypen, Schnittstellen und automatisierte Tests sind dagegen eher Implementierungs- oder Validierungstechniken und weniger geeignet zur initialen Konkretisierung von Qualitätsanforderungen.",
+      "en": "Quality scenarios are established methods for making quality requirements more concrete. They help transform abstract quality characteristics into verifiable requirements. UI prototypes, interfaces, and automated tests are implementation or validation techniques and are less suitable for initial concretization of quality requirements."
+    },
+    "lgs": [
+      "02-03",
+      "02-04",
+      "4-1",
+      "4-2"
+    ]
+  },
+  {
+    "id": "Q-20-04-28",
+    "type": "pick",
+    "points": 2,
+    "stem": {
+      "de": "Welche der folgenden Punkte sind am besten geeignet, die qualitative Bewertung einer Softwarearchitektur bzgl. der Erfüllung von Qualitätsanforderungen zu unterstützen?",
+      "en": "Which of the following points are best suited to support the qualitative evaluation of a software architecture with regard to the fulfillment of quality requirements?"
+    },
+    "options": [
+      {
+        "id": "A",
+        "text": {
+          "de": "Quantitative Abhängigkeitsanalyse.",
+          "en": "Quantitative dependency analysis."
+        },
+        "correct": true
+      },
+      {
+        "id": "B",
+        "text": {
+          "de": "Architekturmodelle.",
+          "en": "Architecture models."
+        },
+        "correct": true
+      },
+      {
+        "id": "C",
+        "text": {
+          "de": "Qualitätsszenarien.",
+          "en": "Quality scenarios."
+        },
+        "correct": true
+      },
+      {
+        "id": "D",
+        "text": {
+          "de": "Teamgröße.",
+          "en": "Team size."
+        },
+        "correct": false
+      },
+      {
+        "id": "E",
+        "text": {
+          "de": "Logdateien.",
+          "en": "Log files."
+        },
+        "correct": true
+      },
+      {
+        "id": "F",
+        "text": {
+          "de": "Organigramm.",
+          "en": "Organizational structure."
+        },
+        "correct": false
+      }
+    ],
+    "explanation": {
+      "de": "Die Analyse von Qualitätsanforderungen kann am besten durch technische und architektonische Artefakte unterstützt werden. Quantitative Metriken, Architekturmodelle, konkrete Qualitätsszenarien und Laufzeitinformationen aus Logs liefern objektive Daten für die Analyse. Organisatorische Aspekte wie Teamgröße oder Organigramme sind dagegen weniger relevant für die technische Qualitätsanalyse.",
+      "en": "The analysis of quality requirements is best supported by technical and architectural artifacts. Quantitative metrics, architecture models, concrete quality scenarios and runtime information from logs provide objective data for analysis. Organizational aspects like team size or organizational structure are less relevant for technical quality analysis."
+    },
+    "lgs": [
+      "05-02",
+      "4-3",
+      "4-4"
+    ]
+  },
+  {
+    "id": "Q-20-04-29",
+    "type": "pick",
+    "points": 1,
+    "stem": {
+      "de": "Sie versuchen, Ihre Architektur qualitativ zu analysieren. Was sind die zutreffendsten Anzeichen für architektonische Problembereiche?",
+      "en": "You try to analyze your architecture quantitatively. Which are the most appropriate indicators for architectural problem areas?"
+    },
+    "options": [
+      {
+        "id": "A",
+        "text": {
+          "de": "Hohe Kopplung der Komponenten.",
+          "en": "High coupling of components."
+        },
+        "correct": true
+      },
+      {
+        "id": "B",
+        "text": {
+          "de": "Namen öffentlicher Methoden geben nicht deren Zweck wieder.",
+          "en": "Names of public methods do not reflect their purpose."
+        },
+        "correct": false
+      },
+      {
+        "id": "C",
+        "text": {
+          "de": "Fehlende Kommentare.",
+          "en": "Missing comments."
+        },
+        "correct": false
+      },
+      {
+        "id": "D",
+        "text": {
+          "de": "Häufung von Fehlern in bestimmten Bausteinen des Systems.",
+          "en": "Clusters of errors in certain building blocks of the system."
+        },
+        "correct": true
+      },
+      {
+        "id": "E",
+        "text": {
+          "de": "Anzahl der Testfälle pro Komponente.",
+          "en": "Number of test cases per component."
+        },
+        "correct": false
+      }
+    ],
+    "explanation": {
+      "de": "Hohe Kopplung zwischen Komponenten und die Häufung von Fehlern in bestimmten Systembausteinen sind klare Indikatoren für architektonische Probleme. Die anderen Optionen wie Methodennamen, fehlende Kommentare oder die Anzahl der Testfälle sind eher Implementierungs- oder Qualitätssicherungsaspekte und weniger architektonische Probleme.",
+      "en": "High coupling between components and clusters of errors in certain system building blocks are clear indicators of architectural problems. The other options like method names, missing comments, or number of test cases are more related to implementation or quality assurance aspects rather than architectural problems."
+    },
+    "lgs": [
+      "05-02",
+      "4-4"
+    ]
+  },
+  {
+    "id": "Q-20-04-36",
+    "type": "pick",
+    "points": 1,
+    "stem": {
+      "de": "Sie versuchen, ihre Architektur quantitativ zu untersuchen. Welche der folgenden Größen können Sie für Ihre Softwarearchitektur zuverlässig messen? Wählen Sie die am besten passenden Antworten aus.",
+      "en": "You try to quantitatively analyze your architecture. Which three of the following properties can you measure reliably in your software architecture? Pick the best fitting answers."
+    },
+    "options": [
+      {
+        "id": "A",
+        "text": {
+          "de": "Größe der Bausteine (z. B. Lines-of-Code).",
+          "en": "Size of building blocks (e.g. LOC)."
+        },
+        "correct": true
+      },
+      {
+        "id": "B",
+        "text": {
+          "de": "Änderungsrate des Quellcodes der Komponenten.",
+          "en": "Change rate of the source code of components."
+        },
+        "correct": true
+      },
+      {
+        "id": "C",
+        "text": {
+          "de": "Kohäsion der Architekturkomponenten.",
+          "en": "Cohesion of the architectural components."
+        },
+        "correct": false
+      },
+      {
+        "id": "D",
+        "text": {
+          "de": "Sicherheitsstufe einer Komponente.",
+          "en": "Security level of a component."
+        },
+        "correct": false
+      },
+      {
+        "id": "E",
+        "text": {
+          "de": "Anzahl der Personen, die zu einer bestimmten Komponente beigetragen haben.",
+          "en": "Number of the developers that contributed to a specific component."
+        },
+        "correct": true
+      }
+    ],
+    "explanation": {
+      "de": "• Die Größe kann einfach und zuverlässig durch statische Analyse des Quellcodes gemessen werden (Lines-of-Code ist eine zuverlässige Größenmetrik)\n• Änderungsrate und Anzahl-der-Entwickler-pro-Komponente können zuverlässig gemessen werden, wenn man die Versionskontrollhistorie berücksichtigt, was mit Systemen wie git, subversion oder ähnlichen in der Entwicklung weit verbreiteten Tools problemlos möglich ist.",
+      "en": "• Size can easily and reliably be measured when statically analyzing source code (lines-of-code metric is a reliable size metric)\n• change-rate and number-of-developers-per-component can reliably be measured when taking the version control history into account, which is perfectly feasibly with systems like git, subversion or similar tools that are widely used in development."
+    },
+    "lgs": [
+      "05-02",
+      "4-4"
+    ]
+  }
+]
