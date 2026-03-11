@@ -22,7 +22,6 @@ import {
   Printer,
   StickyNote,
 } from "lucide-react";
-import { ExternalLink } from "../components/ExternalLink";
 import { Footer } from "../components/Footer";
 import confetti from "canvas-confetti";
 
@@ -351,14 +350,6 @@ export function ResultsPage() {
                         </div>
                       )}
 
-                      {/* Learn more link */}
-                      <ExternalLink
-                        href="https://www.isaqb.org/certifications/cpsa-certifications/cpsa-foundation-level/"
-                        showIcon
-                        className="inline-flex items-center gap-1 mt-3 text-xs text-primary-light hover:underline print:hidden"
-                      >
-                        {t(labels.learnMore)}
-                      </ExternalLink>
 
                       {/* User note */}
                       {questionNotes[qr.questionId] && (
