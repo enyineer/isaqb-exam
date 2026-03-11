@@ -133,31 +133,31 @@ export function ResultsPage() {
           </div>
 
           {/* Score details */}
-          <div className="grid grid-cols-3 gap-3 mb-8">
-            <div className="bg-surface border-2 border-border rounded-xl p-4 text-center">
-              <p className="text-sm text-text-muted mb-1">
+          <div className="grid grid-cols-3 gap-2 sm:gap-3 mb-8">
+            <div className="bg-surface border-2 border-border rounded-xl p-3 sm:p-4 text-center overflow-hidden min-w-0">
+              <p className="text-[11px] sm:text-sm text-text-muted mb-1 wrap-break-word">
                 {t(labels.totalScore)}
               </p>
-              <p className="text-3xl font-heading font-bold">
+              <p className="text-2xl sm:text-3xl font-heading font-bold">
                 {result.totalScore.toFixed(1)}
-                <span className="text-lg text-text-muted">
+                <span className="text-base sm:text-lg text-text-muted">
                   /{result.totalPossible}
                 </span>
               </p>
             </div>
-            <div className="bg-surface border-2 border-border rounded-xl p-4 text-center">
-              <p className="text-sm text-text-muted mb-1">
+            <div className="bg-surface border-2 border-border rounded-xl p-3 sm:p-4 text-center overflow-hidden min-w-0">
+              <p className="text-[11px] sm:text-sm text-text-muted mb-1 wrap-break-word">
                 {t(labels.passThreshold)}
               </p>
-              <p className="text-3xl font-heading font-bold">
+              <p className="text-2xl sm:text-3xl font-heading font-bold">
                 {Math.round(PASS_THRESHOLD * 100)}%
               </p>
             </div>
-            <div className="bg-surface border-2 border-border rounded-xl p-4 text-center">
-              <p className="text-sm text-text-muted mb-1">
+            <div className="bg-surface border-2 border-border rounded-xl p-3 sm:p-4 text-center overflow-hidden min-w-0">
+              <p className="text-[11px] sm:text-sm text-text-muted mb-1 wrap-break-word">
                 {t(labels.timeTaken)}
               </p>
-              <p className="text-3xl font-heading font-bold">
+              <p className="text-2xl sm:text-3xl font-heading font-bold">
                 {elapsedMs ? formatElapsed(elapsedMs) : "—"}
               </p>
             </div>
@@ -280,10 +280,10 @@ export function ResultsPage() {
                   return (
                     <div
                       key={qr.questionId}
-                      className="bg-surface border-2 border-border rounded-xl p-5"
+                      className="bg-surface border-2 border-border rounded-xl p-3.5 sm:p-5"
                     >
                       {/* Question header */}
-                      <div className="flex items-start gap-3 mb-3">
+                      <div className="flex items-start gap-2 sm:gap-3 mb-3">
                         <span
                           className={`shrink-0 mt-0.5 ${
                             isCorrect
@@ -301,8 +301,8 @@ export function ResultsPage() {
                             <XCircle size={18} />
                           )}
                         </span>
-                        <div className="flex-1">
-                          <p className="text-sm font-medium mb-1">
+                        <div className="flex-1 min-w-0">
+                          <p className="text-[13px] sm:text-sm font-medium mb-1">
                             {t(question.stem)}
                           </p>
                           <p className="text-xs text-text-muted">
@@ -340,7 +340,7 @@ export function ResultsPage() {
 
                       {/* Explanation */}
                       {question.explanation && t(question.explanation) && (
-                        <div className="mt-3 p-3 rounded-lg bg-surface-alt text-sm print:hidden">
+                        <div className="mt-3 p-2.5 sm:p-3 rounded-lg bg-surface-alt text-[13px] sm:text-sm print:hidden">
                           <p className="font-semibold text-xs text-text-muted mb-1">
                             {t(labels.explanation)}
                           </p>
@@ -353,7 +353,7 @@ export function ResultsPage() {
 
                       {/* User note */}
                       {questionNotes[qr.questionId] && (
-                        <div className="mt-3 p-3 rounded-lg border-2 border-amber-500/20 bg-amber-500/5 text-sm">
+                        <div className="mt-3 p-2.5 sm:p-3 rounded-lg border-2 border-amber-500/20 bg-amber-500/5 text-[13px] sm:text-sm">
                           <p className="flex items-center gap-1.5 font-semibold text-xs text-amber-600 dark:text-amber-400 mb-1">
                             <StickyNote size={12} />
                             {t(labels.noteForLecturer)}
@@ -386,37 +386,40 @@ function PickReview({
   const { t } = useLanguage();
 
   return (
-    <div className="space-y-1.5 pl-7">
+    <div className="space-y-1 sm:space-y-1.5 mt-1">
       {question.options.map((opt) => {
         const or = qr.optionResults.find((o) => o.id === opt.id)!;
         const isCorrect = or.isCorrect;
         const isSelected = or.isSelected;
+        const isHighlighted = isCorrect || isSelected;
 
         return (
           <div
             key={opt.id}
-            className={`flex items-start gap-2 text-sm px-3 py-1.5 rounded-lg ${
+            className={`flex items-start gap-1.5 sm:gap-2 text-[13px] sm:text-sm rounded-lg ${
+              isHighlighted ? 'px-2.5 sm:px-3 py-1.5' : 'px-2.5 sm:px-3 py-1'
+            } ${
               isCorrect && isSelected
                 ? "bg-green-500/10 text-green-700 dark:text-green-400"
                 : isCorrect && !isSelected
                   ? "bg-blue-500/10 text-blue-700 dark:text-blue-400"
                   : isSelected && !isCorrect
                     ? "bg-red-500/10 text-red-700 dark:text-red-400"
-                    : ""
+                    : "opacity-60"
             }`}
           >
             <span className="shrink-0 mt-0.5">
-              {isCorrect && isSelected && <CheckCircle2 size={16} />}
-              {isCorrect && !isSelected && <MinusCircle size={16} />}
-              {isSelected && !isCorrect && <XCircle size={16} />}
+              {isCorrect && isSelected && <CheckCircle2 size={14} />}
+              {isCorrect && !isSelected && <MinusCircle size={14} />}
+              {isSelected && !isCorrect && <XCircle size={14} />}
               {!isSelected && !isCorrect && (
-                <span className="inline-block w-4" />
+                <span className="inline-block w-3.5" />
               )}
             </span>
-            <span className="font-mono text-xs font-bold opacity-50 shrink-0 mt-0.5">
+            <span className="font-mono text-xs font-bold opacity-50 shrink-0 mt-px">
               {opt.id}
             </span>
-            <span>{t(opt.text)}</span>
+            <span className="min-w-0">{t(opt.text)}</span>
           </div>
         );
       })}
@@ -437,13 +440,13 @@ function CategoryReview({
   );
 
   return (
-    <div className="space-y-1.5 pl-7">
+    <div className="space-y-1 sm:space-y-1.5 mt-1">
       {question.statements.map((stmt) => {
         const sr = qr.statementResults.find((s) => s.id === stmt.id)!;
         return (
           <div
             key={stmt.id}
-            className={`flex items-center gap-2 text-sm px-3 py-1.5 rounded-lg ${
+            className={`text-[13px] sm:text-sm px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-lg ${
               sr.isCorrect
                 ? "bg-green-500/10 text-green-700 dark:text-green-400"
                 : sr.isSkipped
@@ -451,15 +454,20 @@ function CategoryReview({
                   : "bg-red-500/10 text-red-700 dark:text-red-400"
             }`}
           >
-            {sr.isCorrect ? <CheckCircle2 size={14} /> : sr.isSkipped ? <MinusCircle size={14} /> : <XCircle size={14} />}
-            <span className="font-mono text-xs font-bold opacity-50">
-              {stmt.id}
-            </span>
-            <span className="flex-1">{t(stmt.text)}</span>
-            <span className="text-xs opacity-70">
-              {sr.assignedCategory ? categoryMap[sr.assignedCategory] : "—"} →{" "}
-              {categoryMap[sr.correctCategory]}
-            </span>
+            <div className="flex items-start gap-1.5 sm:gap-2">
+              <span className="shrink-0 mt-0.5">{sr.isCorrect ? <CheckCircle2 size={14} /> : sr.isSkipped ? <MinusCircle size={14} /> : <XCircle size={14} />}</span>
+              <span className="font-mono text-xs font-bold opacity-50 shrink-0 mt-px">
+                {stmt.id}
+              </span>
+              <span className="min-w-0">{t(stmt.text)}</span>
+            </div>
+            <div className="flex items-center gap-1.5 mt-1 ml-[calc(14px+0.375rem+1rem+0.375rem)] sm:ml-[calc(14px+0.5rem+1rem+0.5rem)] text-xs opacity-70">
+              <span className={sr.assignedCategory ? "" : "italic opacity-50"}>
+                {sr.assignedCategory ? categoryMap[sr.assignedCategory] : "—"}
+              </span>
+              <span>→</span>
+              <span className="font-medium">{categoryMap[sr.correctCategory]}</span>
+            </div>
           </div>
         );
       })}

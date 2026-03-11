@@ -134,40 +134,40 @@ export function StartPage({ onRefresh }: StartPageProps) {
           </div>
 
           {/* Stats row */}
-          <div className="grid grid-cols-3 gap-3 mb-8">
-            <div className="group relative bg-surface/60 backdrop-blur-sm border border-border/50 rounded-2xl p-5 text-center transition-all duration-300 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5">
+          <div className="grid grid-cols-3 gap-2 sm:gap-3 mb-8">
+            <div className="group relative bg-surface/60 backdrop-blur-sm border border-border/50 rounded-2xl p-3 sm:p-5 text-center transition-all duration-300 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5 overflow-hidden min-w-0">
               <BookOpen
                 size={18}
                 className="mx-auto mb-2.5 text-primary-light transition-transform duration-300 group-hover:scale-110"
               />
-              <p className="text-3xl font-heading font-bold tabular-nums">
+              <p className="text-2xl sm:text-3xl font-heading font-bold tabular-nums">
                 {questions.length}
               </p>
-              <p className="text-xs text-text-muted mt-0.5">
+              <p className="text-[11px] sm:text-xs text-text-muted mt-0.5 wrap-break-word">
                 {t(labels.totalQuestions)}
               </p>
             </div>
-            <div className="group relative bg-surface/60 backdrop-blur-sm border border-border/50 rounded-2xl p-5 text-center transition-all duration-300 hover:border-accent/30 hover:shadow-lg hover:shadow-accent/5">
+            <div className="group relative bg-surface/60 backdrop-blur-sm border border-border/50 rounded-2xl p-3 sm:p-5 text-center transition-all duration-300 hover:border-accent/30 hover:shadow-lg hover:shadow-accent/5 overflow-hidden min-w-0">
               <Trophy
                 size={18}
                 className="mx-auto mb-2.5 text-accent transition-transform duration-300 group-hover:scale-110"
               />
-              <p className="text-3xl font-heading font-bold tabular-nums">
+              <p className="text-2xl sm:text-3xl font-heading font-bold tabular-nums">
                 {totalPoints}
               </p>
-              <p className="text-xs text-text-muted mt-0.5">
+              <p className="text-[11px] sm:text-xs text-text-muted mt-0.5 wrap-break-word">
                 {t(labels.totalPoints)}
               </p>
             </div>
-            <div className="group relative bg-surface/60 backdrop-blur-sm border border-border/50 rounded-2xl p-5 text-center transition-all duration-300 hover:border-success/30 hover:shadow-lg hover:shadow-success/5">
+            <div className="group relative bg-surface/60 backdrop-blur-sm border border-border/50 rounded-2xl p-3 sm:p-5 text-center transition-all duration-300 hover:border-success/30 hover:shadow-lg hover:shadow-success/5 overflow-hidden min-w-0">
               <Timer
                 size={18}
                 className="mx-auto mb-2.5 text-success transition-transform duration-300 group-hover:scale-110"
               />
-              <p className="text-3xl font-heading font-bold tabular-nums">
+              <p className="text-2xl sm:text-3xl font-heading font-bold tabular-nums">
                 {Math.round(PASS_THRESHOLD * 100)}%
               </p>
-              <p className="text-xs text-text-muted mt-0.5">
+              <p className="text-[11px] sm:text-xs text-text-muted mt-0.5 wrap-break-word">
                 {t(labels.passAt)}
               </p>
             </div>
