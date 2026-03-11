@@ -16,6 +16,8 @@ import {
   RotateCcw,
   CheckCircle2,
 } from "lucide-react";
+import { ExternalLink } from "../components/ExternalLink";
+import { Footer } from "../components/Footer";
 import { PASS_THRESHOLD } from "../utils/scoring";
 
 interface StartPageProps {
@@ -112,6 +114,23 @@ export function StartPage({ onRefresh }: StartPageProps) {
             <p className="text-text-muted text-base sm:text-lg max-w-lg mx-auto leading-relaxed">
               {t(labels.examSubtitle)}
             </p>
+          </div>
+
+          {/* iSAQB attribution */}
+          <div className="text-center mb-8">
+            <p className="text-xs text-text-muted opacity-60 mb-1.5">
+              {t({
+                de: "Inhalte basierend auf dem Lehrplan der",
+                en: "Content based on the curriculum by",
+              })}
+            </p>
+            <ExternalLink
+              href="https://www.isaqb.org/certifications/cpsa-certifications/cpsa-foundation-level/"
+              showIcon
+              className="inline-flex items-center gap-1.5 text-sm font-medium text-primary-light hover:text-primary transition-colors hover:underline"
+            >
+              iSAQB e.V. — CPSA Foundation Level
+            </ExternalLink>
           </div>
 
           {/* Stats row */}
@@ -293,29 +312,7 @@ export function StartPage({ onRefresh }: StartPageProps) {
             </span>
           </div>
 
-          {/* Disclaimer */}
-          <p className="text-center text-xs text-text-muted mt-8 opacity-50 leading-relaxed max-w-md mx-auto whitespace-pre-line">
-            {t(labels.disclaimer)}
-          </p>
-          <p className="text-center text-xs mt-2 opacity-40">
-            <a
-              href="https://enking.dev"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-primary-light hover:underline"
-            >
-              enking.dev
-            </a>
-            {" | "}
-            <a
-              href="https://github.com/enyineer/isaqb-exam"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-primary-light hover:underline"
-            >
-              GitHub
-            </a>
-          </p>
+          <Footer className="mt-8" />
         </div>
       </main>
     </PageLayout>

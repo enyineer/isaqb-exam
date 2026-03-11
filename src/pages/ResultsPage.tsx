@@ -13,7 +13,6 @@ import type {
 import {
   RotateCcw,
   Home,
-  ExternalLink,
   CheckCircle2,
   XCircle,
   MinusCircle,
@@ -22,6 +21,8 @@ import {
   Clock,
   Printer,
 } from "lucide-react";
+import { ExternalLink } from "../components/ExternalLink";
+import { Footer } from "../components/Footer";
 import confetti from "canvas-confetti";
 
 function formatElapsed(ms: number): string {
@@ -349,14 +350,13 @@ export function ResultsPage() {
                       )}
 
                       {/* Learn more link */}
-                      <a
+                      <ExternalLink
                         href="https://www.isaqb.org/certifications/cpsa-certifications/cpsa-foundation-level/"
-                        target="_blank"
-                        rel="noopener noreferrer"
+                        showIcon
                         className="inline-flex items-center gap-1 mt-3 text-xs text-primary-light hover:underline print:hidden"
                       >
-                        {t(labels.learnMore)} <ExternalLink size={12} />
-                      </a>
+                        {t(labels.learnMore)}
+                      </ExternalLink>
                     </div>
                   );
                 })}
@@ -364,25 +364,7 @@ export function ResultsPage() {
             </div>
           )}
         </div>
-        <p className="text-center text-xs mt-8 mb-4 opacity-40">
-          <a
-            href="https://enking.dev"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-primary-light hover:underline"
-          >
-            enking.dev
-          </a>
-          {" | "}
-          <a
-            href="https://github.com/enyineer/isaqb-exam"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-primary-light hover:underline"
-          >
-            GitHub
-          </a>
-        </p>
+        <Footer className="mt-8 mb-4" />
       </main>
     </PageLayout>
   );
