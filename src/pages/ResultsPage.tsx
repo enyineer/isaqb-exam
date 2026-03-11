@@ -2,7 +2,7 @@ import { useEffect, useMemo } from "react";
 import { useLanguage } from "../context/LanguageContext";
 import { useExam } from "../context/ExamContext";
 import { useLocation } from "wouter";
-import { ThemePicker, LanguageToggle } from "../components/ThemePicker";
+import { PageLayout } from "../components/PageLayout";
 import { labels } from "../utils/labels";
 import { scoreExam, PASS_THRESHOLD } from "../utils/scoring";
 import type { PickQuestion, CategoryQuestion } from "../data/schema";
@@ -90,23 +90,7 @@ export function ResultsPage() {
   };
 
   return (
-    <div className="min-h-dvh flex flex-col">
-      {/* Header */}
-      <header className="sticky top-0 z-40 bg-bg/80 backdrop-blur-lg border-b border-border print:hidden">
-        <div className="max-w-4xl mx-auto px-4 h-14 flex items-center justify-between">
-          <button
-            onClick={() => navigate("/")}
-            className="font-heading font-bold text-lg hover:text-primary transition-colors cursor-pointer"
-          >
-            iSAQB
-          </button>
-          <div className="flex items-center gap-2">
-            <LanguageToggle />
-            <ThemePicker />
-          </div>
-        </div>
-      </header>
-
+    <PageLayout headerClassName="print:hidden">
       <main
         id="main-content"
         className="flex-1 max-w-3xl mx-auto w-full px-4 py-8"
@@ -400,7 +384,7 @@ export function ResultsPage() {
           </a>
         </p>
       </main>
-    </div>
+    </PageLayout>
   );
 }
 

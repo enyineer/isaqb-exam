@@ -2,7 +2,7 @@ import { useEffect, useCallback, useRef, useState, useMemo, type RefObject } fro
 import { useLanguage } from '../context/LanguageContext'
 import { useExam, computeActiveElapsed } from '../context/ExamContext'
 import { useLocation, useParams } from 'wouter'
-import { ThemePicker, LanguageToggle } from '../components/ThemePicker'
+import { PageLayout } from '../components/PageLayout'
 import { PickQuestion } from '../components/PickQuestion'
 import { CategoryQuestion } from '../components/CategoryQuestion'
 import { labels } from '../utils/labels'
@@ -153,60 +153,49 @@ export function QuestionPage() {
   const progressPercent = (answeredCount / totalQuestions) * 100;
   const isFlagged = flaggedQuestions.has(question.id)
 
-  return (
-    <div className="min-h-dvh flex flex-col">
-      {/* Header */}
-      <header className="sticky top-0 z-40 bg-bg/80 backdrop-blur-lg border-b border-border">
-        <div className="max-w-4xl mx-auto px-4">
-          <div className="h-14 flex items-center justify-between">
-            <button
-              onClick={() => navigate("/")}
-              className="font-heading font-bold text-lg hover:text-primary transition-colors cursor-pointer"
-            >
-              iSAQB
-            </button>
-            <div className="flex items-center gap-3">
-              {/* Live timer */}
-              <span className="flex items-center gap-1.5 text-sm text-text-muted font-mono tabular-nums">
-                <Clock size={14} />
-                {formatTimer(elapsed)}
-              </span>
-              <span className="text-sm text-text-muted hidden sm:block">
-                {t(labels.question)} {questionNumber} {t(labels.of)}{" "}
-                {totalQuestions}
-              </span>
-              {/* Flag button */}
-              <button
-                onClick={() => toggleFlag(question.id)}
-                className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-sm font-medium transition-all cursor-pointer ${
-                  isFlagged
-                    ? 'bg-amber-500/15 text-amber-600 dark:text-amber-400 border-2 border-amber-500/40 shadow-sm shadow-amber-500/10'
-                    : 'border-2 border-border bg-surface hover:bg-surface-hover hover:border-amber-500/30 hover:text-amber-600 dark:hover:text-amber-400'
-                }`}
-                aria-label={isFlagged ? t(labels.unflagQuestion) : t(labels.flagQuestion)}
-                title={isFlagged ? t(labels.unflagQuestion) : t(labels.flagQuestion)}
-              >
-                <Bookmark size={14} className={isFlagged ? 'fill-current' : ''} />
-                <span className="hidden sm:inline">{isFlagged ? t(labels.unflagQuestion) : t(labels.flagQuestion)}</span>
-              </button>
-              <LanguageToggle />
-              <ThemePicker />
-            </div>
-          </div>
-          {/* Progress bar */}
-          <div className="h-1 -mx-4 bg-surface-alt">
-            <div
-              className="h-full bg-primary transition-all duration-500 ease-out"
-              style={{ width: `${progressPercent}%` }}
-              role="progressbar"
-              aria-valuenow={answeredCount}
-              aria-valuemin={0}
-              aria-valuemax={totalQuestions}
-            />
-          </div>
-        </div>
-      </header>
+  const progressBar = (
+    <div className="h-1 -mx-4 bg-surface-alt">
+      <div
+        className="h-full bg-primary transition-all duration-500 ease-out"
+        style={{ width: `${progressPercent}%` }}
+        role="progressbar"
+        aria-valuenow={answeredCount}
+        aria-valuemin={0}
+        aria-valuemax={totalQuestions}
+      />
+    </div>
+  )
 
+  const headerControls = (
+    <>
+      {/* Live timer */}
+      <span className="flex items-center gap-1.5 text-sm text-text-muted font-mono tabular-nums">
+        <Clock size={14} />
+        {formatTimer(elapsed)}
+      </span>
+      <span className="text-sm text-text-muted hidden sm:block">
+        {t(labels.question)} {questionNumber} {t(labels.of)}{" "}
+        {totalQuestions}
+      </span>
+      {/* Flag button */}
+      <button
+        onClick={() => toggleFlag(question.id)}
+        className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-sm font-medium transition-all cursor-pointer ${
+          isFlagged
+            ? 'bg-amber-500/15 text-amber-600 dark:text-amber-400 border-2 border-amber-500/40 shadow-sm shadow-amber-500/10'
+            : 'border-2 border-border bg-surface hover:bg-surface-hover hover:border-amber-500/30 hover:text-amber-600 dark:hover:text-amber-400'
+        }`}
+        aria-label={isFlagged ? t(labels.unflagQuestion) : t(labels.flagQuestion)}
+        title={isFlagged ? t(labels.unflagQuestion) : t(labels.flagQuestion)}
+      >
+        <Bookmark size={14} className={isFlagged ? 'fill-current' : ''} />
+        <span className="hidden sm:inline">{isFlagged ? t(labels.unflagQuestion) : t(labels.flagQuestion)}</span>
+      </button>
+    </>
+  )
+
+  return (
+    <PageLayout headerChildren={headerControls} headerSlot={progressBar}>
       {/* Question content */}
       <main
         id="main-content"
@@ -343,6 +332,6 @@ export function QuestionPage() {
           </div>
         </div>
       )}
-    </div>
+    </PageLayout>
   );
 }

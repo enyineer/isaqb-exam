@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { useLanguage } from "../context/LanguageContext";
 import { useExam, getSavedExamInfo } from "../context/ExamContext";
-import { ThemePicker, LanguageToggle } from "../components/ThemePicker";
+import { PageLayout } from "../components/PageLayout";
 import { useLocation } from "wouter";
 import { labels } from "../utils/labels";
 import {
@@ -84,23 +84,12 @@ export function StartPage({ onRefresh }: StartPageProps) {
         : "bg-amber-500";
 
   return (
-    <div className="min-h-dvh flex flex-col relative overflow-hidden">
+    <PageLayout className="relative overflow-hidden">
       {/* Background decoration */}
       <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[600px] bg-primary/5 rounded-full blur-3xl" />
         <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-accent/5 rounded-full blur-3xl" />
       </div>
-
-      {/* Header */}
-      <header className="sticky top-0 z-40 bg-bg/80 backdrop-blur-lg border-b border-border">
-        <div className="max-w-4xl mx-auto px-4 h-14 flex items-center justify-between">
-          <span className="font-heading font-bold text-lg">iSAQB</span>
-          <div className="flex items-center gap-2">
-            <LanguageToggle />
-            <ThemePicker />
-          </div>
-        </div>
-      </header>
 
       {/* Main content */}
       <main
@@ -329,6 +318,6 @@ export function StartPage({ onRefresh }: StartPageProps) {
           </p>
         </div>
       </main>
-    </div>
+    </PageLayout>
   );
 }
