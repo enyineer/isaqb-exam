@@ -6,7 +6,7 @@ import { PageLayout } from '../components/PageLayout'
 import { PickQuestion } from '../components/PickQuestion'
 import { CategoryQuestion } from '../components/CategoryQuestion'
 import { labels } from '../utils/labels'
-import { ChevronLeft, ChevronRight, Flag, Clock, Bookmark, AlertTriangle, CheckCircle2 } from 'lucide-react'
+import { ChevronLeft, ChevronRight, Flag, Clock, Bookmark, AlertTriangle, CheckCircle2, StickyNote } from 'lucide-react'
 import { seededShuffle } from '../utils/shuffle'
 
 function formatTimer(ms: number): string {
@@ -18,7 +18,7 @@ function formatTimer(ms: number): string {
 
 export function QuestionPage() {
   const { t } = useLanguage()
-  const { questions, answers, finishExam, togglePickAnswer, accumulatedMs, sessionStartedAt, onQuestionEnter, shuffleSeed, flaggedQuestions, toggleFlag } = useExam()
+  const { questions, answers, finishExam, togglePickAnswer, accumulatedMs, sessionStartedAt, onQuestionEnter, shuffleSeed, flaggedQuestions, toggleFlag, questionNotes, setNote } = useExam()
   const [, navigate] = useLocation()
   const params = useParams<{ number: string }>()
   const questionNumber = parseInt(params.number || '1', 10)
@@ -215,6 +215,21 @@ export function QuestionPage() {
             key={question.id}
           />
         )}
+
+        {/* Notes for lecturer */}
+        <div className="mt-6">
+          <label className="flex items-center gap-1.5 text-xs font-medium text-text-muted mb-2">
+            <StickyNote size={13} />
+            {t(labels.noteLabel)}
+          </label>
+          <textarea
+            value={questionNotes[question.id] ?? ''}
+            onChange={(e) => setNote(question.id, e.target.value)}
+            placeholder={t(labels.notePlaceholder)}
+            rows={2}
+            className="w-full px-3 py-2.5 rounded-xl border-2 border-border bg-surface text-sm text-text placeholder:text-text-muted/40 resize-y focus:outline-none focus:border-primary/50 transition-colors"
+          />
+        </div>
       </main>
 
       {/* Navigation footer */}

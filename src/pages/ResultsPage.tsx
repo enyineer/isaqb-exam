@@ -20,6 +20,7 @@ import {
   TrendingUp,
   Clock,
   Printer,
+  StickyNote,
 } from "lucide-react";
 import { ExternalLink } from "../components/ExternalLink";
 import { Footer } from "../components/Footer";
@@ -41,6 +42,7 @@ export function ResultsPage() {
     resetExam,
     elapsedMs,
     questionTimes,
+    questionNotes,
   } = useExam();
   const [, navigate] = useLocation();
 
@@ -357,6 +359,19 @@ export function ResultsPage() {
                       >
                         {t(labels.learnMore)}
                       </ExternalLink>
+
+                      {/* User note */}
+                      {questionNotes[qr.questionId] && (
+                        <div className="mt-3 p-3 rounded-lg border-2 border-amber-500/20 bg-amber-500/5 text-sm">
+                          <p className="flex items-center gap-1.5 font-semibold text-xs text-amber-600 dark:text-amber-400 mb-1">
+                            <StickyNote size={12} />
+                            {t(labels.noteForLecturer)}
+                          </p>
+                          <p className="text-text-muted leading-relaxed whitespace-pre-line">
+                            {questionNotes[qr.questionId]}
+                          </p>
+                        </div>
+                      )}
                     </div>
                   );
                 })}

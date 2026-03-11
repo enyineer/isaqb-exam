@@ -88,4 +88,7 @@ export const labels = {
   },
   finishAnyway: { de: "Trotzdem abschließen", en: "Finish Anyway" },
   reviewFlagged: { de: "Überprüfen", en: "Review" },
+  noteLabel: { de: "Notizen", en: "Notes" },
+  notePlaceholder: { de: "Notizen für den Dozenten…", en: "Notes for the lecturer…" },
+  noteForLecturer: { de: "Notiz für den Dozenten", en: "Note for the lecturer" },
 } as const;
