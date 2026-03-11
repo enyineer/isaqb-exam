@@ -210,7 +210,7 @@ export function QuestionPage() {
       {/* Question content */}
       <main
         id="main-content"
-        className="flex-1 max-w-3xl mx-auto w-full px-4 py-8"
+        className="flex-1 max-w-3xl mx-auto w-full px-4 py-8 outline-none"
         tabIndex={-1}
       >
         {question.type === "pick" ? (
