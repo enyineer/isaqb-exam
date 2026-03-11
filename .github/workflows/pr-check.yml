@@ -1,0 +1,77 @@
+name: PR Check
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Type check
+        id: typecheck
+        run: bunx tsc --noEmit 2>&1 | tee /tmp/typecheck.log
+        continue-on-error: true
+
+      - name: Run tests
+        id: tests
+        run: bun test 2>&1 | tee /tmp/tests.log
+        continue-on-error: true
+
+      - name: Build
+        id: build
+        run: bun run build 2>&1 | tee /tmp/build.log
+        continue-on-error: true
+
+      - name: Comment on failure
+        if: steps.typecheck.outcome == 'failure' || steps.tests.outcome == 'failure' || steps.build.outcome == 'failure'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+
+            let body = '## ❌ CI Check Failed\n\n';
+            body += 'This PR cannot be merged until the following issues are resolved:\n\n';
+
+            const steps = [
+              { name: 'Type Check', id: 'typecheck', file: '/tmp/typecheck.log' },
+              { name: 'Tests', id: 'tests', file: '/tmp/tests.log' },
+              { name: 'Build', id: 'build', file: '/tmp/build.log' },
+            ];
+
+            for (const step of steps) {
+              const outcome = '${{ steps.' + step.id + '.outcome }}';
+              if (outcome === 'failure') {
+                const log = fs.readFileSync(step.file, 'utf8').trim();
+                const truncated = log.length > 3000 ? '…' + log.slice(-3000) : log;
+                body += `### 🔴 ${step.name}\n\n`;
+                body += '```\n' + truncated + '\n```\n\n';
+              }
+            }
+
+            body += '---\n';
+            body += '*Please fix these issues and push again. @' + context.payload.pull_request.user.login + '*';
+
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.payload.pull_request.number,
+              body,
+            });
+
+      - name: Fail workflow if any step failed
+        if: steps.typecheck.outcome == 'failure' || steps.tests.outcome == 'failure' || steps.build.outcome == 'failure'
+        run: exit 1
