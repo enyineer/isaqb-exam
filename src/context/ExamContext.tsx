@@ -15,6 +15,8 @@ interface PersistedState {
   questionTimes: QuestionTimes
   /** Seed for deterministic answer shuffling per attempt */
   shuffleSeed: number
+  /** Question IDs flagged for review */
+  flaggedQuestions: string[]
 }
 
 /** djb2 hash — fast and sufficient for cache invalidation */
@@ -149,6 +151,10 @@ interface ExamContextValue {
   questionTimes: QuestionTimes
   /** Seed for deterministic answer shuffling (set per attempt) */
   shuffleSeed: number
+  /** Question IDs flagged for review */
+  flaggedQuestions: Set<string>
+  /** Toggle flag on a question */
+  toggleFlag: (questionId: string) => void
 }
 
 const ExamContext = createContext<ExamContextValue | null>(null)
@@ -165,6 +171,7 @@ export function ExamProvider({ children }: { children: ReactNode }) {
   const [elapsedMs, setElapsedMs] = useState<number | null>(null)
   const [questionTimes, setQuestionTimes] = useState<QuestionTimes>({})
   const [shuffleSeed, setShuffleSeed] = useState(() => Date.now())
+  const [flaggedQuestions, setFlaggedQuestions] = useState<Set<string>>(new Set())
 
   // Ref-based tracking for the currently viewed question
   const activeQuestionRef = useRef<string | null>(null)
@@ -184,6 +191,7 @@ export function ExamProvider({ children }: { children: ReactNode }) {
       setElapsedMs(persisted.elapsedMs)
       setQuestionTimes(persisted.questionTimes)
       setShuffleSeed(persisted.shuffleSeed)
+      setFlaggedQuestions(new Set(persisted.flaggedQuestions ?? []))
       if (!persisted.examFinished) {
         setSessionStartedAt(Date.now())
       }
@@ -213,8 +221,9 @@ export function ExamProvider({ children }: { children: ReactNode }) {
       elapsedMs,
       questionTimes: finalQuestionTimes,
       shuffleSeed,
+      flaggedQuestions: [...flaggedQuestions],
     })
-  }, [questions, answers, accumulatedMs, sessionStartedAt, examFinished, elapsedMs, questionTimes, shuffleSeed])
+  }, [questions, answers, accumulatedMs, sessionStartedAt, examFinished, elapsedMs, questionTimes, shuffleSeed, flaggedQuestions])
 
   // Persist state on changes (only after exam has been started or continued)
   useEffect(() => { flushToStorage() }, [flushToStorage])
@@ -267,9 +276,19 @@ export function ExamProvider({ children }: { children: ReactNode }) {
     setElapsedMs(null)
     setQuestionTimes({})
     setShuffleSeed(Date.now())
+    setFlaggedQuestions(new Set())
     activeQuestionRef.current = null
     questionEnteredAtRef.current = null
     examActiveRef.current = true
+  }, [])
+
+  const toggleFlag = useCallback((questionId: string) => {
+    setFlaggedQuestions(prev => {
+      const next = new Set(prev)
+      if (next.has(questionId)) next.delete(questionId)
+      else next.add(questionId)
+      return next
+    })
   }, [])
 
   const continueExam = useCallback(() => {
@@ -283,6 +302,7 @@ export function ExamProvider({ children }: { children: ReactNode }) {
     setElapsedMs(persisted.elapsedMs)
     setQuestionTimes(persisted.questionTimes)
     setShuffleSeed(persisted.shuffleSeed)
+    setFlaggedQuestions(new Set(persisted.flaggedQuestions ?? []))
     if (!persisted.examFinished) {
       setSessionStartedAt(Date.now())
     }
@@ -317,6 +337,8 @@ export function ExamProvider({ children }: { children: ReactNode }) {
       accumulatedMs,
       sessionStartedAt,
       onQuestionEnter,
+      flaggedQuestions,
+      toggleFlag,
       questionTimes,
       shuffleSeed,
     }}>

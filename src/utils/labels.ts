@@ -79,4 +79,13 @@ export const labels = {
   savedExamProgress: { de: "Fragen beantwortet", en: "questions answered" },
   viewResults: { de: "Ergebnisse ansehen", en: "View Results" },
   savedExamFinished: { de: "Prüfung abgeschlossen", en: "Exam completed" },
+  flagQuestion: { de: "Markieren", en: "Flag" },
+  unflagQuestion: { de: "Markierung entfernen", en: "Unflag" },
+  flaggedQuestionsTitle: { de: "Markierte Fragen", en: "Flagged Questions" },
+  flaggedQuestionsBody: {
+    de: "Du hast noch markierte Fragen zur Überprüfung. Möchtest du die Prüfung trotzdem abschließen?",
+    en: "You still have flagged questions to review. Do you want to finish the exam anyway?",
+  },
+  finishAnyway: { de: "Trotzdem abschließen", en: "Finish Anyway" },
+  reviewFlagged: { de: "Überprüfen", en: "Review" },
 } as const;

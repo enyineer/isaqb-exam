@@ -28,12 +28,19 @@ function formatElapsed(ms: number): string {
   const totalSeconds = Math.floor(ms / 1000);
   const minutes = Math.floor(totalSeconds / 60);
   const seconds = totalSeconds % 60;
-  return `${minutes}:${String(seconds).padStart(2, '0')}`;
+  return `${minutes}:${String(seconds).padStart(2, "0")}`;
 }
 
 export function ResultsPage() {
   const { t } = useLanguage();
-  const { questions, answers, examFinished, resetExam, elapsedMs, questionTimes } = useExam();
+  const {
+    questions,
+    answers,
+    examFinished,
+    resetExam,
+    elapsedMs,
+    questionTimes,
+  } = useExam();
   const [, navigate] = useLocation();
 
   const result = useMemo(
@@ -165,7 +172,7 @@ export function ResultsPage() {
                 {t(labels.timeTaken)}
               </p>
               <p className="text-3xl font-heading font-bold">
-                {elapsedMs ? formatElapsed(elapsedMs) : '—'}
+                {elapsedMs ? formatElapsed(elapsedMs) : "—"}
               </p>
             </div>
           </div>
@@ -203,23 +210,33 @@ export function ResultsPage() {
               <div className="space-y-1.5">
                 {questions.map((q, i) => {
                   const timeMs = questionTimes[q.id] ?? 0;
-                  const maxTimeMs = Math.max(...Object.values(questionTimes), 1);
+                  const maxTimeMs = Math.max(
+                    ...Object.values(questionTimes),
+                    1,
+                  );
                   const barPercent = (timeMs / maxTimeMs) * 100;
-                  const isLong = timeMs > (elapsedMs ?? 0) / questions.length * 1.5; // > 1.5x average
+                  const isLong =
+                    timeMs > ((elapsedMs ?? 0) / questions.length) * 1.5; // > 1.5x average
                   return (
                     <div key={q.id} className="flex items-center gap-2 text-xs">
-                      <span className="w-6 text-right font-mono text-text-muted shrink-0">{i + 1}</span>
+                      <span className="w-6 text-right font-mono text-text-muted shrink-0">
+                        {i + 1}
+                      </span>
                       <div className="flex-1 h-4 bg-surface-alt rounded-full overflow-hidden">
                         <div
                           className={`h-full rounded-full transition-all duration-700 ease-out ${
-                            isLong ? 'bg-amber-500' : 'bg-primary-light'
+                            isLong ? "bg-amber-500" : "bg-primary-light"
                           }`}
                           style={{ width: `${barPercent}%` }}
                         />
                       </div>
-                      <span className={`w-12 text-right font-mono shrink-0 ${
-                        isLong ? 'text-amber-500 font-semibold' : 'text-text-muted'
-                      }`}>
+                      <span
+                        className={`w-12 text-right font-mono shrink-0 ${
+                          isLong
+                            ? "text-amber-500 font-semibold"
+                            : "text-text-muted"
+                        }`}
+                      >
                         {formatElapsed(timeMs)}
                       </span>
                     </div>
@@ -254,7 +271,9 @@ export function ResultsPage() {
               title={t(labels.exportResults)}
             >
               <Printer size={16} />
-              <span className="hidden sm:inline">{t(labels.exportResults)}</span>
+              <span className="hidden sm:inline">
+                {t(labels.exportResults)}
+              </span>
             </button>
           </div>
 
@@ -370,6 +389,15 @@ export function ResultsPage() {
           >
             enking.dev
           </a>
+          {" | "}
+          <a
+            href="https://github.com/enyineer/isaqb-exam"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-primary-light hover:underline"
+          >
+            GitHub
+          </a>
         </p>
       </main>
     </div>
@@ -409,7 +437,9 @@ function PickReview({
               {isCorrect && isSelected && <CheckCircle2 size={16} />}
               {isCorrect && !isSelected && <MinusCircle size={16} />}
               {isSelected && !isCorrect && <XCircle size={16} />}
-              {!isSelected && !isCorrect && <span className="inline-block w-4" />}
+              {!isSelected && !isCorrect && (
+                <span className="inline-block w-4" />
+              )}
             </span>
             <span className="font-mono text-xs font-bold opacity-50 shrink-0 mt-0.5">
               {opt.id}

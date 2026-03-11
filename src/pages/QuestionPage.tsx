@@ -6,7 +6,7 @@ import { ThemePicker, LanguageToggle } from '../components/ThemePicker'
 import { PickQuestion } from '../components/PickQuestion'
 import { CategoryQuestion } from '../components/CategoryQuestion'
 import { labels } from '../utils/labels'
-import { ChevronLeft, ChevronRight, Flag, Clock } from 'lucide-react'
+import { ChevronLeft, ChevronRight, Flag, Clock, Bookmark, AlertTriangle, CheckCircle2 } from 'lucide-react'
 import { seededShuffle } from '../utils/shuffle'
 
 function formatTimer(ms: number): string {
@@ -18,13 +18,14 @@ function formatTimer(ms: number): string {
 
 export function QuestionPage() {
   const { t } = useLanguage()
-  const { questions, answers, finishExam, togglePickAnswer, accumulatedMs, sessionStartedAt, onQuestionEnter, shuffleSeed } = useExam()
+  const { questions, answers, finishExam, togglePickAnswer, accumulatedMs, sessionStartedAt, onQuestionEnter, shuffleSeed, flaggedQuestions, toggleFlag } = useExam()
   const [, navigate] = useLocation()
   const params = useParams<{ number: string }>()
   const questionNumber = parseInt(params.number || '1', 10)
   const questionIndex = questionNumber - 1
   const question = questions[questionIndex]
   const totalQuestions = questions.length
+  const [showFlaggedModal, setShowFlaggedModal] = useState(false)
 
   // Live timer state (updates every second)
   const [elapsed, setElapsed] = useState(() => computeActiveElapsed(accumulatedMs, sessionStartedAt))
@@ -84,9 +85,19 @@ export function QuestionPage() {
   );
 
   const handleFinish = useCallback(() => {
+    if (flaggedQuestions.size > 0) {
+      setShowFlaggedModal(true)
+      return
+    }
     finishExam();
     navigate("/results");
-  }, [finishExam, navigate]);
+  }, [finishExam, navigate, flaggedQuestions]);
+
+  const confirmFinish = useCallback(() => {
+    setShowFlaggedModal(false)
+    finishExam()
+    navigate("/results")
+  }, [finishExam, navigate])
 
   // Keyboard navigation
   useEffect(() => {
@@ -140,6 +151,7 @@ export function QuestionPage() {
   }).length;
 
   const progressPercent = (answeredCount / totalQuestions) * 100;
+  const isFlagged = flaggedQuestions.has(question.id)
 
   return (
     <div className="min-h-dvh flex flex-col">
@@ -163,6 +175,20 @@ export function QuestionPage() {
                 {t(labels.question)} {questionNumber} {t(labels.of)}{" "}
                 {totalQuestions}
               </span>
+              {/* Flag button */}
+              <button
+                onClick={() => toggleFlag(question.id)}
+                className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-sm font-medium transition-all cursor-pointer ${
+                  isFlagged
+                    ? 'bg-amber-500/15 text-amber-600 dark:text-amber-400 border-2 border-amber-500/40 shadow-sm shadow-amber-500/10'
+                    : 'border-2 border-border bg-surface hover:bg-surface-hover hover:border-amber-500/30 hover:text-amber-600 dark:hover:text-amber-400'
+                }`}
+                aria-label={isFlagged ? t(labels.unflagQuestion) : t(labels.flagQuestion)}
+                title={isFlagged ? t(labels.unflagQuestion) : t(labels.flagQuestion)}
+              >
+                <Bookmark size={14} className={isFlagged ? 'fill-current' : ''} />
+                <span className="hidden sm:inline">{isFlagged ? t(labels.unflagQuestion) : t(labels.flagQuestion)}</span>
+              </button>
               <LanguageToggle />
               <ThemePicker />
             </div>
@@ -233,18 +259,23 @@ export function QuestionPage() {
                 );
               })();
               const isCurrent = i === questionIndex;
+              const isQuestionFlagged = flaggedQuestions.has(q.id);
               return (
                 <button
                   key={q.id}
                   onClick={() => goTo(i + 1)}
                   className={`w-2 h-2 rounded-full transition-all duration-200 shrink-0 cursor-pointer ${
                     isCurrent
-                      ? "bg-primary scale-150"
-                      : isAnswered
-                        ? "bg-primary-light opacity-60"
-                        : "bg-border"
+                      ? isQuestionFlagged
+                        ? "bg-amber-500 scale-150 ring-2 ring-amber-500/30"
+                        : "bg-primary scale-150"
+                      : isQuestionFlagged
+                        ? "bg-amber-500 opacity-80"
+                        : isAnswered
+                          ? "bg-primary-light opacity-60"
+                          : "bg-border"
                   }`}
-                  aria-label={`${t(labels.question)} ${i + 1}${isAnswered ? " ✓" : ""}`}
+                  aria-label={`${t(labels.question)} ${i + 1}${isAnswered ? " ✓" : ""}${isQuestionFlagged ? " ⚑" : ""}`}
                   aria-current={isCurrent ? "step" : undefined}
                 />
               );
@@ -270,6 +301,48 @@ export function QuestionPage() {
           )}
         </div>
       </footer>
+
+      {/* Flagged questions confirmation modal */}
+      {showFlaggedModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          {/* Backdrop */}
+          <div
+            className="absolute inset-0 bg-black/50 backdrop-blur-sm"
+            onClick={() => setShowFlaggedModal(false)}
+          />
+          {/* Modal */}
+          <div className="relative bg-bg border border-border rounded-2xl shadow-2xl max-w-sm w-full p-6 animate-in">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-10 h-10 rounded-xl bg-amber-500/15 flex items-center justify-center">
+                <AlertTriangle size={20} className="text-amber-500" />
+              </div>
+              <h2 className="font-heading font-semibold text-lg">{t(labels.flaggedQuestionsTitle)}</h2>
+            </div>
+            <p className="text-sm text-text-muted mb-2">
+              {t(labels.flaggedQuestionsBody)}
+            </p>
+            <p className="text-sm text-text-muted mb-6">
+              {flaggedQuestions.size} {flaggedQuestions.size === 1 ? (t({ de: 'Frage', en: 'question' })) : (t({ de: 'Fragen', en: 'questions' }))}
+            </p>
+            <div className="flex gap-3">
+              <button
+                onClick={() => setShowFlaggedModal(false)}
+                className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 border-2 border-border bg-surface rounded-xl font-medium text-sm transition-all hover:bg-surface-hover cursor-pointer"
+              >
+                <Bookmark size={14} />
+                {t(labels.reviewFlagged)}
+              </button>
+              <button
+                onClick={confirmFinish}
+                className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-success text-white rounded-xl font-medium text-sm transition-all hover:opacity-90 cursor-pointer"
+              >
+                <CheckCircle2 size={14} />
+                {t(labels.finishAnyway)}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
