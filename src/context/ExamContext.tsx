@@ -39,6 +39,29 @@ function loadPersistedState(questionsHash: string): PersistedState | null {
   }
 }
 
+export interface SavedExamInfo {
+  examFinished: boolean
+  answeredCount: number
+  totalQuestions: number
+  accumulatedMs: number
+}
+
+/** Check if there's a saved exam matching the current questions (without restoring it) */
+export function getSavedExamInfo(questions: Question[]): SavedExamInfo | null {
+  if (questions.length === 0) return null
+  const hash = computeQuestionsHash(questions)
+  const persisted = loadPersistedState(hash)
+  if (!persisted) return null
+  const answeredCount = Object.keys(persisted.answers).length
+  if (answeredCount === 0 && !persisted.examFinished) return null
+  return {
+    examFinished: persisted.examFinished,
+    answeredCount,
+    totalQuestions: questions.length,
+    accumulatedMs: persisted.accumulatedMs,
+  }
+}
+
 function persistState(state: PersistedState) {
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(state))
@@ -111,6 +134,8 @@ interface ExamContextValue {
   togglePickAnswer: (questionId: string, optionId: string) => void
   setCategoryAnswer: (questionId: string, statementId: string, categoryLabel: string) => void
   resetExam: () => void
+  /** Restore persisted state and resume (call from StartPage continue button) */
+  continueExam: () => void
   finishExam: () => void
   examFinished: boolean
   elapsedMs: number | null
@@ -144,71 +169,50 @@ export function ExamProvider({ children }: { children: ReactNode }) {
   // Ref-based tracking for the currently viewed question
   const activeQuestionRef = useRef<string | null>(null)
   const questionEnteredAtRef = useRef<number | null>(null)
-  const hasRestoredRef = useRef(false)
+  /** Set to true after resetExam or continueExam — prevents persisting the default/empty state on page load */
+  const examActiveRef = useRef(false)
 
-  // Restore persisted state when questions load
-  useEffect(() => {
-    if (questions.length === 0 || hasRestoredRef.current) return
-    hasRestoredRef.current = true
-    const hash = computeQuestionsHash(questions)
-    const persisted = loadPersistedState(hash)
-    if (persisted) {
-      dispatch({ type: 'RESTORE', answers: persisted.answers })
-      setAccumulatedMs(persisted.accumulatedMs)
-      setExamFinished(persisted.examFinished)
-      setElapsedMs(persisted.elapsedMs)
-      setQuestionTimes(persisted.questionTimes)
-      setShuffleSeed(persisted.shuffleSeed)
-      // Start a new session from the accumulated time if exam is still in progress
-      if (!persisted.examFinished) {
-        setSessionStartedAt(Date.now())
+  /** Build the current persisted state snapshot and write it to localStorage */
+  const flushToStorage = useCallback((opts?: { includeActiveQuestion?: boolean }) => {
+    if (questions.length === 0 || !examActiveRef.current) return
+    const totalAccumulatedMs = sessionStartedAt
+      ? accumulatedMs + (Date.now() - sessionStartedAt)
+      : accumulatedMs
+    let finalQuestionTimes = questionTimes
+    if (opts?.includeActiveQuestion) {
+      const qId = activeQuestionRef.current
+      const enteredAt = questionEnteredAtRef.current
+      if (qId && enteredAt) {
+        finalQuestionTimes = { ...questionTimes, [qId]: (questionTimes[qId] ?? 0) + (Date.now() - enteredAt) }
       }
     }
-  }, [questions])
-
-  // Persist state on changes
-  useEffect(() => {
-    if (questions.length === 0) return
-    const hash = computeQuestionsHash(questions)
     persistState({
-      questionsHash: hash,
+      questionsHash: computeQuestionsHash(questions),
       answers,
-      accumulatedMs,
+      accumulatedMs: totalAccumulatedMs,
       examFinished,
       elapsedMs,
-      questionTimes,
+      questionTimes: finalQuestionTimes,
       shuffleSeed,
     })
-  }, [questions, answers, accumulatedMs, examFinished, elapsedMs, questionTimes, shuffleSeed])
+  }, [questions, answers, accumulatedMs, sessionStartedAt, examFinished, elapsedMs, questionTimes, shuffleSeed])
 
-  // Flush accumulated time before page unload so we don't lose current session time
+  // Persist state on changes (only after exam has been started or continued)
+  useEffect(() => { flushToStorage() }, [flushToStorage])
+
+  // Flush including active question time before page unload
   useEffect(() => {
-    const handleBeforeUnload = () => {
-      if (sessionStartedAt && !examFinished) {
-        const currentSessionTime = Date.now() - sessionStartedAt
-        const totalAccumulated = accumulatedMs + currentSessionTime
-        // Flush question times too
-        const qId = activeQuestionRef.current
-        const enteredAt = questionEnteredAtRef.current
-        const updatedQTimes = { ...questionTimes }
-        if (qId && enteredAt) {
-          updatedQTimes[qId] = (updatedQTimes[qId] ?? 0) + (Date.now() - enteredAt)
-        }
-        const hash = computeQuestionsHash(questions)
-        persistState({
-          questionsHash: hash,
-          answers,
-          accumulatedMs: totalAccumulated,
-          examFinished,
-          elapsedMs,
-          questionTimes: updatedQTimes,
-          shuffleSeed,
-        })
-      }
-    }
+    const handleBeforeUnload = () => flushToStorage({ includeActiveQuestion: true })
     window.addEventListener('beforeunload', handleBeforeUnload)
     return () => window.removeEventListener('beforeunload', handleBeforeUnload)
-  }, [sessionStartedAt, accumulatedMs, examFinished, questions, answers, elapsedMs, questionTimes])
+  }, [flushToStorage])
+
+  // Periodically persist timer while the session is active (every 5s)
+  useEffect(() => {
+    if (!sessionStartedAt || examFinished) return
+    const interval = setInterval(() => flushToStorage(), 5_000)
+    return () => clearInterval(interval)
+  }, [flushToStorage, sessionStartedAt, examFinished])
 
   /** Flush accumulated time for the currently active question */
   const flushActiveQuestion = useCallback(() => {
@@ -246,7 +250,25 @@ export function ExamProvider({ children }: { children: ReactNode }) {
     setShuffleSeed(Date.now())
     activeQuestionRef.current = null
     questionEnteredAtRef.current = null
+    examActiveRef.current = true
   }, [])
+
+  const continueExam = useCallback(() => {
+    if (questions.length === 0) return
+    const hash = computeQuestionsHash(questions)
+    const persisted = loadPersistedState(hash)
+    if (!persisted) return
+    dispatch({ type: 'RESTORE', answers: persisted.answers })
+    setAccumulatedMs(persisted.accumulatedMs)
+    setExamFinished(persisted.examFinished)
+    setElapsedMs(persisted.elapsedMs)
+    setQuestionTimes(persisted.questionTimes)
+    setShuffleSeed(persisted.shuffleSeed)
+    if (!persisted.examFinished) {
+      setSessionStartedAt(Date.now())
+    }
+    examActiveRef.current = true
+  }, [questions])
 
   const finishExam = useCallback(() => {
     flushActiveQuestion()
@@ -269,6 +291,7 @@ export function ExamProvider({ children }: { children: ReactNode }) {
       togglePickAnswer,
       setCategoryAnswer,
       resetExam,
+      continueExam,
       finishExam,
       examFinished,
       elapsedMs,

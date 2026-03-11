@@ -73,4 +73,10 @@ export const labels = {
     en: "This tool and its author are not affiliated with iSAQB e.V.\nNo guarantee is provided for the correctness of the questions or the test itself.\nThis site uses privacy-friendly, cookie-less analytics with Umami.",
   },
   exportResults: { de: "Drucken", en: "Print" },
+  continueExam: { de: "Fortsetzen", en: "Continue" },
+  newExam: { de: "Neue Prüfung", en: "New Exam" },
+  savedExamTitle: { de: "Gespeicherte Prüfung", en: "Saved Exam" },
+  savedExamProgress: { de: "Fragen beantwortet", en: "questions answered" },
+  viewResults: { de: "Ergebnisse ansehen", en: "View Results" },
+  savedExamFinished: { de: "Prüfung abgeschlossen", en: "Exam completed" },
 } as const;

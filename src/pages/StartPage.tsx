@@ -1,9 +1,10 @@
+import { useMemo } from 'react'
 import { useLanguage } from '../context/LanguageContext'
-import { useExam } from '../context/ExamContext'
+import { useExam, getSavedExamInfo } from '../context/ExamContext'
 import { ThemePicker, LanguageToggle } from '../components/ThemePicker'
 import { useLocation } from 'wouter'
 import { labels } from '../utils/labels'
-import { BookOpen, Timer, Trophy, ArrowRight, Info, RefreshCw, GraduationCap } from 'lucide-react'
+import { BookOpen, Timer, Trophy, ArrowRight, Info, RefreshCw, GraduationCap, Play, RotateCcw, CheckCircle2 } from 'lucide-react'
 import { PASS_THRESHOLD } from '../utils/scoring'
 
 interface StartPageProps {
@@ -19,16 +20,33 @@ function formatRelativeTime(timestamp: number, lang: string): string {
   return lang === 'de' ? `vor ${hours} Std.` : `${hours}h ago`
 }
 
+function formatTimer(ms: number): string {
+  const totalSeconds = Math.floor(ms / 1000)
+  const minutes = Math.floor(totalSeconds / 60)
+  const seconds = totalSeconds % 60
+  return `${minutes}:${String(seconds).padStart(2, '0')}`
+}
+
 export function StartPage({ onRefresh }: StartPageProps) {
   const { t, lang } = useLanguage()
-  const { questions, dataSource, fetchedAt, loading, resetExam } = useExam()
+  const { questions, dataSource, fetchedAt, loading, resetExam, continueExam } = useExam()
   const [, navigate] = useLocation()
 
   const totalPoints = questions.reduce((sum, q) => sum + q.points, 0)
+  const savedExam = useMemo(() => getSavedExamInfo(questions), [questions])
 
   const handleStart = () => {
     resetExam()
     navigate('/question/1')
+  }
+
+  const handleContinue = () => {
+    continueExam()
+    if (savedExam?.examFinished) {
+      navigate('/results')
+    } else {
+      navigate('/question/1')
+    }
   }
 
   const sourceLabel = dataSource === 'live'
@@ -142,19 +160,64 @@ export function StartPage({ onRefresh }: StartPageProps) {
             </div>
           )}
 
-          {/* CTA */}
-          <div className="relative group">
-            {/* Glow effect behind button */}
-            <div className="absolute -inset-1 rounded-2xl bg-linear-to-r from-primary via-accent to-primary opacity-0 group-hover:opacity-20 blur-xl transition-opacity duration-500" />
-            <button
-              onClick={handleStart}
-              disabled={questions.length === 0}
-              className="relative w-full flex items-center justify-center gap-3 px-8 py-4 bg-linear-to-r from-primary to-primary-dark text-white rounded-2xl font-heading font-semibold text-lg transition-all duration-300 shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30 hover:scale-[1.01] active:scale-[0.99] cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
-            >
-              {t(labels.startExam)}
-              <ArrowRight size={20} className="transition-transform duration-300 group-hover:translate-x-1" />
-            </button>
-          </div>
+          {/* Continue saved exam or Start new */}
+          {savedExam ? (
+            <div className="bg-surface/60 backdrop-blur-sm border-2 border-primary/20 rounded-2xl p-5 mb-6">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
+                  {savedExam.examFinished
+                    ? <CheckCircle2 size={20} className="text-primary-light" />
+                    : <Play size={20} className="text-primary-light" />
+                  }
+                </div>
+                <div>
+                  <p className="font-heading font-semibold text-sm">{t(labels.savedExamTitle)}</p>
+                  <p className="text-xs text-text-muted">
+                    {savedExam.examFinished
+                      ? t(labels.savedExamFinished)
+                      : `${savedExam.answeredCount} / ${savedExam.totalQuestions} ${t(labels.savedExamProgress)}`
+                    }
+                    {savedExam.accumulatedMs > 0 && (
+                      <span className="ml-1.5 opacity-60">· {formatTimer(savedExam.accumulatedMs)}</span>
+                    )}
+                  </p>
+                </div>
+              </div>
+              <div className="flex gap-3">
+                <button
+                  onClick={handleContinue}
+                  className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-primary text-white rounded-xl font-medium transition-all duration-200 hover:bg-primary-dark cursor-pointer"
+                >
+                  {savedExam.examFinished ? (
+                    <>{t(labels.viewResults)} <ArrowRight size={16} /></>
+                  ) : (
+                    <>{t(labels.continueExam)} <ArrowRight size={16} /></>
+                  )}
+                </button>
+                <button
+                  onClick={handleStart}
+                  className="flex items-center justify-center gap-2 px-4 py-3 border-2 border-border bg-surface rounded-xl font-medium transition-all duration-200 hover:bg-surface-hover cursor-pointer"
+                >
+                  <RotateCcw size={16} />
+                  {t(labels.newExam)}
+                </button>
+              </div>
+            </div>
+          ) : (
+            /* CTA */
+            <div className="relative group">
+              {/* Glow effect behind button */}
+              <div className="absolute -inset-1 rounded-2xl bg-linear-to-r from-primary via-accent to-primary opacity-0 group-hover:opacity-20 blur-xl transition-opacity duration-500" />
+              <button
+                onClick={handleStart}
+                disabled={questions.length === 0}
+                className="relative w-full flex items-center justify-center gap-3 px-8 py-4 bg-linear-to-r from-primary to-primary-dark text-white rounded-2xl font-heading font-semibold text-lg transition-all duration-300 shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30 hover:scale-[1.01] active:scale-[0.99] cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+              >
+                {t(labels.startExam)}
+                <ArrowRight size={20} className="transition-transform duration-300 group-hover:translate-x-1" />
+              </button>
+            </div>
+          )}
 
           {/* Keyboard hints — hidden on mobile (irrelevant for touch) */}
           <div className="hidden sm:flex items-center justify-center gap-4 mt-5 text-xs text-text-muted">
