@@ -3,6 +3,7 @@ import { useLanguage } from "../context/LanguageContext";
 import { useExam } from "../context/ExamContext";
 import { useLocation } from "wouter";
 import { PageLayout } from "../components/PageLayout";
+import { ReviewResultItem, type ReviewStatus } from "../components/ReviewResultItem";
 import { labels } from "../utils/labels";
 import { scoreExam, PASS_THRESHOLD } from "../utils/scoring";
 import type { PickQuestion, CategoryQuestion } from "../data/schema";
@@ -389,38 +390,20 @@ function PickReview({
     <div className="space-y-1 sm:space-y-1.5 mt-1">
       {question.options.map((opt) => {
         const or = qr.optionResults.find((o) => o.id === opt.id)!;
-        const isCorrect = or.isCorrect;
-        const isSelected = or.isSelected;
-        const isHighlighted = isCorrect || isSelected;
+
+        const status: ReviewStatus =
+          or.isCorrect && or.isSelected ? 'correct'
+          : or.isCorrect && !or.isSelected ? 'missed'
+          : or.isSelected && !or.isCorrect ? 'incorrect'
+          : 'neutral';
 
         return (
-          <div
+          <ReviewResultItem
             key={opt.id}
-            className={`flex items-start gap-1.5 sm:gap-2 text-[13px] sm:text-sm rounded-lg ${
-              isHighlighted ? 'px-2.5 sm:px-3 py-1.5' : 'px-2.5 sm:px-3 py-1'
-            } ${
-              isCorrect && isSelected
-                ? "bg-green-500/10 text-green-700 dark:text-green-400"
-                : isCorrect && !isSelected
-                  ? "bg-blue-500/10 text-blue-700 dark:text-blue-400"
-                  : isSelected && !isCorrect
-                    ? "bg-red-500/10 text-red-700 dark:text-red-400"
-                    : "opacity-60"
-            }`}
-          >
-            <span className="shrink-0 mt-0.5">
-              {isCorrect && isSelected && <CheckCircle2 size={14} />}
-              {isCorrect && !isSelected && <MinusCircle size={14} />}
-              {isSelected && !isCorrect && <XCircle size={14} />}
-              {!isSelected && !isCorrect && (
-                <span className="inline-block w-3.5" />
-              )}
-            </span>
-            <span className="font-mono text-xs font-bold opacity-50 shrink-0 mt-px">
-              {opt.id}
-            </span>
-            <span className="min-w-0">{t(opt.text)}</span>
-          </div>
+            status={status}
+            itemId={opt.id}
+            text={t(opt.text)}
+          />
         );
       })}
     </div>
@@ -443,32 +426,25 @@ function CategoryReview({
     <div className="space-y-1 sm:space-y-1.5 mt-1">
       {question.statements.map((stmt) => {
         const sr = qr.statementResults.find((s) => s.id === stmt.id)!;
+
+        const status: ReviewStatus = sr.isCorrect ? 'correct' : sr.isSkipped ? 'missed' : 'incorrect';
+
         return (
-          <div
+          <ReviewResultItem
             key={stmt.id}
-            className={`text-[13px] sm:text-sm px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-lg ${
-              sr.isCorrect
-                ? "bg-green-500/10 text-green-700 dark:text-green-400"
-                : sr.isSkipped
-                  ? "bg-blue-500/10 text-blue-700 dark:text-blue-400"
-                  : "bg-red-500/10 text-red-700 dark:text-red-400"
-            }`}
-          >
-            <div className="flex items-start gap-1.5 sm:gap-2">
-              <span className="shrink-0 mt-0.5">{sr.isCorrect ? <CheckCircle2 size={14} /> : sr.isSkipped ? <MinusCircle size={14} /> : <XCircle size={14} />}</span>
-              <span className="font-mono text-xs font-bold opacity-50 shrink-0 mt-px">
-                {stmt.id}
-              </span>
-              <span className="min-w-0">{t(stmt.text)}</span>
-            </div>
-            <div className="flex items-center gap-1.5 mt-1 ml-[calc(14px+0.375rem+1rem+0.375rem)] sm:ml-[calc(14px+0.5rem+1rem+0.5rem)] text-xs opacity-70">
-              <span className={sr.assignedCategory ? "" : "italic opacity-50"}>
-                {sr.assignedCategory ? categoryMap[sr.assignedCategory] : "—"}
-              </span>
-              <span>→</span>
-              <span className="font-medium">{categoryMap[sr.correctCategory]}</span>
-            </div>
-          </div>
+            status={status}
+            itemId={stmt.id}
+            text={t(stmt.text)}
+            secondaryContent={
+              <>
+                <span className={sr.assignedCategory ? '' : 'italic opacity-50'}>
+                  {sr.assignedCategory ? categoryMap[sr.assignedCategory] : '—'}
+                </span>
+                <span>→</span>
+                <span className="font-medium">{categoryMap[sr.correctCategory]}</span>
+              </>
+            }
+          />
         );
       })}
     </div>
