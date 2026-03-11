@@ -169,8 +169,27 @@ export function ExamProvider({ children }: { children: ReactNode }) {
   // Ref-based tracking for the currently viewed question
   const activeQuestionRef = useRef<string | null>(null)
   const questionEnteredAtRef = useRef<number | null>(null)
-  /** Set to true after resetExam or continueExam — prevents persisting the default/empty state on page load */
+  /** Set to true after resetExam, continueExam, or auto-restore — prevents persisting the default/empty state on page load */
   const examActiveRef = useRef(false)
+
+  // Auto-restore persisted state when questions load (handles mid-exam page refresh)
+  useEffect(() => {
+    if (questions.length === 0 || examActiveRef.current) return
+    const hash = computeQuestionsHash(questions)
+    const persisted = loadPersistedState(hash)
+    if (persisted) {
+      dispatch({ type: 'RESTORE', answers: persisted.answers })
+      setAccumulatedMs(persisted.accumulatedMs)
+      setExamFinished(persisted.examFinished)
+      setElapsedMs(persisted.elapsedMs)
+      setQuestionTimes(persisted.questionTimes)
+      setShuffleSeed(persisted.shuffleSeed)
+      if (!persisted.examFinished) {
+        setSessionStartedAt(Date.now())
+      }
+      examActiveRef.current = true
+    }
+  }, [questions])
 
   /** Build the current persisted state snapshot and write it to localStorage */
   const flushToStorage = useCallback((opts?: { includeActiveQuestion?: boolean }) => {
