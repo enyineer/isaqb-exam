@@ -50,6 +50,7 @@ export function scorePickQuestion(question: PickQuestion, selectedIds: string[])
   const correctOptions = question.options.filter(o => o.correct)
   const correctCount = correctOptions.length
   const pointsPerCorrect = question.points / correctCount
+  const tooManySelected = selectedIds.length > correctCount
 
   let rawScore = 0
   const optionResults: OptionResult[] = question.options.map(option => {
@@ -65,10 +66,13 @@ export function scorePickQuestion(question: PickQuestion, selectedIds: string[])
     return { id: option.id, isSelected, isCorrect, pointsDelta: isSelected ? pointsDelta : 0 }
   })
 
+  // Selecting more options than correct answers always results in 0 points
+  const finalScore = tooManySelected ? 0 : Math.max(0, rawScore)
+
   return {
     questionId: question.id,
     type: 'pick',
-    score: Math.max(0, rawScore),
+    score: finalScore,
     maxPoints: question.points,
     rawScore,
     optionResults,

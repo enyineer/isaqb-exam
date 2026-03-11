@@ -3,7 +3,7 @@ import { useExam } from '../context/ExamContext'
 import { ThemePicker, LanguageToggle } from '../components/ThemePicker'
 import { useLocation } from 'wouter'
 import { labels } from '../utils/labels'
-import { BookOpen, Timer, Trophy, ArrowRight, Info, RefreshCw } from 'lucide-react'
+import { BookOpen, Timer, Trophy, ArrowRight, Info, RefreshCw, GraduationCap } from 'lucide-react'
 import { PASS_THRESHOLD } from '../utils/scoring'
 
 interface StartPageProps {
@@ -50,7 +50,13 @@ export function StartPage({ onRefresh }: StartPageProps) {
       : 'bg-amber-500'
 
   return (
-    <div className="min-h-dvh flex flex-col">
+    <div className="min-h-dvh flex flex-col relative overflow-hidden">
+      {/* Background decoration */}
+      <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[600px] bg-primary/5 rounded-full blur-3xl" />
+        <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-accent/5 rounded-full blur-3xl" />
+      </div>
+
       {/* Header */}
       <header className="sticky top-0 z-40 bg-bg/80 backdrop-blur-lg border-b border-border">
         <div className="max-w-4xl mx-auto px-4 h-14 flex items-center justify-between">
@@ -63,47 +69,51 @@ export function StartPage({ onRefresh }: StartPageProps) {
       </header>
 
       {/* Main content */}
-      <main id="main-content" className="flex-1 flex items-center justify-center px-4 py-12">
+      <main id="main-content" className="relative flex-1 flex items-center justify-center px-4 py-12">
         <div className="max-w-2xl w-full page-enter">
           {/* Hero */}
-          <div className="text-center mb-10">
-            <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-primary mb-6 shadow-lg">
-              <BookOpen className="text-white" size={32} />
+          <div className="text-center mb-12">
+            <div className="relative inline-flex items-center justify-center w-20 h-20 rounded-2xl mb-6">
+              {/* Glow behind icon */}
+              <div className="absolute inset-0 rounded-2xl bg-primary/20 blur-xl scale-150" />
+              <div className="relative w-20 h-20 rounded-2xl bg-linear-to-br from-primary to-primary-dark flex items-center justify-center shadow-lg">
+                <GraduationCap className="text-white" size={36} />
+              </div>
             </div>
             <h1 className="font-heading text-4xl sm:text-5xl font-bold mb-3 tracking-tight">
               {t(labels.examTitle)}
             </h1>
-            <p className="text-text-muted text-lg max-w-md mx-auto leading-relaxed">
+            <p className="text-text-muted text-base sm:text-lg max-w-lg mx-auto leading-relaxed">
               {t(labels.examSubtitle)}
             </p>
           </div>
 
-          {/* Stats cards */}
+          {/* Stats row */}
           <div className="grid grid-cols-3 gap-3 mb-8">
-            <div className="bg-surface border-2 border-border rounded-xl p-4 text-center">
-              <BookOpen size={20} className="mx-auto mb-2 text-primary-light" />
-              <p className="text-2xl font-heading font-bold">{questions.length}</p>
-              <p className="text-xs text-text-muted">{t(labels.totalQuestions)}</p>
+            <div className="group relative bg-surface/60 backdrop-blur-sm border border-border/50 rounded-2xl p-5 text-center transition-all duration-300 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5">
+              <BookOpen size={18} className="mx-auto mb-2.5 text-primary-light transition-transform duration-300 group-hover:scale-110" />
+              <p className="text-3xl font-heading font-bold tabular-nums">{questions.length}</p>
+              <p className="text-xs text-text-muted mt-0.5">{t(labels.totalQuestions)}</p>
             </div>
-            <div className="bg-surface border-2 border-border rounded-xl p-4 text-center">
-              <Trophy size={20} className="mx-auto mb-2 text-accent" />
-              <p className="text-2xl font-heading font-bold">{totalPoints}</p>
-              <p className="text-xs text-text-muted">{t(labels.totalPoints)}</p>
+            <div className="group relative bg-surface/60 backdrop-blur-sm border border-border/50 rounded-2xl p-5 text-center transition-all duration-300 hover:border-accent/30 hover:shadow-lg hover:shadow-accent/5">
+              <Trophy size={18} className="mx-auto mb-2.5 text-accent transition-transform duration-300 group-hover:scale-110" />
+              <p className="text-3xl font-heading font-bold tabular-nums">{totalPoints}</p>
+              <p className="text-xs text-text-muted mt-0.5">{t(labels.totalPoints)}</p>
             </div>
-            <div className="bg-surface border-2 border-border rounded-xl p-4 text-center">
-              <Timer size={20} className="mx-auto mb-2 text-success" />
-              <p className="text-2xl font-heading font-bold">{Math.round(PASS_THRESHOLD * 100)}%</p>
-              <p className="text-xs text-text-muted">{t(labels.passAt)}</p>
+            <div className="group relative bg-surface/60 backdrop-blur-sm border border-border/50 rounded-2xl p-5 text-center transition-all duration-300 hover:border-success/30 hover:shadow-lg hover:shadow-success/5">
+              <Timer size={18} className="mx-auto mb-2.5 text-success transition-transform duration-300 group-hover:scale-110" />
+              <p className="text-3xl font-heading font-bold tabular-nums">{Math.round(PASS_THRESHOLD * 100)}%</p>
+              <p className="text-xs text-text-muted mt-0.5">{t(labels.passAt)}</p>
             </div>
           </div>
 
-          {/* Description */}
-          <div className="bg-surface border-2 border-border rounded-xl p-5 mb-8">
+          {/* Info block */}
+          <div className="bg-surface/60 backdrop-blur-sm border border-border/50 rounded-2xl p-5 mb-8">
             <p className="text-sm text-text-muted leading-relaxed mb-3">
               {t(labels.examDescription)}
             </p>
-            <div className="flex items-start gap-2 p-3 rounded-lg bg-surface-alt text-xs text-text-muted">
-              <Info size={14} className="shrink-0 mt-0.5" />
+            <div className="flex items-start gap-2.5 p-3 rounded-xl bg-primary/5 border border-primary/10 text-xs text-text-muted">
+              <Info size={14} className="shrink-0 mt-0.5 text-primary-light" />
               <span>{t(labels.scoringInfo)}</span>
             </div>
           </div>
@@ -133,14 +143,18 @@ export function StartPage({ onRefresh }: StartPageProps) {
           )}
 
           {/* CTA */}
-          <button
-            onClick={handleStart}
-            disabled={questions.length === 0}
-            className="w-full flex items-center justify-center gap-3 px-8 py-4 bg-primary hover:bg-primary-dark text-white rounded-xl font-heading font-semibold text-lg transition-all duration-200 shadow-lg hover:shadow-xl cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            {t(labels.startExam)}
-            <ArrowRight size={20} />
-          </button>
+          <div className="relative group">
+            {/* Glow effect behind button */}
+            <div className="absolute -inset-1 rounded-2xl bg-linear-to-r from-primary via-accent to-primary opacity-0 group-hover:opacity-20 blur-xl transition-opacity duration-500" />
+            <button
+              onClick={handleStart}
+              disabled={questions.length === 0}
+              className="relative w-full flex items-center justify-center gap-3 px-8 py-4 bg-linear-to-r from-primary to-primary-dark text-white rounded-2xl font-heading font-semibold text-lg transition-all duration-300 shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30 hover:scale-[1.01] active:scale-[0.99] cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+            >
+              {t(labels.startExam)}
+              <ArrowRight size={20} className="transition-transform duration-300 group-hover:translate-x-1" />
+            </button>
+          </div>
 
           {/* Keyboard hints — hidden on mobile (irrelevant for touch) */}
           <div className="hidden sm:flex items-center justify-center gap-4 mt-5 text-xs text-text-muted">
@@ -159,7 +173,7 @@ export function StartPage({ onRefresh }: StartPageProps) {
           </div>
 
           {/* Disclaimer */}
-          <p className="text-center text-xs text-text-muted mt-6 opacity-50 leading-relaxed max-w-md mx-auto whitespace-pre-line">
+          <p className="text-center text-xs text-text-muted mt-8 opacity-50 leading-relaxed max-w-md mx-auto whitespace-pre-line">
             {t(labels.disclaimer)}
           </p>
           <p className="text-center text-xs mt-2 opacity-40">

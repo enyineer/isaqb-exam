@@ -55,8 +55,8 @@ export const labels = {
   lastFetched: { de: "Zuletzt abgerufen", en: "Last fetched" },
   refetch: { de: "Neu laden", en: "Refresh" },
   scoringInfo: {
-    de: "Bewertung: Für jede richtige Auswahl gibt es anteilige Punkte, für jede falsche Auswahl werden anteilige Punkte abgezogen. Minimum 0 Punkte pro Frage.",
-    en: "Scoring: Each correct selection earns proportional points, each incorrect selection deducts proportional points. Minimum 0 points per question.",
+    de: "Bewertung: Für jede richtige Auswahl gibt es anteilige Punkte, für jede falsche Auswahl werden anteilige Punkte abgezogen. Minimum 0 Punkte pro Frage. Werden mehr Optionen gewählt als richtige Antworten vorhanden sind, ergibt das immer 0 Punkte.",
+    en: "Scoring: Each correct selection earns proportional points, each incorrect selection deducts proportional points. Minimum 0 points per question. Selecting more options than correct answers always results in 0 points.",
   },
   assignToCategory: { de: "Kategorie zuordnen:", en: "Assign to category:" },
   noAssignment: { de: "Keine Zuordnung", en: "No assignment" },
