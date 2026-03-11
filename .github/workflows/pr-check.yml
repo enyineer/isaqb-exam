@@ -39,6 +39,10 @@ jobs:
       - name: Comment on failure
         if: steps.typecheck.outcome == 'failure' || steps.tests.outcome == 'failure' || steps.build.outcome == 'failure'
         uses: actions/github-script@v7
+        env:
+          TYPECHECK_OUTCOME: ${{ steps.typecheck.outcome }}
+          TESTS_OUTCOME: ${{ steps.tests.outcome }}
+          BUILD_OUTCOME: ${{ steps.build.outcome }}
         with:
           script: |
             const fs = require('fs');
@@ -47,14 +51,13 @@ jobs:
             body += 'This PR cannot be merged until the following issues are resolved:\n\n';
 
             const steps = [
-              { name: 'Type Check', id: 'typecheck', file: '/tmp/typecheck.log' },
-              { name: 'Tests', id: 'tests', file: '/tmp/tests.log' },
-              { name: 'Build', id: 'build', file: '/tmp/build.log' },
+              { name: 'Type Check', outcome: process.env.TYPECHECK_OUTCOME, file: '/tmp/typecheck.log' },
+              { name: 'Tests', outcome: process.env.TESTS_OUTCOME, file: '/tmp/tests.log' },
+              { name: 'Build', outcome: process.env.BUILD_OUTCOME, file: '/tmp/build.log' },
             ];
 
             for (const step of steps) {
-              const outcome = '${{ steps.' + step.id + '.outcome }}';
-              if (outcome === 'failure') {
+              if (step.outcome === 'failure') {
                 const log = fs.readFileSync(step.file, 'utf8').trim();
                 const truncated = log.length > 3000 ? '…' + log.slice(-3000) : log;
                 body += `### 🔴 ${step.name}\n\n`;

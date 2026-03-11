@@ -4,6 +4,10 @@ A web-based practice exam for the **iSAQB Certified Professional for Software Ar
 
 Questions are sourced from the [official iSAQB examination question catalog](https://github.com/isaqb-org/examination-foundation).
 
+## Take the exam
+
+You can take the exam [here](https://enyineer.github.io/isaqb-exam/). Please report any issues in this repositories issue tracker.
+
 ## Features
 
 - 🎯 Pick & category question types with iSAQB scoring rules
