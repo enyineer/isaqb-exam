@@ -35,9 +35,9 @@ describe('scorePickQuestion', () => {
     expect(result.rawScore).toBe(-1) // -1/1 = -1
   })
 
-  test('selecting correct + wrong gives 0 for single-correct question', () => {
+  test('selecting correct + wrong gives 0 for single-correct question (too many selected)', () => {
     const result = scorePickQuestion(singleCorrect, ['A', 'B'])
-    expect(result.score).toBe(0) // +1 - 1 = 0
+    expect(result.score).toBe(0) // 2 selected > 1 correct → always 0
   })
 
   const multiCorrect: PickQuestion = {
@@ -73,6 +73,13 @@ describe('scorePickQuestion', () => {
     const result = scorePickQuestion(multiCorrect, ['A', 'D', 'E'])
     expect(result.score).toBe(0)
     expect(result.rawScore).toBeCloseTo(-1 / 3, 5) // 1/3 - 2/3
+  })
+
+  test('selecting more options than correct answers always gives 0', () => {
+    // 4 selected > 3 correct → 0 points regardless of whether all correct are included
+    const result = scorePickQuestion(multiCorrect, ['A', 'B', 'C', 'D'])
+    expect(result.score).toBe(0)
+    expect(result.rawScore).toBeCloseTo(2 / 3, 5) // would be positive, but too many selected
   })
 
   const twoPointQuestion: PickQuestion = {
