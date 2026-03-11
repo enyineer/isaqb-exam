@@ -14,10 +14,14 @@ You can take the exam [here](https://enyineer.github.io/isaqb-exam/). Please rep
 - 🔀 Shuffled answer order per attempt to prevent pattern memorization
 - ⏱️ Active time tracking (pauses when browser is closed)
 - 💾 Auto-saves progress to localStorage — refresh without losing state
-- 🖨️ Print/export results for your lecturer
+- 🚩 Flag questions for review — confirmation prompt before finishing with flagged questions
+- 📝 Per-question notes for your lecturer — persisted and shown in results + print
+- 🖨️ Print/export results for your lecturer (including notes)
+- 🔵 Skipped vs wrong answer distinction in results (no penalty for skipped)
 - 🌍 German & English
 - 🎨 Multiple color themes + dark mode
 - ⌨️ Full keyboard navigation
+- 🔗 Hash-based routing — works on GitHub Pages without server config
 
 ## Tech Stack
 
