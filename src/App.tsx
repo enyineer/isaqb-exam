@@ -1,5 +1,6 @@
 import { useEffect, useCallback } from 'react'
-import { Route, Switch } from 'wouter'
+import { Route, Switch, Router } from 'wouter'
+import { useHashLocation } from 'wouter/use-hash-location'
 import { ThemeProvider } from './context/ThemeContext'
 import { LanguageProvider } from './context/LanguageContext'
 import { ExamProvider, useExam } from './context/ExamContext'
@@ -63,12 +64,14 @@ function AppContent() {
 
 export default function App() {
   return (
-    <ThemeProvider>
-      <LanguageProvider>
-        <ExamProvider>
-          <AppContent />
-        </ExamProvider>
-      </LanguageProvider>
-    </ThemeProvider>
+    <Router hook={useHashLocation}>
+      <ThemeProvider>
+        <LanguageProvider>
+          <ExamProvider>
+            <AppContent />
+          </ExamProvider>
+        </LanguageProvider>
+      </ThemeProvider>
+    </Router>
   )
 }
