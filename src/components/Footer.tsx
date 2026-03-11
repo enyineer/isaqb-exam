@@ -1,21 +1,32 @@
 import { ExternalLink } from './ExternalLink'
 import { useLanguage } from '../context/LanguageContext'
 import { labels } from '../utils/labels'
-import { Github, Globe } from 'lucide-react'
+import { Github, Globe, ShieldCheck } from 'lucide-react'
 
 /**
- * Shared premium footer with disclaimer and author/repo links.
+ * Shared premium footer with disclaimer, analytics transparency, and author/repo links.
  */
 export function Footer({ className = '' }: { className?: string }) {
   const { t } = useLanguage()
 
   return (
     <footer className={`border-t border-border/50 ${className}`}>
-      <div className="max-w-3xl mx-auto px-4 py-6 space-y-4">
+      <div className="max-w-3xl mx-auto px-4 py-6 space-y-5">
         {/* Disclaimer */}
         <p className="text-center text-[11px] text-text-muted/50 leading-relaxed max-w-sm mx-auto">
           {t(labels.disclaimer)}
         </p>
+
+        {/* Analytics transparency */}
+        <div className="max-w-sm mx-auto p-3 rounded-xl border border-border/30 bg-surface/20">
+          <p className="flex items-center justify-center gap-1.5 text-[11px] font-medium text-text-muted/60 mb-1.5">
+            <ShieldCheck size={12} />
+            {t(labels.analyticsTitle)}
+          </p>
+          <p className="text-center text-[10px] text-text-muted/40 leading-relaxed whitespace-pre-line">
+            {t(labels.analyticsDescription)}
+          </p>
+        </div>
 
         {/* Links */}
         <div className="flex items-center justify-center gap-3">

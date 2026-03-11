@@ -69,8 +69,16 @@ export const labels = {
   timeTaken: { de: "Benötigte Zeit", en: "Time Taken" },
   timePerQuestion: { de: "Zeitverteilung", en: "Time per Question" },
   disclaimer: {
-    de: "Dieses Tool und sein Autor sind nicht mit der iSAQB e.V. verbunden.\nEs wird keine Gewähr für die Richtigkeit der Fragen oder des Tests selbst übernommen.\nDiese Seite verwendet datenschutzfreundliche, cookielose Analysen mit Umami.",
-    en: "This tool and its author are not affiliated with iSAQB e.V.\nNo guarantee is provided for the correctness of the questions or the test itself.\nThis site uses privacy-friendly, cookie-less analytics with Umami.",
+    de: "Dieses Tool und sein Autor sind nicht mit der iSAQB e.V. verbunden.\nEs wird keine Gewähr für die Richtigkeit der Fragen oder des Tests selbst übernommen.",
+    en: "This tool and its author are not affiliated with iSAQB e.V.\nNo guarantee is provided for the correctness of the questions or the test itself.",
+  },
+  analyticsTitle: {
+    de: "Datenschutzfreundliche Analysen",
+    en: "Privacy-Friendly Analytics",
+  },
+  analyticsDescription: {
+    de: "Diese Seite nutzt Umami, um anonyme Nutzungsstatistiken zu erheben.\nErfasst werden: Seitenaufrufe, Referrer, Browser, Betriebssystem, Gerätetyp und Land.\nEs werden keine Cookies gesetzt, keine persönlichen Daten gespeichert und kein Tracking über Seiten hinweg durchgeführt.",
+    en: "This site uses Umami to collect anonymous usage statistics.\nCollected: page views, referrers, browser, OS, device type, and country.\nNo cookies are set, no personal data is stored, and no cross-site tracking is performed.",
   },
   exportResults: { de: "Drucken", en: "Print" },
   continueExam: { de: "Fortsetzen", en: "Continue" },
