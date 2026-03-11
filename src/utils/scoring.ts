@@ -6,6 +6,7 @@ export interface OptionResult {
   id: string
   isSelected: boolean
   isCorrect: boolean
+  isSkipped: boolean
   pointsDelta: number
 }
 
@@ -24,6 +25,7 @@ export interface StatementResult {
   assignedCategory: string | undefined
   correctCategory: string
   isCorrect: boolean
+  isSkipped: boolean
   pointsDelta: number
 }
 
@@ -56,6 +58,7 @@ export function scorePickQuestion(question: PickQuestion, selectedIds: string[])
   const optionResults: OptionResult[] = question.options.map(option => {
     const isSelected = selectedIds.includes(option.id)
     const isCorrect = option.correct
+    const isSkipped = !isSelected && isCorrect
     let pointsDelta = 0
 
     if (isSelected) {
@@ -63,7 +66,7 @@ export function scorePickQuestion(question: PickQuestion, selectedIds: string[])
       rawScore += pointsDelta
     }
 
-    return { id: option.id, isSelected, isCorrect, pointsDelta: isSelected ? pointsDelta : 0 }
+    return { id: option.id, isSelected, isCorrect, isSkipped, pointsDelta: isSelected ? pointsDelta : 0 }
   })
 
   // Selecting more options than correct answers always results in 0 points
@@ -90,10 +93,11 @@ export function scoreCategoryQuestion(
   let rawScore = 0
   const statementResults: StatementResult[] = question.statements.map(stmt => {
     const assignedCategory = assignments[stmt.id]
-    const isCorrect = assignedCategory === stmt.correctCategory
-    const pointsDelta = assignedCategory != null
-      ? (isCorrect ? pointsPerStatement : -pointsPerStatement)
-      : 0
+    const isSkipped = assignedCategory == null
+    const isCorrect = !isSkipped && assignedCategory === stmt.correctCategory
+    const pointsDelta = isSkipped
+      ? 0
+      : (isCorrect ? pointsPerStatement : -pointsPerStatement)
 
     rawScore += pointsDelta
 
@@ -102,6 +106,7 @@ export function scoreCategoryQuestion(
       assignedCategory,
       correctCategory: stmt.correctCategory,
       isCorrect,
+      isSkipped,
       pointsDelta,
     }
   })

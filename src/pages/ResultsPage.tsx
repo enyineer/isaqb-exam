@@ -446,10 +446,12 @@ function CategoryReview({
             className={`flex items-center gap-2 text-sm px-3 py-1.5 rounded-lg ${
               sr.isCorrect
                 ? "bg-green-500/10 text-green-700 dark:text-green-400"
-                : "bg-red-500/10 text-red-700 dark:text-red-400"
+                : sr.isSkipped
+                  ? "bg-blue-500/10 text-blue-700 dark:text-blue-400"
+                  : "bg-red-500/10 text-red-700 dark:text-red-400"
             }`}
           >
-            {sr.isCorrect ? <CheckCircle2 size={14} /> : <XCircle size={14} />}
+            {sr.isCorrect ? <CheckCircle2 size={14} /> : sr.isSkipped ? <MinusCircle size={14} /> : <XCircle size={14} />}
             <span className="font-mono text-xs font-bold opacity-50">
               {stmt.id}
             </span>
