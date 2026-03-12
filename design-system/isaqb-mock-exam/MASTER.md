@@ -6,9 +6,9 @@
 
 ---
 
-**Project:** iSAQB Mock Exam
-**Generated:** 2026-03-11 18:40:05
-**Category:** Cybersecurity Platform
+**Project:** iSAQB CPSA-F Mock Exam
+**Generated:** 2026-03-12 21:10:00
+**Category:** Educational Web Application
 
 ---
 
@@ -16,176 +16,176 @@
 
 ### Color Palette
 
-| Role | Hex | CSS Variable |
-|------|-----|--------------|
-| Primary | `#0F172A` | `--color-primary` |
-| Secondary | `#334155` | `--color-secondary` |
-| CTA/Accent | `#0369A1` | `--color-cta` |
-| Background | `#F8FAFC` | `--color-background` |
-| Text | `#020617` | `--color-text` |
+The app uses a **themeable color system** with four color schemes and light/dark mode support. Colors are defined via CSS custom properties with a two-tier indirection: `--theme-*` variables hold the actual values, and Tailwind-exposed `--color-*` variables reference them.
 
-**Color Notes:** Professional navy + blue CTA
+#### Color Themes
+
+| Theme | Primary | Primary Light | Primary Dark | Accent | Accent Light |
+|-------|---------|---------------|--------------|--------|--------------|
+| **Ocean** (default) | `#1e40af` | `#3b82f6` | `#1e3a8a` | `#0ea5e9` | `#7dd3fc` |
+| Forest | `#166534` | `#22c55e` | `#14532d` | `#10b981` | `#6ee7b7` |
+| Sunset | `#c2410c` | `#f97316` | `#9a3412` | `#f59e0b` | `#fcd34d` |
+| Violet | `#6d28d9` | `#8b5cf6` | `#5b21b6` | `#a855f7` | `#c4b5fd` |
+
+#### Surface Colors (Light Mode)
+
+| Role | Value | CSS Variable |
+|------|-------|--------------|
+| Surface | `#ffffff` | `--theme-surface` |
+| Surface Alt | `#f1f5f9` | `--theme-surface-alt` |
+| Surface Hover | `#e2e8f0` | `--theme-surface-hover` |
+| Text | `#0f172a` | `--theme-text` |
+| Text Muted | `#64748b` | `--theme-text-muted` |
+| Text Inverse | `#f8fafc` | `--theme-text-inverse` |
+| Border | `#cbd5e1` | `--theme-border` |
+| Background | `#f8fafc` | `--theme-bg` |
+
+#### Surface Colors (Dark Mode — class `.dark`)
+
+| Role | Value | CSS Variable |
+|------|-------|--------------|
+| Surface | `#1e293b` | `--theme-surface` |
+| Surface Alt | `#0f172a` | `--theme-surface-alt` |
+| Surface Hover | `#334155` | `--theme-surface-hover` |
+| Text | `#f1f5f9` | `--theme-text` |
+| Text Muted | `#94a3b8` | `--theme-text-muted` |
+| Border | `#334155` | `--theme-border` |
+| Background | `#0f172a` | `--theme-bg` |
+
+#### Status & Indicator Colors
+
+| Role | Value | CSS Variable |
+|------|-------|--------------|
+| Success | `#16a34a` | `--color-success` |
+| Error | `#dc2626` | `--color-error` |
+| Warning | `#d97706` | `--color-warning` |
+| Indicator Too Few | `#38bdf8` | `--color-indicator-too-few` |
+| Indicator Correct | theme primary | `--color-indicator-correct` |
+| Indicator Too Many | `#ef4444` | `--color-indicator-too-many` |
 
 ### Typography
 
-- **Heading Font:** Baloo 2
-- **Body Font:** Comic Neue
-- **Mood:** kids, education, playful, friendly, colorful, learning
-- **Google Fonts:** [Baloo 2 + Comic Neue](https://fonts.google.com/share?selection.family=Baloo+2:wght@400;500;600;700|Comic+Neue:wght@300;400;700)
+- **Heading Font:** Outfit (weights 300–700)
+- **Body Font:** Work Sans (weights 300–700)
+- **Mood:** Professional, clean, educational, modern, approachable
+- **Font Host:** Privacy-friendly Coolify proxy (`api.fonts.coollabs.io`)
 
 **CSS Import:**
 ```css
-@import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;500;600;700&family=Comic+Neue:wght@300;400;700&display=swap');
+@import url('https://api.fonts.coollabs.io/css2?family=Outfit:wght@300;400;500;600;700&family=Work+Sans:wght@300;400;500;600;700&display=swap');
 ```
 
-### Spacing Variables
+**Font Assignment:**
+```css
+--font-heading: 'Outfit', system-ui, sans-serif;
+--font-body: 'Work Sans', system-ui, sans-serif;
+```
 
-| Token | Value | Usage |
-|-------|-------|-------|
-| `--space-xs` | `4px` / `0.25rem` | Tight gaps |
-| `--space-sm` | `8px` / `0.5rem` | Icon gaps, inline spacing |
-| `--space-md` | `16px` / `1rem` | Standard padding |
-| `--space-lg` | `24px` / `1.5rem` | Section padding |
-| `--space-xl` | `32px` / `2rem` | Large gaps |
-| `--space-2xl` | `48px` / `3rem` | Section margins |
-| `--space-3xl` | `64px` / `4rem` | Hero padding |
+### CSS Framework
 
-### Shadow Depths
-
-| Level | Value | Usage |
-|-------|-------|-------|
-| `--shadow-sm` | `0 1px 2px rgba(0,0,0,0.05)` | Subtle lift |
-| `--shadow-md` | `0 4px 6px rgba(0,0,0,0.1)` | Cards, buttons |
-| `--shadow-lg` | `0 10px 15px rgba(0,0,0,0.1)` | Modals, dropdowns |
-| `--shadow-xl` | `0 20px 25px rgba(0,0,0,0.15)` | Hero images, featured cards |
+- **Tailwind CSS v4** via `@import "tailwindcss"` with `@theme` directive
+- Custom components defined in `index.css` alongside Tailwind utilities
 
 ---
 
 ## Component Specs
 
-### Buttons
+### Option Cards (Answer Selection)
 
 ```css
-/* Primary Button */
-.btn-primary {
-  background: #0369A1;
+.option-card {
+  cursor: pointer;
+  border: 2px solid var(--theme-border);
+  border-radius: 0.75rem;
+  padding: 1rem 1.25rem;
+  transition: all 0.2s ease;
+  background: var(--theme-surface);
+}
+
+.option-card:hover {
+  border-color: var(--theme-primary-light);
+  background: var(--theme-surface-hover);
+}
+
+.option-card:focus-visible {
+  outline: 3px solid var(--theme-primary-light);
+  outline-offset: 2px;
+}
+
+.option-card[aria-checked="true"],
+.option-card.selected {
+  border-color: var(--theme-primary);
+  background: color-mix(in srgb, var(--theme-primary) 8%, var(--theme-surface));
+  box-shadow: 0 0 0 1px var(--theme-primary);
+}
+```
+
+### Category Buttons (Pill Buttons)
+
+```css
+.category-btn {
+  cursor: pointer;
+  padding: 0.5rem 1rem;
+  border-radius: 9999px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  border: 2px solid var(--theme-border);
+  background: var(--theme-surface);
+  color: var(--theme-text);
+  transition: all 0.2s ease;
+}
+
+.category-btn.active {
+  background: var(--theme-primary);
   color: white;
-  padding: 12px 24px;
-  border-radius: 8px;
-  font-weight: 600;
-  transition: all 200ms ease;
-  cursor: pointer;
-}
-
-.btn-primary:hover {
-  opacity: 0.9;
-  transform: translateY(-1px);
-}
-
-/* Secondary Button */
-.btn-secondary {
-  background: transparent;
-  color: #0F172A;
-  border: 2px solid #0F172A;
-  padding: 12px 24px;
-  border-radius: 8px;
-  font-weight: 600;
-  transition: all 200ms ease;
-  cursor: pointer;
+  border-color: var(--theme-primary);
 }
 ```
 
-### Cards
+### Page Transitions
 
-```css
-.card {
-  background: #F8FAFC;
-  border-radius: 12px;
-  padding: 24px;
-  box-shadow: var(--shadow-md);
-  transition: all 200ms ease;
-  cursor: pointer;
-}
+- **Page enter:** Fade + slide up (`translateY(8px)`, 300ms ease-out)
+- **Question forward:** Slide in from right (`translateX(30px)`, 300ms ease-out)
+- **Question back:** Slide in from left (`translateX(-30px)`, 300ms ease-out)
+- **Question exit:** Slide out in opposite direction (250ms ease-in)
 
-.card:hover {
-  box-shadow: var(--shadow-lg);
-  transform: translateY(-2px);
-}
-```
+### Custom Scrollbar
 
-### Inputs
-
-```css
-.input {
-  padding: 12px 16px;
-  border: 1px solid #E2E8F0;
-  border-radius: 8px;
-  font-size: 16px;
-  transition: border-color 200ms ease;
-}
-
-.input:focus {
-  border-color: #0F172A;
-  outline: none;
-  box-shadow: 0 0 0 3px #0F172A20;
-}
-```
-
-### Modals
-
-```css
-.modal-overlay {
-  background: rgba(0, 0, 0, 0.5);
-  backdrop-filter: blur(4px);
-}
-
-.modal {
-  background: white;
-  border-radius: 16px;
-  padding: 32px;
-  box-shadow: var(--shadow-xl);
-  max-width: 500px;
-  width: 90%;
-}
-```
+- Width: 8px (vertical), 4px (horizontal with `.scrollbar-thin`)
+- Track: `--theme-bg-alt`
+- Thumb: `--theme-border`, rounded 4px
+- Supports `scrollbar-width: thin` for Firefox
 
 ---
 
 ## Style Guidelines
 
-**Style:** Cyberpunk UI
+**Style:** Clean Educational UI
 
-**Keywords:** Neon, dark mode, terminal, HUD, sci-fi, glitch, dystopian, futuristic, matrix, tech noir
+**Keywords:** Professional, accessible, clean, modern, educational, certification, exam, responsive
 
-**Best For:** Gaming platforms, tech products, crypto apps, sci-fi applications, developer tools, entertainment
+**Best For:** Educational platforms, exam preparation, quiz apps, certification tools
 
-**Key Effects:** Neon glow (text-shadow), glitch animations (skew/offset), scanlines (::before overlay), terminal fonts
+**Key Effects:** Subtle transitions (200ms ease), theme-aware color mixing (`color-mix()`), directional slide animations for question navigation
 
-### Page Pattern
+### Design Principles
 
-**Pattern Name:** Horizontal Scroll Journey
-
-- **Conversion Strategy:** Immersive product discovery. High engagement. Keep navigation visible.
-28,Bento Grid Showcase,bento,  grid,  features,  modular,  apple-style,  showcase", 1. Hero, 2. Bento Grid (Key Features), 3. Detail Cards, 4. Tech Specs, 5. CTA, Floating Action Button or Bottom of Grid, Card backgrounds: #F5F5F7 or Glass. Icons: Vibrant brand colors. Text: Dark., Hover card scale (1.02), video inside cards, tilt effect, staggered reveal, Scannable value props. High information density without clutter. Mobile stack.
-29,Interactive 3D Configurator,3d,  configurator,  customizer,  interactive,  product", 1. Hero (Configurator), 2. Feature Highlight (synced), 3. Price/Specs, 4. Purchase, Inside Configurator UI + Sticky Bottom Bar, Neutral studio background. Product: Realistic materials. UI: Minimal overlay., Real-time rendering, material swap animation, camera rotate/zoom, light reflection, Increases ownership feeling. 360 view reduces return rates. Direct add-to-cart.
-30,AI-Driven Dynamic Landing,ai,  dynamic,  personalized,  adaptive,  generative", 1. Prompt/Input Hero, 2. Generated Result Preview, 3. How it Works, 4. Value Prop, Input Field (Hero) + 'Try it' Buttons, Adaptive to user input. Dark mode for compute feel. Neon accents., Typing text effects, shimmering generation loaders, morphing layouts, Immediate value demonstration. 'Show, don't tell'. Low friction start.
-- **CTA Placement:** Floating Sticky CTA or End of Horizontal Track
-- **Section Order:** 1. Intro (Vertical), 2. The Journey (Horizontal Track), 3. Detail Reveal, 4. Vertical Footer
+1. **Theme-aware** — All colors reference CSS variables so color themes and dark mode work automatically
+2. **Accessible** — Focus-visible outlines, skip links, keyboard navigation, `prefers-reduced-motion` respected
+3. **Consistent** — Option cards and category buttons use the same border/hover/active pattern
+4. **Privacy-first** — Self-hosted analytics, privacy-friendly font proxy (no Google Fonts direct)
 
 ---
 
 ## Anti-Patterns (Do NOT Use)
 
-- ❌ Light mode
-- ❌ Poor data viz
-
-### Additional Forbidden Patterns
-
-- ❌ **Emojis as icons** — Use SVG icons (Heroicons, Lucide, Simple Icons)
-- ❌ **Missing cursor:pointer** — All clickable elements must have cursor:pointer
+- ❌ **Google Fonts directly** — Use `api.fonts.coollabs.io` proxy
+- ❌ **Hardcoded colors** — Always use theme CSS variables
+- ❌ **Emojis as icons** — Use SVG icons (Lucide React)
+- ❌ **Missing cursor:pointer** — All clickable elements must have `cursor: pointer`
 - ❌ **Layout-shifting hovers** — Avoid scale transforms that shift layout
 - ❌ **Low contrast text** — Maintain 4.5:1 minimum contrast ratio
-- ❌ **Instant state changes** — Always use transitions (150-300ms)
+- ❌ **Instant state changes** — Always use transitions (150–300ms)
 - ❌ **Invisible focus states** — Focus states must be visible for a11y
 
 ---
@@ -194,13 +194,15 @@
 
 Before delivering any UI code, verify:
 
-- [ ] No emojis used as icons (use SVG instead)
-- [ ] All icons from consistent icon set (Heroicons/Lucide)
-- [ ] `cursor-pointer` on all clickable elements
-- [ ] Hover states with smooth transitions (150-300ms)
-- [ ] Light mode: text contrast 4.5:1 minimum
-- [ ] Focus states visible for keyboard navigation
+- [ ] No emojis used as icons (use Lucide React SVGs)
+- [ ] All colors use theme CSS variables, not hardcoded hex
+- [ ] `cursor: pointer` on all clickable elements
+- [ ] Hover states with smooth transitions (150–300ms)
+- [ ] Text contrast 4.5:1 minimum in both light and dark mode
+- [ ] Focus-visible states for keyboard navigation
 - [ ] `prefers-reduced-motion` respected
+- [ ] Fonts loaded via `api.fonts.coollabs.io` (not Google Fonts)
 - [ ] Responsive: 375px, 768px, 1024px, 1440px
 - [ ] No content hidden behind fixed navbars
 - [ ] No horizontal scroll on mobile
+- [ ] Print styles work correctly (`@media print`)
