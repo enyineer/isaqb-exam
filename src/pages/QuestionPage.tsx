@@ -21,7 +21,7 @@ function formatTimer(ms: number): string {
 
 export function QuestionPage() {
   const { t } = useLanguage()
-  const { questions, answers, togglePickAnswer, accumulatedMs, sessionStartedAt, onQuestionEnter, shuffleSeed, flaggedQuestions, toggleFlag, questionNotes, setNote } = useExam()
+  const { questions, answers, togglePickAnswer, setCategoryAnswer, accumulatedMs, sessionStartedAt, onQuestionEnter, shuffleSeed, flaggedQuestions, toggleFlag, questionNotes, setNote } = useExam()
   const [, navigate] = useLocation()
   const params = useParams<{ number: string }>()
   const questionNumber = parseInt(params.number || '1', 10)
@@ -63,6 +63,14 @@ export function QuestionPage() {
   const shuffledOptionsRef = useRef(shuffledOptions)
   shuffledOptionsRef.current = shuffledOptions
 
+  // Shuffled statements for keyboard handler (must match CategoryQuestion's shuffle)
+  const shuffledStatements = useMemo(
+    () => question?.type === 'category' ? seededShuffle(question.statements, shuffleSeed + question.id.length) : [],
+    [question, shuffleSeed],
+  )
+  const shuffledStatementsRef = useRef(shuffledStatements)
+  shuffledStatementsRef.current = shuffledStatements
+
   // Auto-scroll dots to current question
   const dotsContainerRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
@@ -81,8 +89,12 @@ export function QuestionPage() {
   // Keep refs for keyboard handler closures
   const questionRef = useRef(question);
   const toggleRef = useRef(togglePickAnswer);
+  const setCategoryRef = useRef(setCategoryAnswer);
+  const answersRef = useRef(answers);
   questionRef.current = question;
   toggleRef.current = togglePickAnswer;
+  setCategoryRef.current = setCategoryAnswer;
+  answersRef.current = answers;
 
   const goTo = useCallback(
     (num: number) => {
@@ -115,6 +127,24 @@ export function QuestionPage() {
           const opts = shuffledOptionsRef.current;
           if (idx < opts.length) {
             toggleRef.current(q.id, opts[idx].id);
+          }
+        } else if (q?.type === "category") {
+          const idx = parseInt(e.key) - 1;
+          const stmts = shuffledStatementsRef.current;
+          if (idx < stmts.length) {
+            const stmt = stmts[idx];
+            const currentAnswers = (answersRef.current[q.id] as Record<string, string>) || {};
+            const currentLabel = currentAnswers[stmt.id];
+            const catLabels = q.categories.map(c => c.label);
+            const currentIdx = currentLabel ? catLabels.indexOf(currentLabel) : -1;
+            // Cycle: unset → first → second → … → last → unset
+            const nextIdx = currentIdx + 1;
+            if (nextIdx < catLabels.length) {
+              setCategoryRef.current(q.id, stmt.id, catLabels[nextIdx]);
+            } else if (currentLabel) {
+              // Unset: toggle off by setting the same label again
+              setCategoryRef.current(q.id, stmt.id, currentLabel);
+            }
           }
         }
       }
