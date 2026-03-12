@@ -2,7 +2,7 @@ name: Process Leaderboard Submission
 
 on:
   issues:
-    types: [opened, labeled]
+    types: [opened]
 
 jobs:
   process:
