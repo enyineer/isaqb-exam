@@ -132,6 +132,9 @@ interface ExamContextValue {
   setDataSource: (s: DataSource) => void
   fetchedAt: number | null
   setFetchedAt: (t: number | null) => void
+  /** Commit SHA of the upstream question source (null for fallback) */
+  questionsCommitSha: string | null
+  setQuestionsCommitSha: (s: string | null) => void
   loading: boolean
   setLoading: (l: boolean) => void
   answers: Answers
@@ -169,6 +172,7 @@ export function ExamProvider({ children }: { children: ReactNode }) {
   const [questions, setQuestions] = useState<Question[]>([])
   const [dataSource, setDataSource] = useState<DataSource>(null)
   const [fetchedAt, setFetchedAt] = useState<number | null>(null)
+  const [questionsCommitSha, setQuestionsCommitSha] = useState<string | null>(null)
   const [loading, setLoading] = useState(true)
   const [answers, dispatch] = useReducer(answersReducer, {})
   const [examFinished, setExamFinished] = useState(false)
@@ -346,6 +350,7 @@ export function ExamProvider({ children }: { children: ReactNode }) {
       questions, setQuestions,
       dataSource, setDataSource,
       fetchedAt, setFetchedAt,
+      questionsCommitSha, setQuestionsCommitSha,
       loading, setLoading,
       answers,
       togglePickAnswer,

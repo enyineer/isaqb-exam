@@ -3,8 +3,12 @@ import { validateQuestions } from './schema'
 import { parseQuestionXml } from './xmlParser'
 import fallbackQuestions from './fallbackQuestions.json'
 
-const GITHUB_API_URL = 'https://api.github.com/repos/isaqb-org/foundation-exam-questions/contents/mock/questions'
-const RAW_BASE_URL = 'https://raw.githubusercontent.com/isaqb-org/foundation-exam-questions/main/mock/questions'
+const UPSTREAM_OWNER = 'isaqb-org'
+const UPSTREAM_REPO = 'foundation-exam-questions'
+const QUESTIONS_PATH = 'mock/questions'
+const GITHUB_API_URL = `https://api.github.com/repos/${UPSTREAM_OWNER}/${UPSTREAM_REPO}/contents/${QUESTIONS_PATH}`
+const COMMITS_API_URL = `https://api.github.com/repos/${UPSTREAM_OWNER}/${UPSTREAM_REPO}/commits?path=${QUESTIONS_PATH}&per_page=1`
+const RAW_BASE_URL = `https://raw.githubusercontent.com/${UPSTREAM_OWNER}/${UPSTREAM_REPO}/main/${QUESTIONS_PATH}`
 
 const CACHE_KEY = 'isaqb-questions-cache'
 const CACHE_TTL_MS = 60 * 60 * 1000 // 60 minutes
@@ -13,6 +17,8 @@ interface CachedData {
   questions: Question[]
   fetchedAt: number // unix timestamp ms
   source: 'live'
+  /** Commit SHA of the upstream question source at fetch time */
+  commitSha: string
 }
 
 function readCache(): CachedData | null {
@@ -27,8 +33,8 @@ function readCache(): CachedData | null {
   }
 }
 
-function writeCache(questions: Question[]): void {
-  const data: CachedData = { questions, fetchedAt: Date.now(), source: 'live' }
+function writeCache(questions: Question[], commitSha: string): void {
+  const data: CachedData = { questions, fetchedAt: Date.now(), source: 'live', commitSha }
   try {
     localStorage.setItem(CACHE_KEY, JSON.stringify(data))
   } catch {
@@ -51,10 +57,25 @@ async function discoverQuestionFiles(): Promise<string[]> {
 }
 
 /**
- * Fetch and parse all question XML files from GitHub.
+ * Fetch the latest commit SHA for the questions directory.
  */
-async function fetchLiveQuestions(): Promise<Question[]> {
-  const filenames = await discoverQuestionFiles()
+async function fetchLatestCommitSha(): Promise<string> {
+  const res = await fetch(COMMITS_API_URL)
+  if (!res.ok) throw new Error(`Commits API returned ${res.status}`)
+  const commits: Array<{ sha: string }> = await res.json()
+  if (commits.length === 0) throw new Error('No commits found for questions path')
+  return commits[0].sha
+}
+
+/**
+ * Fetch and parse all question XML files from GitHub.
+ * Returns the questions along with the upstream commit SHA.
+ */
+async function fetchLiveQuestions(): Promise<{ questions: Question[]; commitSha: string }> {
+  const [filenames, commitSha] = await Promise.all([
+    discoverQuestionFiles(),
+    fetchLatestCommitSha(),
+  ])
 
   const results = await Promise.all(
     filenames.map(async (filename) => {
@@ -71,13 +92,15 @@ async function fetchLiveQuestions(): Promise<Question[]> {
     throw new Error('Schema validation failed')
   }
 
-  return validation.data
+  return { questions: validation.data, commitSha }
 }
 
 export interface LoadResult {
   questions: Question[]
   source: 'live' | 'fallback' | 'cached'
   fetchedAt: number | null // unix timestamp ms, null for fallback
+  /** Commit SHA of the upstream question source (null for fallback) */
+  commitSha: string | null
 }
 
 /**
@@ -91,25 +114,25 @@ export async function loadQuestions(forceRefresh = false): Promise<LoadResult> {
   if (!forceRefresh) {
     const cached = readCache()
     if (cached && (Date.now() - cached.fetchedAt) < CACHE_TTL_MS) {
-      return { questions: cached.questions, source: 'cached', fetchedAt: cached.fetchedAt }
+      return { questions: cached.questions, source: 'cached', fetchedAt: cached.fetchedAt, commitSha: cached.commitSha ?? null }
     }
   }
 
   // Try live fetch
   try {
-    const questions = await fetchLiveQuestions()
-    writeCache(questions)
-    return { questions, source: 'live', fetchedAt: Date.now() }
+    const { questions, commitSha } = await fetchLiveQuestions()
+    writeCache(questions, commitSha)
+    return { questions, source: 'live', fetchedAt: Date.now(), commitSha }
   } catch (err) {
     console.warn('Falling back to bundled questions:', (err as Error).message)
 
     // If we have a stale cache, prefer it over the static fallback
     const staleCache = readCache()
     if (staleCache) {
-      return { questions: staleCache.questions, source: 'cached', fetchedAt: staleCache.fetchedAt }
+      return { questions: staleCache.questions, source: 'cached', fetchedAt: staleCache.fetchedAt, commitSha: staleCache.commitSha ?? null }
     }
 
-    return { questions: fallbackQuestions as Question[], source: 'fallback', fetchedAt: null }
+    return { questions: fallbackQuestions as Question[], source: 'fallback', fetchedAt: null, commitSha: null }
   }
 }
 

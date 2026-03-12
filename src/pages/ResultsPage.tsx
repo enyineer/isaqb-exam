@@ -22,8 +22,10 @@ import {
   Clock,
   Printer,
   StickyNote,
+  ExternalLink,
 } from "lucide-react";
 import { Footer } from "../components/Footer";
+import { buildSubmitUrl } from "../utils/leaderboard";
 import confetti from "canvas-confetti";
 
 function formatElapsed(ms: number): string {
@@ -43,6 +45,7 @@ export function ResultsPage() {
     elapsedMs,
     questionTimes,
     questionNotes,
+    questionsCommitSha,
   } = useExam();
   const [, navigate] = useLocation();
 
@@ -234,7 +237,7 @@ export function ResultsPage() {
           )}
 
           {/* Action buttons */}
-          <div className="flex gap-3 mb-10 print:hidden">
+          <div className="flex flex-wrap gap-3 mb-4 print:hidden">
             <button
               onClick={handleRetry}
               className="flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-primary text-white hover:bg-primary-dark transition-all duration-200 font-medium cursor-pointer"
@@ -263,6 +266,39 @@ export function ResultsPage() {
               </span>
             </button>
           </div>
+
+          {/* Leaderboard buttons */}
+          <div className="flex flex-wrap gap-3 mb-10 print:hidden">
+            {questionsCommitSha ? (
+              <a
+                href={buildSubmitUrl(questionsCommitSha, answers, elapsedMs ?? 0)}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-amber-500/10 border-2 border-amber-500/30 hover:bg-amber-500/20 transition-all duration-200 font-medium text-amber-700 dark:text-amber-400"
+              >
+                <Trophy size={16} />
+                {t(labels.submitToLeaderboard)}
+                <ExternalLink size={14} className="opacity-60" />
+              </a>
+            ) : (
+              <p className="flex-1 text-center text-sm text-text-muted px-4 py-3 rounded-xl bg-surface border-2 border-border">
+                {t(labels.leaderboardOfflineWarning)}
+              </p>
+            )}
+            <button
+              onClick={() => navigate('/leaderboard')}
+              className="flex items-center justify-center gap-2 px-4 py-3 rounded-xl border-2 border-border bg-surface hover:bg-surface-hover transition-all duration-200 font-medium cursor-pointer"
+            >
+              <Trophy size={16} className="text-amber-500" />
+              {t(labels.viewLeaderboard)}
+            </button>
+          </div>
+
+          {questionsCommitSha && (
+            <p className="text-xs text-text-muted text-center -mt-6 mb-10 print:hidden opacity-60">
+              {t(labels.leaderboardSubmitInfo)}
+            </p>
+          )}
 
           {/* Questions review - all questions */}
           {result.questionResults.length > 0 && (

@@ -1,0 +1,19 @@
+name: "🏆 Leaderboard Submission"
+description: "Submit your exam score to the leaderboard"
+title: "🏆 Leaderboard Submission"
+labels: ["leaderboard-submission"]
+body:
+  - type: textarea
+    id: payload
+    attributes:
+      label: Score Data
+      description: "This field is auto-filled by the exam app. Do not edit."
+      render: json
+    validations:
+      required: true
+  - type: markdown
+    attributes:
+      value: |
+        > **Note**: This issue will be automatically processed by a GitHub Action.
+        > Your score will be verified and added to the [Leaderboard Discussion](https://github.com/enyineer/isaqb-exam/discussions/3).
+        > The issue will be closed automatically after processing.

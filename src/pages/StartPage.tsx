@@ -312,6 +312,17 @@ export function StartPage({ onRefresh }: StartPageProps) {
             </span>
           </div>
 
+          {/* Leaderboard link */}
+          <div className="flex justify-center mt-6">
+            <button
+              onClick={() => navigate('/leaderboard')}
+              className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-amber-500/10 border border-amber-500/20 text-sm font-medium text-amber-700 dark:text-amber-400 hover:bg-amber-500/20 transition-all duration-200 cursor-pointer"
+            >
+              <Trophy size={16} />
+              {t(labels.viewLeaderboard)}
+            </button>
+          </div>
+
           <Footer className="mt-8" />
         </div>
       </main>

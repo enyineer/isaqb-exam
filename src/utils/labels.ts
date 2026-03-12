@@ -99,4 +99,35 @@ export const labels = {
   noteLabel: { de: "Notizen", en: "Notes" },
   notePlaceholder: { de: "Notizen für den Dozenten…", en: "Notes for the lecturer…" },
   noteForLecturer: { de: "Notiz für den Dozenten", en: "Note for the lecturer" },
+  // Leaderboard
+  leaderboard: { de: "Bestenliste", en: "Leaderboard" },
+  leaderboardEmpty: { de: "Noch keine Einträge vorhanden.", en: "No entries yet." },
+  leaderboardError: { de: "Bestenliste konnte nicht geladen werden.", en: "Could not load leaderboard." },
+  leaderboardLoading: { de: "Bestenliste wird geladen…", en: "Loading leaderboard…" },
+  submitToLeaderboard: { de: "An Bestenliste senden", en: "Submit to Leaderboard" },
+  viewLeaderboard: { de: "Bestenliste ansehen", en: "View Leaderboard" },
+  leaderboardRank: { de: "#", en: "#" },
+  leaderboardUser: { de: "Benutzer", en: "User" },
+  leaderboardScore: { de: "Punkte", en: "Score" },
+  leaderboardPercentage: { de: "Prozent", en: "Percentage" },
+  leaderboardTime: { de: "Zeit", en: "Time" },
+  leaderboardDate: { de: "Datum", en: "Date" },
+  leaderboardPassedBadge: { de: "Bestanden", en: "Passed" },
+  leaderboardFailedBadge: { de: "Nicht bestanden", en: "Failed" },
+  leaderboardSubmitInfo: {
+    de: "Dein Ergebnis wird über ein GitHub Issue eingereicht und automatisch verifiziert.",
+    en: "Your result is submitted via a GitHub Issue and verified automatically.",
+  },
+  leaderboardOfflineWarning: {
+    de: "Die Bestenliste ist nur mit Online-Fragen verfügbar (nicht mit Offline-/Fallback-Fragen).",
+    en: "Leaderboard submission is only available with online questions (not offline/fallback).",
+  },
+  leaderboardRateLimited: {
+    de: "GitHub-API-Limit erreicht. Es werden zwischengespeicherte Daten angezeigt.",
+    en: "GitHub API rate limit reached. Showing cached data.",
+  },
+  leaderboardMaxEntries: {
+    de: "Es werden maximal die letzten 1.000 Einträge angezeigt.",
+    en: "Showing up to the last 1,000 entries.",
+  },
 } as const;
