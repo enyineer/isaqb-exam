@@ -80,7 +80,7 @@ type AnswerAction =
   | { type: 'RESET' }
   | { type: 'RESTORE'; answers: Answers }
 
-function answersReducer(state: Answers, action: AnswerAction): Answers {
+export function answersReducer(state: Answers, action: AnswerAction): Answers {
   switch (action.type) {
     case 'SET_PICK_ANSWER': {
       const current = (state[action.questionId] as string[]) || []
@@ -91,6 +91,10 @@ function answersReducer(state: Answers, action: AnswerAction): Answers {
     }
     case 'SET_CATEGORY_ANSWER': {
       const current = (state[action.questionId] as Record<string, string>) || {}
+      if (current[action.statementId] === action.categoryLabel) {
+        const { [action.statementId]: _, ...rest } = current
+        return { ...state, [action.questionId]: rest }
+      }
       return {
         ...state,
         [action.questionId]: { ...current, [action.statementId]: action.categoryLabel },
