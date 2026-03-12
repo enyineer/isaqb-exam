@@ -54,6 +54,10 @@ export const labels = {
   },
   lastFetched: { de: "Zuletzt abgerufen", en: "Last fetched" },
   refetch: { de: "Neu laden", en: "Refresh" },
+  questionsRateLimited: {
+    de: "GitHub-API-Limit erreicht — in einem gemeinsamen Netzwerk (z.B. Workshop) wird das Limit schneller verbraucht. Es werden zwischengespeicherte bzw. gebündelte Fragen angezeigt. Versuche es in ca. einer Stunde erneut oder nutze mobile Daten.",
+    en: "GitHub API rate limit reached — in a shared network (e.g. workshop), the limit is consumed faster. Showing cached or bundled questions. Try again in about an hour or use mobile data.",
+  },
   scoringTitle: { de: "Bewertung", en: "Scoring" },
   scoringCorrectTitle: { de: "Richtig", en: "Correct" },
   scoringCorrectDesc: { de: "Anteilige Punkte", en: "Proportional points" },
@@ -112,7 +116,10 @@ export const labels = {
   // Leaderboard
   leaderboard: { de: "Bestenliste", en: "Leaderboard" },
   leaderboardEmpty: { de: "Noch keine Einträge vorhanden.", en: "No entries yet." },
-  leaderboardError: { de: "Bestenliste konnte nicht geladen werden.", en: "Could not load leaderboard." },
+  leaderboardError: {
+    de: "Bestenliste konnte nicht geladen werden. In einem gemeinsamen Netzwerk (z.B. Workshop) kann das GitHub-API-Limit schnell erreicht werden. Versuche es in ca. einer Stunde erneut oder nutze mobile Daten.",
+    en: "Could not load the leaderboard. In a shared network (e.g. workshop), the GitHub API limit can be reached quickly. Try again in about an hour or use mobile data.",
+  },
   leaderboardLoading: { de: "Bestenliste wird geladen…", en: "Loading leaderboard…" },
   submitToLeaderboard: { de: "An Bestenliste senden", en: "Submit to Leaderboard" },
   viewLeaderboard: { de: "Bestenliste ansehen", en: "View Leaderboard" },
@@ -133,8 +140,8 @@ export const labels = {
     en: "Leaderboard submission is only available with online questions (not offline/fallback).",
   },
   leaderboardRateLimited: {
-    de: "GitHub-API-Limit erreicht. Es werden zwischengespeicherte Daten angezeigt.",
-    en: "GitHub API rate limit reached. Showing cached data.",
+    de: "GitHub-API-Limit erreicht — in einem gemeinsamen Netzwerk (z.B. Workshop) wird das Limit schneller verbraucht. Es werden zwischengespeicherte Daten angezeigt. Versuche es in ca. einer Stunde erneut oder nutze mobile Daten.",
+    en: "GitHub API rate limit reached — in a shared network (e.g. workshop), the limit is consumed faster. Showing cached data. Try again in about an hour or use mobile data.",
   },
   leaderboardMaxEntries: {
     de: "Es werden maximal die letzten 1.000 Einträge angezeigt.",

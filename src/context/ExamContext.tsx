@@ -141,6 +141,9 @@ interface ExamContextValue {
   setQuestionsCommitSha: (s: string | null) => void
   loading: boolean
   setLoading: (l: boolean) => void
+  /** True if question loading was rate-limited by GitHub API */
+  questionsRateLimited: boolean
+  setQuestionsRateLimited: (r: boolean) => void
   answers: Answers
   togglePickAnswer: (questionId: string, optionId: string) => void
   setCategoryAnswer: (questionId: string, statementId: string, categoryLabel: string) => void
@@ -178,6 +181,7 @@ export function ExamProvider({ children }: { children: ReactNode }) {
   const [fetchedAt, setFetchedAt] = useState<number | null>(null)
   const [questionsCommitSha, setQuestionsCommitSha] = useState<string | null>(null)
   const [loading, setLoading] = useState(true)
+  const [questionsRateLimited, setQuestionsRateLimited] = useState(false)
   const [answers, dispatch] = useReducer(answersReducer, {})
   const [examFinished, setExamFinished] = useState(false)
   const [accumulatedMs, setAccumulatedMs] = useState(0)
@@ -356,6 +360,7 @@ export function ExamProvider({ children }: { children: ReactNode }) {
       fetchedAt, setFetchedAt,
       questionsCommitSha, setQuestionsCommitSha,
       loading, setLoading,
+      questionsRateLimited, setQuestionsRateLimited,
       answers,
       togglePickAnswer,
       setCategoryAnswer,
