@@ -1,0 +1,40 @@
+name: Update Fallback Questions
+
+on:
+  schedule:
+    # Every night at 3:00 AM UTC
+    - cron: '0 3 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  update-fallback:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ssh-key: ${{ secrets.DEPLOY_KEY }}
+
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Generate fallback questions
+        run: bun run scripts/generateFallback.ts
+
+      - name: Commit and push if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add src/data/fallbackQuestions.json
+          if git diff --cached --quiet; then
+            echo "No changes to fallback questions"
+          else
+            git commit -m "chore: update fallback questions [automated]"
+            git push
+          fi
