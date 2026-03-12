@@ -298,18 +298,25 @@ export function QuestionPage() {
                 }
 
                 switch (status) {
-                  case 'none':     return `bg-border${scale}`;
+                  case 'none':     return `${scale}`;
                   case 'too-few':  return `bg-[var(--color-indicator-too-few)]${isCurrent ? scale : ' opacity-80'}`;
                   case 'correct':  return `bg-[var(--color-indicator-correct)]${scale}`;
                   case 'too-many': return `bg-[var(--color-indicator-too-many)]${scale}`;
                 }
               };
 
+              // Inline style for default dot color — Tailwind v4 JIT doesn't generate
+              // dynamic class names reliably for named colors with opacity modifiers
+              const defaultStyle = !isQuestionFlagged && status === 'none'
+                ? { backgroundColor: 'color-mix(in srgb, var(--color-text-muted) 40%, transparent)' }
+                : undefined;
+
               return (
                 <button
                   key={q.id}
                   onClick={() => goTo(i + 1)}
                   className={`w-2 h-2 rounded-full transition-all duration-200 shrink-0 cursor-pointer ${dotColor()}`}
+                  style={defaultStyle}
                   aria-label={`${t(labels.question)} ${i + 1}${status !== 'none' ? " ✓" : ""}${isQuestionFlagged ? " ⚑" : ""}`}
                   aria-current={isCurrent ? "step" : undefined}
                 />
