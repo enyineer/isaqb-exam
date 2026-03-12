@@ -376,6 +376,7 @@ export async function fetchLeaderboard(forceRefresh = false): Promise<Leaderboar
   const pages: Record<number, CachedPage> = cache?.pages ? { ...cache.pages } : {}
   let lastFullPage = cache?.lastFullPage ?? 0
   const tailEntries: LeaderboardEntry[] = []
+  let lastTailEtag: string | null = null
 
   if (firstComments.length === 100) {
     // Full page → promote to permanent cache with its ETag
@@ -384,6 +385,7 @@ export async function fetchLeaderboard(forceRefresh = false): Promise<Leaderboar
   } else {
     // Partial page → tail entries
     tailEntries.push(...parseCommentsToEntries(firstComments))
+    lastTailEtag = firstTailEtag
   }
 
   // Fetch more pages if the first tail page was full
@@ -401,17 +403,16 @@ export async function fetchLeaderboard(forceRefresh = false): Promise<Leaderboar
         pages[page] = { entries: parseCommentsToEntries(comments), etag: pageEtag }
         lastFullPage = page
       } else {
-        // Partial page → tail
+        // Partial page → tail (save its ETag for conditional requests)
         tailEntries.push(...parseCommentsToEntries(comments))
+        lastTailEtag = pageEtag
         break
       }
     }
   }
 
-  // Determine the tail ETag — the ETag of the first non-permanent page
-  const tailEtag = lastFullPage >= startPage
-    ? null // First tail page got promoted, new tail starts at lastFullPage+1 (unknown ETag)
-    : firstTailEtag
+  // Use the ETag of whichever page is now the tail
+  const tailEtag = lastTailEtag
 
   // Build and save updated cache
   const updatedCache: LeaderboardCache = {

@@ -944,8 +944,8 @@ describe('fetchLeaderboard — tail ETag management', () => {
 
     cached = JSON.parse(localStorageData[CACHE_KEY])
     expect(cached.lastFullPage).toBe(1)
-    // Tail ETag should be null since the original first tail page was promoted
-    expect(cached.tailEtag).toBeNull()
+    // Tail ETag should be the new partial page's ETag (page 2)
+    expect(cached.tailEtag).toBe('"new-tail-etag"')
   })
 
   test('preserves tail ETag when first tail page stays partial', async () => {
