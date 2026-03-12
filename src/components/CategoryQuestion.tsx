@@ -28,7 +28,7 @@ export function CategoryQuestion({ question, questionNumber }: CategoryQuestionP
   )
 
   return (
-    <div className="page-enter">
+    <div>
       <QuestionHeader
         questionNumber={questionNumber}
         points={question.points}

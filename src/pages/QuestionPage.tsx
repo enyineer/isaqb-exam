@@ -3,6 +3,7 @@ import { useLanguage } from '../context/LanguageContext'
 import { useExam, computeActiveElapsed } from '../context/ExamContext'
 import { useLocation, useParams } from 'wouter'
 import { PageLayout } from '../components/PageLayout'
+import { PageTransition } from '../components/PageTransition'
 import { PickQuestion } from '../components/PickQuestion'
 import { CategoryQuestion } from '../components/CategoryQuestion'
 import { FinishExamButton } from '../components/FinishExamButton'
@@ -27,6 +28,13 @@ export function QuestionPage() {
   const questionIndex = questionNumber - 1
   const question = questions[questionIndex]
   const totalQuestions = questions.length
+
+  // Track navigation direction
+  const prevQuestionNumber = useRef(questionNumber)
+  const direction = questionNumber >= prevQuestionNumber.current ? 'forward' : 'back' as const
+  useEffect(() => {
+    prevQuestionNumber.current = questionNumber
+  }, [questionNumber])
 
   // Live timer state (updates every second)
   const [elapsed, setElapsed] = useState(() => computeActiveElapsed(accumulatedMs, sessionStartedAt))
@@ -116,8 +124,9 @@ export function QuestionPage() {
     return () => document.removeEventListener("keydown", handler);
   }, [goTo, questionNumber, totalQuestions]);
 
-  // Focus main on question change
+  // Scroll to top and focus main on question change
   useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
     document.getElementById("main-content")?.focus();
   }, [questionNumber]);
 
@@ -195,34 +204,34 @@ export function QuestionPage() {
         className="flex-1 max-w-3xl mx-auto w-full px-4 py-8 outline-none"
         tabIndex={-1}
       >
-        {question.type === "pick" ? (
-          <PickQuestion
-            question={question}
-            questionNumber={questionNumber}
-            key={question.id}
-          />
-        ) : (
-          <CategoryQuestion
-            question={question}
-            questionNumber={questionNumber}
-            key={question.id}
-          />
-        )}
+        <PageTransition transitionKey={question.id} direction={direction}>
+          {question.type === "pick" ? (
+            <PickQuestion
+              question={question}
+              questionNumber={questionNumber}
+            />
+          ) : (
+            <CategoryQuestion
+              question={question}
+              questionNumber={questionNumber}
+            />
+          )}
 
-        {/* Notes for lecturer */}
-        <div className="mt-6">
-          <label className="flex items-center gap-1.5 text-xs font-medium text-text-muted mb-2">
-            <StickyNote size={13} />
-            {t(labels.noteLabel)}
-          </label>
-          <textarea
-            value={questionNotes[question.id] ?? ''}
-            onChange={(e) => setNote(question.id, e.target.value)}
-            placeholder={t(labels.notePlaceholder)}
-            rows={2}
-            className="w-full px-3 py-2.5 rounded-xl border-2 border-border bg-surface text-sm text-text placeholder:text-text-muted/40 resize-y focus:outline-none focus:border-primary/50 transition-colors"
-          />
-        </div>
+          {/* Notes for lecturer */}
+          <div className="mt-6">
+            <label className="flex items-center gap-1.5 text-xs font-medium text-text-muted mb-2">
+              <StickyNote size={13} />
+              {t(labels.noteLabel)}
+            </label>
+            <textarea
+              value={questionNotes[question.id] ?? ''}
+              onChange={(e) => setNote(question.id, e.target.value)}
+              placeholder={t(labels.notePlaceholder)}
+              rows={2}
+              className="w-full px-3 py-2.5 rounded-xl border-2 border-border bg-surface text-sm text-text placeholder:text-text-muted/40 resize-y focus:outline-none focus:border-primary/50 transition-colors"
+            />
+          </div>
+        </PageTransition>
       </main>
 
       {/* Navigation footer */}

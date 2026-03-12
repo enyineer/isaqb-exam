@@ -154,6 +154,68 @@ h1, h2, h3, h4, h5, h6 {
   }
 }
 
+/* ===== Directional question transitions ===== */
+.question-enter-forward {
+  animation: slideInFromRight 0.3s ease-out;
+}
+
+.question-enter-back {
+  animation: slideInFromLeft 0.3s ease-out;
+}
+
+@keyframes slideInFromRight {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInFromLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Exit animations (old content sliding out) */
+.question-exit-left {
+  animation: slideOutToLeft 0.25s ease-in forwards;
+}
+
+.question-exit-right {
+  animation: slideOutToRight 0.25s ease-in forwards;
+}
+
+@keyframes slideOutToLeft {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+}
+
+@keyframes slideOutToRight {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+}
+
 /* ===== Custom scrollbar ===== */
 ::-webkit-scrollbar {
   width: 8px;
