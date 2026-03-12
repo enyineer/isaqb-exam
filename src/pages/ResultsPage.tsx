@@ -143,30 +143,30 @@ export function ResultsPage() {
 
           {/* Score details */}
           <div className="grid grid-cols-3 gap-2 sm:gap-3 mb-8">
-            <div className="bg-surface border-2 border-border rounded-xl p-3 sm:p-4 text-center overflow-hidden min-w-0">
+            <div className="bg-surface border-2 border-border rounded-xl p-3 sm:p-4 text-center overflow-hidden min-w-0 flex flex-col justify-between">
               <p className="text-[11px] sm:text-sm text-text-muted mb-1 wrap-break-word">
                 {t(labels.totalScore)}
               </p>
-              <p className="text-2xl sm:text-3xl font-heading font-bold">
+              <p className="text-2xl sm:text-3xl font-heading font-bold mt-auto">
                 {result.totalScore.toFixed(1)}
                 <span className="text-base sm:text-lg text-text-muted">
                   /{result.totalPossible}
                 </span>
               </p>
             </div>
-            <div className="bg-surface border-2 border-border rounded-xl p-3 sm:p-4 text-center overflow-hidden min-w-0">
+            <div className="bg-surface border-2 border-border rounded-xl p-3 sm:p-4 text-center overflow-hidden min-w-0 flex flex-col justify-between">
               <p className="text-[11px] sm:text-sm text-text-muted mb-1 wrap-break-word">
                 {t(labels.passThreshold)}
               </p>
-              <p className="text-2xl sm:text-3xl font-heading font-bold">
+              <p className="text-2xl sm:text-3xl font-heading font-bold mt-auto">
                 {Math.round(PASS_THRESHOLD * 100)}%
               </p>
             </div>
-            <div className="bg-surface border-2 border-border rounded-xl p-3 sm:p-4 text-center overflow-hidden min-w-0">
+            <div className="bg-surface border-2 border-border rounded-xl p-3 sm:p-4 text-center overflow-hidden min-w-0 flex flex-col justify-between">
               <p className="text-[11px] sm:text-sm text-text-muted mb-1 wrap-break-word">
                 {t(labels.timeTaken)}
               </p>
-              <p className="text-2xl sm:text-3xl font-heading font-bold">
+              <p className="text-2xl sm:text-3xl font-heading font-bold mt-auto">
                 {elapsedMs ? formatElapsed(elapsedMs) : "—"}
               </p>
             </div>
@@ -198,54 +198,61 @@ export function ResultsPage() {
 
           {/* Per-question time breakdown */}
           {Object.keys(questionTimes).length > 0 && (
-            <div className="mb-8 bg-surface border-2 border-border rounded-xl p-4">
-              <h3 className="text-sm font-semibold text-text-muted mb-3">
+            <details className="mb-8 bg-surface border-2 border-border rounded-xl group print:hidden">
+              <summary className="flex items-center gap-2 p-4 cursor-pointer select-none text-sm font-semibold text-text-muted list-none [&::-webkit-details-marker]:hidden">
+                <Clock size={14} className="shrink-0" />
                 {t(labels.timePerQuestion)}
-              </h3>
-              <div className="space-y-1.5">
-                {questions.map((q, i) => {
-                  const timeMs = questionTimes[q.id] ?? 0;
-                  const maxTimeMs = Math.max(
-                    ...Object.values(questionTimes),
-                    1,
-                  );
-                  const barPercent = (timeMs / maxTimeMs) * 100;
-                  const isLong =
-                    timeMs > ((elapsedMs ?? 0) / questions.length) * 1.5; // > 1.5x average
-                  return (
-                    <div key={q.id} className="flex items-center gap-2 text-xs">
-                      <span className="w-6 text-right font-mono text-text-muted shrink-0">
-                        {i + 1}
-                      </span>
-                      <div className="flex-1 h-4 bg-surface-alt rounded-full overflow-hidden">
-                        <div
-                          className={`h-full rounded-full transition-all duration-700 ease-out ${
-                            isLong ? "bg-amber-500" : "bg-primary-light"
+                <svg className="ml-auto w-4 h-4 shrink-0 transition-transform duration-200 group-open:rotate-180" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="6 9 12 15 18 9" /></svg>
+              </summary>
+              <div className="px-4 pb-4">
+                <p className="text-xs text-text-muted mb-3 leading-relaxed">
+                  {t(labels.timePerQuestionHint)}
+                </p>
+                <div className="space-y-1.5">
+                  {questions.map((q, i) => {
+                    const timeMs = questionTimes[q.id] ?? 0;
+                    const maxTimeMs = Math.max(
+                      ...Object.values(questionTimes),
+                      1,
+                    );
+                    const barPercent = (timeMs / maxTimeMs) * 100;
+                    const isLong =
+                      timeMs > ((elapsedMs ?? 0) / questions.length) * 1.5; // > 1.5x average
+                    return (
+                      <div key={q.id} className="flex items-center gap-2 text-xs">
+                        <span className="w-6 text-right font-mono text-text-muted shrink-0">
+                          {i + 1}
+                        </span>
+                        <div className="flex-1 h-4 bg-surface-alt rounded-full overflow-hidden">
+                          <div
+                            className={`h-full rounded-full transition-all duration-700 ease-out ${
+                              isLong ? "bg-amber-500" : "bg-primary-light"
+                            }`}
+                            style={{ width: `${barPercent}%` }}
+                          />
+                        </div>
+                        <span
+                          className={`w-12 text-right font-mono shrink-0 ${
+                            isLong
+                              ? "text-amber-500 font-semibold"
+                              : "text-text-muted"
                           }`}
-                          style={{ width: `${barPercent}%` }}
-                        />
+                        >
+                          {formatElapsed(timeMs)}
+                        </span>
                       </div>
-                      <span
-                        className={`w-12 text-right font-mono shrink-0 ${
-                          isLong
-                            ? "text-amber-500 font-semibold"
-                            : "text-text-muted"
-                        }`}
-                      >
-                        {formatElapsed(timeMs)}
-                      </span>
-                    </div>
-                  );
-                })}
+                    );
+                  })}
+                </div>
               </div>
-            </div>
+            </details>
           )}
 
           {/* Action buttons */}
-          <div className="flex flex-wrap gap-3 mb-4 print:hidden">
+          <div className="flex flex-wrap gap-2 sm:gap-3 mb-4 print:hidden">
             <button
               onClick={handleRetry}
-              className="flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-primary text-white hover:bg-primary-dark transition-all duration-200 font-medium cursor-pointer"
+              className="flex-1 flex items-center justify-center gap-2 px-3 sm:px-4 py-2 sm:py-3 rounded-xl bg-primary text-white hover:bg-primary-dark transition-all duration-200 text-sm sm:text-base font-medium cursor-pointer"
             >
               <RotateCcw size={16} />
               {t(labels.retryExam)}
@@ -255,14 +262,14 @@ export function ResultsPage() {
                 resetExam();
                 navigate("/");
               }}
-              className="flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl border-2 border-border bg-surface hover:bg-surface-hover transition-all duration-200 font-medium cursor-pointer"
+              className="flex-1 flex items-center justify-center gap-2 px-3 sm:px-4 py-2 sm:py-3 rounded-xl border-2 border-border bg-surface hover:bg-surface-hover transition-all duration-200 text-sm sm:text-base font-medium cursor-pointer"
             >
               <Home size={16} />
               {t(labels.backToStart)}
             </button>
             <button
               onClick={() => window.print()}
-              className="flex items-center justify-center gap-2 px-4 py-3 rounded-xl border-2 border-border bg-surface hover:bg-surface-hover transition-all duration-200 font-medium cursor-pointer"
+              className="flex items-center justify-center gap-2 px-3 sm:px-4 py-2 sm:py-3 rounded-xl border-2 border-border bg-surface hover:bg-surface-hover transition-all duration-200 text-sm sm:text-base font-medium cursor-pointer"
               title={t(labels.exportResults)}
             >
               <Printer size={16} />
@@ -273,26 +280,26 @@ export function ResultsPage() {
           </div>
 
           {/* Leaderboard buttons */}
-          <div className="flex flex-wrap gap-3 mb-10 print:hidden">
+          <div className="flex gap-2 sm:gap-3 mb-10 print:hidden">
             {questionsCommitSha ? (
               <a
                 href={buildSubmitUrl(questionsCommitSha, answers, elapsedMs ?? 0)}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-amber-500/10 border-2 border-amber-500/30 hover:bg-amber-500/20 transition-all duration-200 font-medium text-amber-700 dark:text-amber-400"
+                className="flex-1 min-w-0 flex items-center justify-center gap-1.5 sm:gap-2 px-2.5 sm:px-4 py-2 sm:py-3 rounded-xl bg-amber-500/10 border-2 border-amber-500/30 hover:bg-amber-500/20 transition-all duration-200 text-xs sm:text-base font-medium text-amber-700 dark:text-amber-400"
               >
-                <Trophy size={16} />
-                {t(labels.submitToLeaderboard)}
-                <ExternalLink size={14} className="opacity-60" />
+                <Trophy size={16} className="shrink-0" />
+                <span className="truncate">{t(labels.submitToLeaderboard)}</span>
+                <ExternalLink size={14} className="opacity-60 shrink-0" />
               </a>
             ) : (
-              <p className="flex-1 text-center text-sm text-text-muted px-4 py-3 rounded-xl bg-surface border-2 border-border">
+              <p className="flex-1 min-w-0 text-center text-xs sm:text-sm text-text-muted px-2.5 sm:px-4 py-2 sm:py-3 rounded-xl bg-surface border-2 border-border">
                 {t(labels.leaderboardOfflineWarning)}
               </p>
             )}
             <button
               onClick={() => navigate('/leaderboard')}
-              className="flex items-center justify-center gap-2 px-4 py-3 rounded-xl border-2 border-border bg-surface hover:bg-surface-hover transition-all duration-200 font-medium cursor-pointer"
+              className="shrink-0 flex items-center justify-center gap-1.5 sm:gap-2 px-2.5 sm:px-4 py-2 sm:py-3 rounded-xl border-2 border-border bg-surface hover:bg-surface-hover transition-all duration-200 text-xs sm:text-base font-medium cursor-pointer whitespace-nowrap"
             >
               <Trophy size={16} className="text-amber-500" />
               {t(labels.viewLeaderboard)}

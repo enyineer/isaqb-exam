@@ -78,6 +78,10 @@ export const labels = {
   learnMore: { de: "Mehr erfahren", en: "Learn more" },
   timeTaken: { de: "Benötigte Zeit", en: "Time Taken" },
   timePerQuestion: { de: "Zeitverteilung", en: "Time per Question" },
+  timePerQuestionHint: {
+    de: "Fragen, die länger gedauert haben, deuten auf Themen hin, die du nochmals wiederholen solltest.",
+    en: "Questions that took longer may indicate topics worth revisiting.",
+  },
   disclaimer: {
     de: "Dieses Tool und sein Autor sind nicht mit der iSAQB e.V. verbunden.\nEs wird keine Gewähr für die Richtigkeit der Fragen oder des Tests selbst übernommen.",
     en: "This tool and its author are not affiliated with iSAQB e.V.\nNo guarantee is provided for the correctness of the questions or the test itself.",
@@ -122,7 +126,7 @@ export const labels = {
     en: "Could not load the leaderboard. In a shared network (e.g. workshop), the GitHub API limit can be reached quickly. Try again in about an hour or use mobile data.",
   },
   leaderboardLoading: { de: "Bestenliste wird geladen…", en: "Loading leaderboard…" },
-  submitToLeaderboard: { de: "An Bestenliste senden", en: "Submit to Leaderboard" },
+  submitToLeaderboard: { de: "Ergebnis senden", en: "Submit Result" },
   viewLeaderboard: { de: "Bestenliste ansehen", en: "View Leaderboard" },
   leaderboardRank: { de: "#", en: "#" },
   leaderboardUser: { de: "Benutzer", en: "User" },
