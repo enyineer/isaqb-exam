@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'bun:test'
-import { computeActiveElapsed, computeQuestionsHash } from '../src/context/ExamContext'
+import { computeActiveElapsed, computeQuestionsHash, answersReducer } from '../src/context/ExamContext'
 import type { Question } from '../src/data/schema'
 
 // Minimal question fixtures for testing
@@ -112,5 +112,40 @@ describe('computeQuestionsHash', () => {
       ],
     }]
     expect(computeQuestionsHash(q1)).not.toBe(computeQuestionsHash(q2))
+  })
+})
+
+describe('answersReducer — SET_CATEGORY_ANSWER toggle', () => {
+  it('sets a category assignment', () => {
+    const state = answersReducer({}, {
+      type: 'SET_CATEGORY_ANSWER', questionId: 'q1', statementId: 'A', categoryLabel: 'cat-x',
+    })
+    expect((state['q1'] as Record<string, string>)['A']).toBe('cat-x')
+  })
+
+  it('removes the assignment when clicking the same category again', () => {
+    const initial = { q1: { A: 'cat-x', B: 'cat-y' } }
+    const state = answersReducer(initial, {
+      type: 'SET_CATEGORY_ANSWER', questionId: 'q1', statementId: 'A', categoryLabel: 'cat-x',
+    })
+    expect((state['q1'] as Record<string, string>)['A']).toBeUndefined()
+    // Other assignments remain untouched
+    expect((state['q1'] as Record<string, string>)['B']).toBe('cat-y')
+  })
+
+  it('switches to a different category without removing', () => {
+    const initial = { q1: { A: 'cat-x' } }
+    const state = answersReducer(initial, {
+      type: 'SET_CATEGORY_ANSWER', questionId: 'q1', statementId: 'A', categoryLabel: 'cat-y',
+    })
+    expect((state['q1'] as Record<string, string>)['A']).toBe('cat-y')
+  })
+
+  it('removing the last assignment results in an empty object', () => {
+    const initial = { q1: { A: 'cat-x' } }
+    const state = answersReducer(initial, {
+      type: 'SET_CATEGORY_ANSWER', questionId: 'q1', statementId: 'A', categoryLabel: 'cat-x',
+    })
+    expect(state['q1']).toEqual({})
   })
 })
