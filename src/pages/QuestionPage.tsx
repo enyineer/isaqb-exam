@@ -1,14 +1,15 @@
-import { useEffect, useCallback, useRef, useState, useMemo, type RefObject } from 'react'
+import { useEffect, useCallback, useRef, useState, useMemo } from 'react'
 import { useLanguage } from '../context/LanguageContext'
 import { useExam, computeActiveElapsed } from '../context/ExamContext'
 import { useLocation, useParams } from 'wouter'
 import { PageLayout } from '../components/PageLayout'
 import { PickQuestion } from '../components/PickQuestion'
 import { CategoryQuestion } from '../components/CategoryQuestion'
+import { FinishExamButton } from '../components/FinishExamButton'
 import { labels } from '../utils/labels'
-import { ChevronLeft, ChevronRight, Flag, Clock, Bookmark, AlertTriangle, CheckCircle2, StickyNote } from 'lucide-react'
+import { ChevronLeft, ChevronRight, Flag, Clock, Bookmark, CheckCircle2, StickyNote } from 'lucide-react'
 import { seededShuffle } from '../utils/shuffle'
-import { getQuestionAnswerStatus, type AnswerStatus } from '../utils/questionStatus'
+import { getQuestionAnswerStatus } from '../utils/questionStatus'
 
 function formatTimer(ms: number): string {
   const totalSeconds = Math.floor(ms / 1000)
@@ -19,14 +20,13 @@ function formatTimer(ms: number): string {
 
 export function QuestionPage() {
   const { t } = useLanguage()
-  const { questions, answers, finishExam, togglePickAnswer, accumulatedMs, sessionStartedAt, onQuestionEnter, shuffleSeed, flaggedQuestions, toggleFlag, questionNotes, setNote } = useExam()
+  const { questions, answers, togglePickAnswer, accumulatedMs, sessionStartedAt, onQuestionEnter, shuffleSeed, flaggedQuestions, toggleFlag, questionNotes, setNote } = useExam()
   const [, navigate] = useLocation()
   const params = useParams<{ number: string }>()
   const questionNumber = parseInt(params.number || '1', 10)
   const questionIndex = questionNumber - 1
   const question = questions[questionIndex]
   const totalQuestions = questions.length
-  const [showFlaggedModal, setShowFlaggedModal] = useState(false)
 
   // Live timer state (updates every second)
   const [elapsed, setElapsed] = useState(() => computeActiveElapsed(accumulatedMs, sessionStartedAt))
@@ -85,20 +85,6 @@ export function QuestionPage() {
     [navigate, totalQuestions],
   );
 
-  const handleFinish = useCallback(() => {
-    if (flaggedQuestions.size > 0) {
-      setShowFlaggedModal(true)
-      return
-    }
-    finishExam();
-    navigate("/results");
-  }, [finishExam, navigate, flaggedQuestions]);
-
-  const confirmFinish = useCallback(() => {
-    setShowFlaggedModal(false)
-    finishExam()
-    navigate("/results")
-  }, [finishExam, navigate])
 
   // Keyboard navigation
   useEffect(() => {
@@ -146,16 +132,31 @@ export function QuestionPage() {
   const isFlagged = flaggedQuestions.has(question.id)
 
   const progressBar = (
-    <div className="h-1 -mx-4 bg-surface-alt">
-      <div
-        className="h-full bg-primary transition-all duration-500 ease-out"
-        style={{ width: `${progressPercent}%` }}
-        role="progressbar"
-        aria-valuenow={answeredCount}
-        aria-valuemin={0}
-        aria-valuemax={totalQuestions}
-      />
-    </div>
+    <FinishExamButton>
+      {(onFinish) => (
+        <button
+          onClick={onFinish}
+          className="group flex items-center gap-2 w-full py-1 cursor-pointer bg-transparent border-0 outline-none focus-visible:ring-2 focus-visible:ring-primary/50 rounded-sm"
+          aria-label={t(labels.finishExam)}
+          title={t(labels.finishExam)}
+        >
+          <div className="flex-1 h-1.5 bg-surface-alt rounded-full overflow-hidden border border-border">
+            <div
+              className="h-full bg-primary transition-all duration-500 ease-out group-hover:brightness-125"
+              style={{ width: `${progressPercent}%` }}
+              role="progressbar"
+              aria-valuenow={answeredCount}
+              aria-valuemin={0}
+              aria-valuemax={totalQuestions}
+            />
+          </div>
+          <CheckCircle2
+            size={14}
+            className="shrink-0 text-text-muted group-hover:text-success transition-colors"
+          />
+        </button>
+      )}
+    </FinishExamButton>
   )
 
   const headerControls = (
@@ -286,58 +287,22 @@ export function QuestionPage() {
               <ChevronRight size={16} />
             </button>
           ) : (
-            <button
-              onClick={handleFinish}
-              className="shrink-0 flex items-center gap-2 px-3 py-2 rounded-lg bg-success text-white hover:opacity-90 transition-all duration-200 text-sm font-semibold cursor-pointer whitespace-nowrap"
-            >
-              <Flag size={16} />
-              <span className="hidden sm:inline">{t(labels.finishExam)}</span>
-            </button>
+            <FinishExamButton>
+              {(onFinish) => (
+                <button
+                  onClick={onFinish}
+                  className="shrink-0 flex items-center gap-2 px-3 py-2 rounded-lg bg-success text-white hover:opacity-90 transition-all duration-200 text-sm font-semibold cursor-pointer whitespace-nowrap"
+                >
+                  <Flag size={16} />
+                  <span className="hidden sm:inline">{t(labels.finishExam)}</span>
+                </button>
+              )}
+            </FinishExamButton>
           )}
         </div>
       </footer>
 
-      {/* Flagged questions confirmation modal */}
-      {showFlaggedModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-          {/* Backdrop */}
-          <div
-            className="absolute inset-0 bg-black/50 backdrop-blur-sm"
-            onClick={() => setShowFlaggedModal(false)}
-          />
-          {/* Modal */}
-          <div className="relative bg-bg border border-border rounded-2xl shadow-2xl max-w-sm w-full p-6 animate-in">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-10 h-10 rounded-xl bg-amber-500/15 flex items-center justify-center">
-                <AlertTriangle size={20} className="text-amber-500" />
-              </div>
-              <h2 className="font-heading font-semibold text-lg">{t(labels.flaggedQuestionsTitle)}</h2>
-            </div>
-            <p className="text-sm text-text-muted mb-2">
-              {t(labels.flaggedQuestionsBody)}
-            </p>
-            <p className="text-sm text-text-muted mb-6">
-              {flaggedQuestions.size} {flaggedQuestions.size === 1 ? (t({ de: 'Frage', en: 'question' })) : (t({ de: 'Fragen', en: 'questions' }))}
-            </p>
-            <div className="flex gap-3">
-              <button
-                onClick={() => setShowFlaggedModal(false)}
-                className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 border-2 border-border bg-surface rounded-xl font-medium text-sm transition-all hover:bg-surface-hover cursor-pointer"
-              >
-                <Bookmark size={14} />
-                {t(labels.reviewFlagged)}
-              </button>
-              <button
-                onClick={confirmFinish}
-                className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-success text-white rounded-xl font-medium text-sm transition-all hover:opacity-90 cursor-pointer"
-              >
-                <CheckCircle2 size={14} />
-                {t(labels.finishAnyway)}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+
     </PageLayout>
   );
 }
