@@ -6,6 +6,7 @@ import { AnswerIndicator } from './AnswerIndicator'
 import { QuestionHeader } from './QuestionHeader'
 import { labels } from '../utils/labels'
 import { seededShuffle } from '../utils/shuffle'
+import { getQuestionAnswerStatus } from '../utils/questionStatus'
 
 const LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 
@@ -20,6 +21,7 @@ export function PickQuestion({ question, questionNumber }: PickQuestionProps) {
 
   const selectedIds = (answers[question.id] as string[]) || []
   const correctCount = question.options.filter(o => o.correct).length
+  const status = getQuestionAnswerStatus(question, answers[question.id])
 
   // Shuffle options deterministically per attempt + question
   const shuffledOptions = useMemo(
@@ -37,7 +39,7 @@ export function PickQuestion({ question, questionNumber }: PickQuestionProps) {
 
       {/* Answer indicator */}
       <div className="mb-4">
-        <AnswerIndicator selected={selectedIds.length} required={correctCount} />
+        <AnswerIndicator selected={selectedIds.length} required={correctCount} status={status} />
       </div>
 
       {/* Options */}

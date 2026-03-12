@@ -8,6 +8,7 @@ import { CategoryQuestion } from '../components/CategoryQuestion'
 import { labels } from '../utils/labels'
 import { ChevronLeft, ChevronRight, Flag, Clock, Bookmark, AlertTriangle, CheckCircle2, StickyNote } from 'lucide-react'
 import { seededShuffle } from '../utils/shuffle'
+import { getQuestionAnswerStatus, type AnswerStatus } from '../utils/questionStatus'
 
 function formatTimer(ms: number): string {
   const totalSeconds = Math.floor(ms / 1000)
@@ -139,16 +140,7 @@ export function QuestionPage() {
     return null;
   }
 
-  const answeredCount = questions.filter((q) => {
-    const a = answers[q.id];
-    if (q.type === "pick") return Array.isArray(a) && a.length > 0;
-    return (
-      a &&
-      typeof a === "object" &&
-      !Array.isArray(a) &&
-      Object.keys(a).length > 0
-    );
-  }).length;
+  const answeredCount = questions.filter((q) => getQuestionAnswerStatus(q, answers[q.id]) !== 'none').length;
 
   const progressPercent = (answeredCount / totalQuestions) * 100;
   const isFlagged = flaggedQuestions.has(question.id)
@@ -252,34 +244,33 @@ export function QuestionPage() {
             aria-label="Questions"
           >
             {questions.map((q, i) => {
-              const isAnswered = (() => {
-                const a = answers[q.id];
-                if (q.type === "pick") return Array.isArray(a) && a.length > 0;
-                return (
-                  a &&
-                  typeof a === "object" &&
-                  !Array.isArray(a) &&
-                  Object.keys(a).length > 0
-                );
-              })();
+              const status = getQuestionAnswerStatus(q, answers[q.id]);
               const isCurrent = i === questionIndex;
               const isQuestionFlagged = flaggedQuestions.has(q.id);
+
+              const dotColor = (): string => {
+                const scale = isCurrent ? ' scale-150' : '';
+
+                if (isQuestionFlagged) {
+                  return isCurrent
+                    ? 'bg-amber-500 scale-150 ring-2 ring-amber-500/30'
+                    : 'bg-amber-500 opacity-80';
+                }
+
+                switch (status) {
+                  case 'none':     return `bg-border${scale}`;
+                  case 'too-few':  return `bg-[var(--color-indicator-too-few)]${isCurrent ? scale : ' opacity-80'}`;
+                  case 'correct':  return `bg-[var(--color-indicator-correct)]${scale}`;
+                  case 'too-many': return `bg-[var(--color-indicator-too-many)]${scale}`;
+                }
+              };
+
               return (
                 <button
                   key={q.id}
                   onClick={() => goTo(i + 1)}
-                  className={`w-2 h-2 rounded-full transition-all duration-200 shrink-0 cursor-pointer ${
-                    isCurrent
-                      ? isQuestionFlagged
-                        ? "bg-amber-500 scale-150 ring-2 ring-amber-500/30"
-                        : "bg-primary scale-150"
-                      : isQuestionFlagged
-                        ? "bg-amber-500 opacity-80"
-                        : isAnswered
-                          ? "bg-primary-light opacity-60"
-                          : "bg-border"
-                  }`}
-                  aria-label={`${t(labels.question)} ${i + 1}${isAnswered ? " ✓" : ""}${isQuestionFlagged ? " ⚑" : ""}`}
+                  className={`w-2 h-2 rounded-full transition-all duration-200 shrink-0 cursor-pointer ${dotColor()}`}
+                  aria-label={`${t(labels.question)} ${i + 1}${status !== 'none' ? " ✓" : ""}${isQuestionFlagged ? " ⚑" : ""}`}
                   aria-current={isCurrent ? "step" : undefined}
                 />
               );

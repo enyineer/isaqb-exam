@@ -1,30 +1,33 @@
 import { useLanguage } from '../context/LanguageContext'
 import { labels } from '../utils/labels'
+import type { AnswerStatus } from '../utils/questionStatus'
 
 interface AnswerIndicatorProps {
   selected: number
   required: number
+  status: AnswerStatus
 }
 
-export function AnswerIndicator({ selected, required }: AnswerIndicatorProps) {
+export function AnswerIndicator({ selected, required, status }: AnswerIndicatorProps) {
   const { t } = useLanguage()
 
-  let status: 'too-few' | 'correct' | 'too-many'
   let colorClass: string
   let label: string
 
-  if (selected < required) {
-    status = 'too-few'
-    colorClass = 'bg-[var(--color-indicator-too-few)] text-white'
-    label = t(labels.tooFew)
-  } else if (selected === required) {
-    status = 'correct'
-    colorClass = 'bg-[var(--color-indicator-correct)] text-white'
-    label = t(labels.correctCount)
-  } else {
-    status = 'too-many'
-    colorClass = 'bg-[var(--color-indicator-too-many)] text-white'
-    label = t(labels.tooMany)
+  switch (status) {
+    case 'none':
+    case 'too-few':
+      colorClass = 'bg-[var(--color-indicator-too-few)] text-white'
+      label = t(labels.tooFew)
+      break
+    case 'correct':
+      colorClass = 'bg-[var(--color-indicator-correct)] text-white'
+      label = t(labels.correctCount)
+      break
+    case 'too-many':
+      colorClass = 'bg-[var(--color-indicator-too-many)] text-white'
+      label = t(labels.tooMany)
+      break
   }
 
   return (
