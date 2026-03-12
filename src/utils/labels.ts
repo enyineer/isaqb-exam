@@ -96,6 +96,11 @@ export const labels = {
   },
   finishAnyway: { de: "Trotzdem abschließen", en: "Finish Anyway" },
   reviewFlagged: { de: "Überprüfen", en: "Review" },
+  unansweredQuestionsTitle: { de: "Unbeantwortete Fragen", en: "Unanswered Questions" },
+  unansweredQuestionsBody: {
+    de: "Du hast noch unbeantwortete Fragen. Möchtest du die Prüfung trotzdem abschließen?",
+    en: "You still have unanswered questions. Do you want to finish the exam anyway?",
+  },
   noteLabel: { de: "Notizen", en: "Notes" },
   notePlaceholder: { de: "Notizen für den Dozenten…", en: "Notes for the lecturer…" },
   noteForLecturer: { de: "Notiz für den Dozenten", en: "Note for the lecturer" },
