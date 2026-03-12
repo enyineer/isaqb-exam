@@ -54,6 +54,11 @@ export function ResultsPage() {
     [questions, answers],
   );
 
+  // Scroll to top on mount
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, []);
+
   useEffect(() => {
     if (!examFinished) {
       navigate("/");

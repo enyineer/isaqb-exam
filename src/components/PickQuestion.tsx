@@ -30,7 +30,7 @@ export function PickQuestion({ question, questionNumber }: PickQuestionProps) {
   )
 
   return (
-    <div className="page-enter">
+    <div>
       <QuestionHeader
         questionNumber={questionNumber}
         points={question.points}
