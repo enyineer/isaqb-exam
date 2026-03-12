@@ -359,7 +359,7 @@ export async function fetchLeaderboard(forceRefresh = false): Promise<Leaderboar
       const entries = sortEntries(collectAllEntries(cache))
       return { entries, fetchedAt: cache.fetchedAt, fromCache: true, rateLimited: true }
     }
-    throw new Error('GitHub API rate limit exceeded')
+    throw new Error('GitHub API rate limit exceeded. In a shared network (e.g. workshop with 15+ users), the limit is reached quickly. Try again in ~1 hour or switch to mobile data.')
   }
 
   if (!firstRes.ok) {

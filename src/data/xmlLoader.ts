@@ -3,6 +3,14 @@ import { validateQuestions } from './schema'
 import { parseQuestionXml } from './xmlParser'
 import fallbackQuestions from './fallbackQuestions.json'
 
+/** Thrown when GitHub returns 403 or 429 (rate limited) */
+class RateLimitError extends Error {
+  constructor(status: number) {
+    super(`GitHub API rate limited (HTTP ${status})`)
+    this.name = 'RateLimitError'
+  }
+}
+
 const UPSTREAM_OWNER = 'isaqb-org'
 const UPSTREAM_REPO = 'foundation-exam-questions'
 const QUESTIONS_PATH = 'mock/questions'
@@ -48,6 +56,7 @@ function writeCache(questions: Question[], commitSha: string): void {
  */
 async function discoverQuestionFiles(): Promise<string[]> {
   const res = await fetch(GITHUB_API_URL)
+  if (res.status === 403 || res.status === 429) throw new RateLimitError(res.status)
   if (!res.ok) throw new Error(`GitHub API returned ${res.status}`)
   const entries: Array<{ name: string; type: string }> = await res.json()
   return entries
@@ -61,6 +70,7 @@ async function discoverQuestionFiles(): Promise<string[]> {
  */
 async function fetchLatestCommitSha(): Promise<string> {
   const res = await fetch(COMMITS_API_URL)
+  if (res.status === 403 || res.status === 429) throw new RateLimitError(res.status)
   if (!res.ok) throw new Error(`Commits API returned ${res.status}`)
   const commits: Array<{ sha: string }> = await res.json()
   if (commits.length === 0) throw new Error('No commits found for questions path')
@@ -101,6 +111,8 @@ export interface LoadResult {
   fetchedAt: number | null // unix timestamp ms, null for fallback
   /** Commit SHA of the upstream question source (null for fallback) */
   commitSha: string | null
+  /** True if the live fetch failed due to GitHub API rate limiting */
+  rateLimited: boolean
 }
 
 /**
@@ -114,7 +126,7 @@ export async function loadQuestions(forceRefresh = false): Promise<LoadResult> {
   if (!forceRefresh) {
     const cached = readCache()
     if (cached && (Date.now() - cached.fetchedAt) < CACHE_TTL_MS) {
-      return { questions: cached.questions, source: 'cached', fetchedAt: cached.fetchedAt, commitSha: cached.commitSha ?? null }
+      return { questions: cached.questions, source: 'cached', fetchedAt: cached.fetchedAt, commitSha: cached.commitSha ?? null, rateLimited: false }
     }
   }
 
@@ -122,17 +134,18 @@ export async function loadQuestions(forceRefresh = false): Promise<LoadResult> {
   try {
     const { questions, commitSha } = await fetchLiveQuestions()
     writeCache(questions, commitSha)
-    return { questions, source: 'live', fetchedAt: Date.now(), commitSha }
+    return { questions, source: 'live', fetchedAt: Date.now(), commitSha, rateLimited: false }
   } catch (err) {
+    const isRateLimited = err instanceof RateLimitError
     console.warn('Falling back to bundled questions:', (err as Error).message)
 
     // If we have a stale cache, prefer it over the static fallback
     const staleCache = readCache()
     if (staleCache) {
-      return { questions: staleCache.questions, source: 'cached', fetchedAt: staleCache.fetchedAt, commitSha: staleCache.commitSha ?? null }
+      return { questions: staleCache.questions, source: 'cached', fetchedAt: staleCache.fetchedAt, commitSha: staleCache.commitSha ?? null, rateLimited: isRateLimited }
     }
 
-    return { questions: fallbackQuestions as Question[], source: 'fallback', fetchedAt: null, commitSha: null }
+    return { questions: fallbackQuestions as Question[], source: 'fallback', fetchedAt: null, commitSha: null, rateLimited: isRateLimited }
   }
 }
 

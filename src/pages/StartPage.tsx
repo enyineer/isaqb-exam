@@ -18,6 +18,7 @@ import {
   CircleMinus,
   Shield,
   Ban,
+  AlertTriangle,
 } from "lucide-react";
 import { ExternalLink } from "../components/ExternalLink";
 import { Footer } from "../components/Footer";
@@ -46,7 +47,7 @@ function formatTimer(ms: number): string {
 
 export function StartPage({ onRefresh }: StartPageProps) {
   const { t, lang } = useLanguage();
-  const { questions, dataSource, fetchedAt, loading, resetExam, continueExam } =
+  const { questions, dataSource, fetchedAt, loading, questionsRateLimited, resetExam, continueExam } =
     useExam();
   const [, navigate] = useLocation();
 
@@ -205,6 +206,14 @@ export function StartPage({ onRefresh }: StartPageProps) {
               </div>
             </div>
           </div>
+
+          {/* Rate limit warning */}
+          {questionsRateLimited && !loading && (
+            <div className="flex items-start gap-2 text-xs px-4 py-2.5 mb-4 rounded-xl bg-amber-500/10 text-amber-700 dark:text-amber-400 border border-amber-500/20">
+              <AlertTriangle size={14} className="shrink-0 mt-0.5" />
+              <span>{t(labels.questionsRateLimited)}</span>
+            </div>
+          )}
 
           {/* Data source indicator + refetch */}
           {dataSource && (

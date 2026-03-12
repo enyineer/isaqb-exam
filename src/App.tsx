@@ -14,18 +14,19 @@ import { labels } from './utils/labels'
 import { Loader2 } from 'lucide-react'
 
 function AppContent() {
-  const { setQuestions, setDataSource, setFetchedAt, setQuestionsCommitSha, setLoading, loading } = useExam()
+  const { setQuestions, setDataSource, setFetchedAt, setQuestionsCommitSha, setLoading, setQuestionsRateLimited, loading } = useExam()
   const { t } = useLanguage()
 
   const doLoad = useCallback(async (forceRefresh = false) => {
     setLoading(true)
-    const { questions, source, fetchedAt, commitSha } = await loadQuestions(forceRefresh)
+    const { questions, source, fetchedAt, commitSha, rateLimited } = await loadQuestions(forceRefresh)
     setQuestions(questions)
     setDataSource(source)
     setFetchedAt(fetchedAt)
     setQuestionsCommitSha(commitSha)
+    setQuestionsRateLimited(rateLimited)
     setLoading(false)
-  }, [setQuestions, setDataSource, setFetchedAt, setQuestionsCommitSha, setLoading])
+  }, [setQuestions, setDataSource, setFetchedAt, setQuestionsCommitSha, setLoading, setQuestionsRateLimited])
 
   useEffect(() => {
     doLoad()
