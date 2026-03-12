@@ -59,6 +59,7 @@ export const labels = {
     en: "GitHub API rate limit reached — in a shared network (e.g. workshop), the limit is consumed faster. Showing cached or bundled questions. Try again in about an hour or use mobile data.",
   },
   scoringTitle: { de: "Bewertung", en: "Scoring" },
+  scoringToggle: { de: "Wie wird bewertet?", en: "How is scoring calculated?" },
   scoringCorrectTitle: { de: "Richtig", en: "Correct" },
   scoringCorrectDesc: { de: "Anteilige Punkte", en: "Proportional points" },
   scoringWrongTitle: { de: "Falsch", en: "Wrong" },

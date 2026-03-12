@@ -75,13 +75,6 @@ export function StartPage({ onRefresh }: StartPageProps) {
         ? labels.dataSourceCached
         : labels.dataSourceFallback;
 
-  const sourceColor =
-    dataSource === "live"
-      ? "bg-green-500/10 text-green-600 dark:text-green-400"
-      : dataSource === "cached"
-        ? "bg-blue-500/10 text-blue-600 dark:text-blue-400"
-        : "bg-amber-500/10 text-amber-600 dark:text-amber-400";
-
   const dotColor =
     dataSource === "live"
       ? "bg-green-500"
@@ -104,7 +97,7 @@ export function StartPage({ onRefresh }: StartPageProps) {
       >
         <div className="max-w-2xl w-full page-enter">
           {/* Hero */}
-          <div className="text-center mb-12">
+          <div className="text-center mb-10">
             <div className="relative inline-flex items-center justify-center w-20 h-20 rounded-2xl mb-6">
               {/* Glow behind icon */}
               <div className="absolute inset-0 rounded-2xl bg-primary/20 blur-xl scale-150" />
@@ -115,26 +108,22 @@ export function StartPage({ onRefresh }: StartPageProps) {
             <h1 className="font-heading text-4xl sm:text-5xl font-bold mb-3 tracking-tight">
               {t(labels.examTitle)}
             </h1>
-            <p className="text-text-muted text-base sm:text-lg max-w-lg mx-auto leading-relaxed">
+            <p className="text-text-muted text-base sm:text-lg max-w-lg mx-auto leading-relaxed mb-2">
               {t(labels.examSubtitle)}
             </p>
-          </div>
-
-          {/* iSAQB attribution */}
-          <div className="text-center mb-8">
-            <p className="text-xs text-text-muted opacity-60 mb-1.5">
+            {/* iSAQB attribution — inline */}
+            <p className="text-xs text-text-muted/50">
               {t({
-                de: "Inhalte basierend auf dem Lehrplan der",
-                en: "Content based on the curriculum by",
-              })}
+                de: "Basierend auf dem Lehrplan der",
+                en: "Based on the curriculum by",
+              })}{" "}
+              <ExternalLink
+                href="https://www.isaqb.org/certifications/cpsa-certifications/cpsa-foundation-level/"
+                className="text-primary-light/70 hover:text-primary transition-colors hover:underline"
+              >
+                iSAQB e.V.
+              </ExternalLink>
             </p>
-            <ExternalLink
-              href="https://www.isaqb.org/certifications/cpsa-certifications/cpsa-foundation-level/"
-              showIcon
-              className="inline-flex items-center gap-1.5 text-sm font-medium text-primary-light hover:text-primary transition-colors hover:underline"
-            >
-              iSAQB e.V. — CPSA Foundation Level
-            </ExternalLink>
           </div>
 
           {/* Stats row */}
@@ -177,15 +166,22 @@ export function StartPage({ onRefresh }: StartPageProps) {
             </div>
           </div>
 
-          {/* Info block */}
-          <div className="bg-surface/60 backdrop-blur-sm border border-border/50 rounded-2xl p-5 mb-8">
-            <p className="text-sm text-text-muted leading-relaxed mb-4">
-              {t(labels.examDescription)}
-            </p>
-            <div className="rounded-xl bg-primary/5 border border-primary/10 p-4">
-              <p className="text-[11px] font-semibold uppercase tracking-widest text-primary-light mb-3">
-                {t(labels.scoringTitle)}
-              </p>
+          {/* Exam description */}
+          <p className="text-sm text-text-muted text-center leading-relaxed mb-4 max-w-md mx-auto">
+            {t(labels.examDescription)}
+          </p>
+
+          {/* Collapsible scoring details — near CTA for context */}
+          <details className="group mb-6">
+            <summary className="flex items-center justify-center gap-1.5 text-xs text-text-muted/50 cursor-pointer hover:text-text-muted transition-colors select-none list-none [&::-webkit-details-marker]:hidden">
+              <span className="border-b border-dashed border-current">
+                {t(labels.scoringToggle)}
+              </span>
+              <svg className="w-3 h-3 transition-transform group-open:rotate-180" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="1.5">
+                <path d="M3 4.5L6 7.5L9 4.5" />
+              </svg>
+            </summary>
+            <div className="mt-3 rounded-xl bg-surface/40 border border-border/30 p-4">
               <div className="grid grid-cols-2 gap-3">
                 {([
                   { icon: CirclePlus,  color: 'text-success',       title: labels.scoringCorrectTitle, desc: labels.scoringCorrectDesc },
@@ -205,45 +201,13 @@ export function StartPage({ onRefresh }: StartPageProps) {
                 ))}
               </div>
             </div>
-          </div>
+          </details>
 
           {/* Rate limit warning */}
           {questionsRateLimited && !loading && (
             <div className="flex items-start gap-2 text-xs px-4 py-2.5 mb-4 rounded-xl bg-amber-500/10 text-amber-700 dark:text-amber-400 border border-amber-500/20">
               <AlertTriangle size={14} className="shrink-0 mt-0.5" />
               <span>{t(labels.questionsRateLimited)}</span>
-            </div>
-          )}
-
-          {/* Data source indicator + refetch */}
-          {dataSource && (
-            <div
-              className={`flex items-center justify-between gap-3 text-xs mb-6 px-3 py-2.5 rounded-xl ${sourceColor}`}
-            >
-              <div className="flex items-center gap-2 min-w-0">
-                <span className={`w-2 h-2 rounded-full shrink-0 ${dotColor}`} />
-                <div className="min-w-0">
-                  <span className="block truncate">{t(sourceLabel)}</span>
-                  {fetchedAt && (
-                    <span className="block opacity-60 truncate">
-                      {t(labels.lastFetched)}{" "}
-                      {formatRelativeTime(fetchedAt, lang)}
-                    </span>
-                  )}
-                </div>
-              </div>
-              <button
-                onClick={onRefresh}
-                disabled={loading}
-                className="shrink-0 flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-white/20 hover:bg-white/30 dark:bg-black/20 dark:hover:bg-black/30 transition-all font-medium cursor-pointer disabled:opacity-50"
-                aria-label={t(labels.refetch)}
-              >
-                <RefreshCw
-                  size={12}
-                  className={loading ? "animate-spin" : ""}
-                />
-                <span className="hidden sm:inline">{t(labels.refetch)}</span>
-              </button>
             </div>
           )}
 
@@ -300,7 +264,7 @@ export function StartPage({ onRefresh }: StartPageProps) {
             </div>
           ) : (
             /* CTA */
-            <div className="relative group">
+            <div className="relative group mb-6">
               {/* Glow effect behind button */}
               <div className="absolute -inset-1 rounded-2xl bg-linear-to-r from-primary via-accent to-primary opacity-0 group-hover:opacity-20 blur-xl transition-opacity duration-500" />
               <button
@@ -317,46 +281,74 @@ export function StartPage({ onRefresh }: StartPageProps) {
             </div>
           )}
 
-          {/* Keyboard hints — hidden on mobile (irrelevant for touch) */}
-          <div className="hidden sm:flex items-center justify-center gap-4 mt-5 text-xs text-text-muted">
+          {/* Secondary actions row */}
+          <div className="flex items-center justify-center gap-4 mb-6">
+            <button
+              onClick={() => navigate('/leaderboard')}
+              className="flex items-center gap-1.5 text-xs text-text-muted hover:text-primary transition-colors cursor-pointer"
+            >
+              <Trophy size={13} />
+              {t(labels.viewLeaderboard)}
+            </button>
+          </div>
+
+          {/* Keyboard hints — hidden on mobile */}
+          <div className="hidden sm:flex items-center justify-center gap-4 mb-6 text-[11px] text-text-muted/50">
             <span className="flex items-center gap-1.5">
-              <kbd className="inline-flex items-center justify-center min-w-6 h-6 px-1.5 rounded-md border border-border bg-surface-alt font-mono text-[10px] shadow-sm">
+              <kbd className="inline-flex items-center justify-center min-w-5 h-5 px-1 rounded border border-border/50 bg-surface-alt/50 font-mono text-[9px]">
                 ←
               </kbd>
-              <kbd className="inline-flex items-center justify-center min-w-6 h-6 px-1.5 rounded-md border border-border bg-surface-alt font-mono text-[10px] shadow-sm">
+              <kbd className="inline-flex items-center justify-center min-w-5 h-5 px-1 rounded border border-border/50 bg-surface-alt/50 font-mono text-[9px]">
                 →
               </kbd>
-              <span className="ml-0.5 opacity-70">
+              <span className="opacity-70">
                 {t({ de: "Navigieren", en: "Navigate" })}
               </span>
             </span>
-            <span className="w-px h-4 bg-border" />
+            <span className="w-px h-3 bg-border/30" />
             <span className="flex items-center gap-1.5">
-              <kbd className="inline-flex items-center justify-center min-w-6 h-6 px-1.5 rounded-md border border-border bg-surface-alt font-mono text-[10px] shadow-sm">
+              <kbd className="inline-flex items-center justify-center min-w-5 h-5 px-1 rounded border border-border/50 bg-surface-alt/50 font-mono text-[9px]">
                 1
               </kbd>
               <span className="opacity-40">–</span>
-              <kbd className="inline-flex items-center justify-center min-w-6 h-6 px-1.5 rounded-md border border-border bg-surface-alt font-mono text-[10px] shadow-sm">
+              <kbd className="inline-flex items-center justify-center min-w-5 h-5 px-1 rounded border border-border/50 bg-surface-alt/50 font-mono text-[9px]">
                 9
               </kbd>
-              <span className="ml-0.5 opacity-70">
+              <span className="opacity-70">
                 {t({ de: "Optionen", en: "Options" })}
               </span>
             </span>
           </div>
 
-          {/* Leaderboard link */}
-          <div className="flex justify-center mt-6">
-            <button
-              onClick={() => navigate('/leaderboard')}
-              className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-amber-500/10 border border-amber-500/20 text-sm font-medium text-amber-700 dark:text-amber-400 hover:bg-amber-500/20 transition-all duration-200 cursor-pointer"
-            >
-              <Trophy size={16} />
-              {t(labels.viewLeaderboard)}
-            </button>
-          </div>
 
-          <Footer className="mt-8" />
+
+          {/* Data source — minimal pill */}
+          {dataSource && (
+            <div className="flex items-center justify-center gap-3 mb-6">
+              <div className="flex items-center gap-1.5 text-[11px] text-text-muted/40">
+                <span className={`w-1.5 h-1.5 rounded-full shrink-0 ${dotColor}`} />
+                <span>{t(sourceLabel)}</span>
+                {fetchedAt && (
+                  <span className="opacity-60">
+                    · {formatRelativeTime(fetchedAt, lang)}
+                  </span>
+                )}
+                <button
+                  onClick={onRefresh}
+                  disabled={loading}
+                  className="ml-1 p-1 rounded-md hover:bg-surface-hover transition-colors cursor-pointer disabled:opacity-40"
+                  aria-label={t(labels.refetch)}
+                >
+                  <RefreshCw
+                    size={10}
+                    className={loading ? "animate-spin" : ""}
+                  />
+                </button>
+              </div>
+            </div>
+          )}
+
+          <Footer className="mt-4" />
         </div>
       </main>
     </PageLayout>
