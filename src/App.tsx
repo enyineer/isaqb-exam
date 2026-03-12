@@ -7,23 +7,25 @@ import { ExamProvider, useExam } from './context/ExamContext'
 import { StartPage } from './pages/StartPage'
 import { QuestionPage } from './pages/QuestionPage'
 import { ResultsPage } from './pages/ResultsPage'
+import { LeaderboardPage } from './pages/LeaderboardPage'
 import { loadQuestions } from './data/xmlLoader'
 import { useLanguage } from './context/LanguageContext'
 import { labels } from './utils/labels'
 import { Loader2 } from 'lucide-react'
 
 function AppContent() {
-  const { setQuestions, setDataSource, setFetchedAt, setLoading, loading } = useExam()
+  const { setQuestions, setDataSource, setFetchedAt, setQuestionsCommitSha, setLoading, loading } = useExam()
   const { t } = useLanguage()
 
   const doLoad = useCallback(async (forceRefresh = false) => {
     setLoading(true)
-    const { questions, source, fetchedAt } = await loadQuestions(forceRefresh)
+    const { questions, source, fetchedAt, commitSha } = await loadQuestions(forceRefresh)
     setQuestions(questions)
     setDataSource(source)
     setFetchedAt(fetchedAt)
+    setQuestionsCommitSha(commitSha)
     setLoading(false)
-  }, [setQuestions, setDataSource, setFetchedAt, setLoading])
+  }, [setQuestions, setDataSource, setFetchedAt, setQuestionsCommitSha, setLoading])
 
   useEffect(() => {
     doLoad()
@@ -54,6 +56,7 @@ function AppContent() {
         </Route>
         <Route path="/question/:number" component={QuestionPage} />
         <Route path="/results" component={ResultsPage} />
+        <Route path="/leaderboard" component={LeaderboardPage} />
         <Route>
           <StartPage onRefresh={() => doLoad(true)} />
         </Route>
