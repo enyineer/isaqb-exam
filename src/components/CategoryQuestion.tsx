@@ -60,10 +60,10 @@ export function CategoryQuestion({ question, questionNumber }: CategoryQuestionP
           return (
             <div
               key={stmt.id}
-              className="p-4 rounded-xl border-2 border-border bg-surface transition-all duration-200"
+              className="rounded-xl border-2 border-border bg-surface transition-all duration-200 overflow-hidden"
             >
-              <div className="flex items-start gap-3 mb-3">
-                <span className="text-xs font-bold text-text-muted bg-surface-alt w-6 h-6 rounded-md flex items-center justify-center shrink-0">
+              <div className="flex items-start gap-3 p-4">
+                <span className="shrink-0 text-xs font-bold w-7 h-7 rounded-lg bg-surface-alt text-text-muted flex items-center justify-center">
                   {stmt.id}
                 </span>
                 <span className="text-sm flex-1">{t(stmt.text)}</span>
@@ -71,14 +71,17 @@ export function CategoryQuestion({ question, questionNumber }: CategoryQuestionP
                   {index + 1}
                 </kbd>
               </div>
-              <div className="flex flex-wrap gap-2 pl-9">
-                <span className="text-xs text-text-muted self-center mr-1">
-                  {t(labels.assignToCategory)}
-                </span>
-                {question.categories.map(cat => (
+              <div className="flex border-t border-border">
+                {question.categories.map((cat, catIdx) => (
                   <button
                     key={cat.label}
-                    className={`category-btn ${currentAssignment === cat.label ? 'active' : ''}`}
+                    className={`flex-1 py-2.5 text-xs font-medium transition-all duration-200 cursor-pointer ${
+                      catIdx > 0 ? 'border-l border-border' : ''
+                    } ${
+                      currentAssignment === cat.label
+                        ? 'bg-primary text-white'
+                        : 'bg-surface-alt/50 text-text-muted hover:bg-surface-hover'
+                    }`}
                     onClick={() => setCategoryAnswer(question.id, stmt.id, cat.label)}
                     aria-pressed={currentAssignment === cat.label}
                   >

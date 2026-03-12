@@ -9,12 +9,15 @@ import {
   Timer,
   Trophy,
   ArrowRight,
-  Info,
   RefreshCw,
   GraduationCap,
   Play,
   RotateCcw,
   CheckCircle2,
+  CirclePlus,
+  CircleMinus,
+  Shield,
+  Ban,
 } from "lucide-react";
 import { ExternalLink } from "../components/ExternalLink";
 import { Footer } from "../components/Footer";
@@ -175,41 +178,62 @@ export function StartPage({ onRefresh }: StartPageProps) {
 
           {/* Info block */}
           <div className="bg-surface/60 backdrop-blur-sm border border-border/50 rounded-2xl p-5 mb-8">
-            <p className="text-sm text-text-muted leading-relaxed mb-3">
+            <p className="text-sm text-text-muted leading-relaxed mb-4">
               {t(labels.examDescription)}
             </p>
-            <div className="flex items-start gap-2.5 p-3 rounded-xl bg-primary/5 border border-primary/10 text-xs text-text-muted">
-              <Info size={14} className="shrink-0 mt-0.5 text-primary-light" />
-              <span>{t(labels.scoringInfo)}</span>
+            <div className="rounded-xl bg-primary/5 border border-primary/10 p-4">
+              <p className="text-[11px] font-semibold uppercase tracking-widest text-primary-light mb-3">
+                {t(labels.scoringTitle)}
+              </p>
+              <div className="grid grid-cols-2 gap-3">
+                {([
+                  { icon: CirclePlus,  color: 'text-success',       title: labels.scoringCorrectTitle, desc: labels.scoringCorrectDesc },
+                  { icon: CircleMinus, color: 'text-error',         title: labels.scoringWrongTitle,   desc: labels.scoringWrongDesc },
+                  { icon: Shield,      color: 'text-primary-light', title: labels.scoringFloorTitle,   desc: labels.scoringFloorDesc },
+                  { icon: Ban,         color: 'text-amber-500',     title: labels.scoringOverTitle,    desc: labels.scoringOverDesc },
+                ] as const).map(({ icon: Icon, color, title, desc }) => (
+                  <div key={title.en} className="flex items-center gap-2.5">
+                    <div className="shrink-0 w-7 h-7 rounded-lg bg-surface/80 border border-border/40 flex items-center justify-center">
+                      <Icon size={14} className={color} />
+                    </div>
+                    <div className="min-w-0">
+                      <p className="text-xs font-semibold text-text leading-none mb-0.5">{t(title)}</p>
+                      <p className="text-[11px] text-text-muted leading-tight">{t(desc)}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
 
           {/* Data source indicator + refetch */}
           {dataSource && (
             <div
-              className={`flex items-center justify-between gap-3 text-xs mb-6 px-4 py-2.5 rounded-xl ${sourceColor}`}
+              className={`flex items-center justify-between gap-3 text-xs mb-6 px-3 py-2.5 rounded-xl ${sourceColor}`}
             >
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 min-w-0">
                 <span className={`w-2 h-2 rounded-full shrink-0 ${dotColor}`} />
-                <span>{t(sourceLabel)}</span>
-                {fetchedAt && (
-                  <span className="opacity-60">
-                    · {t(labels.lastFetched)}{" "}
-                    {formatRelativeTime(fetchedAt, lang)}
-                  </span>
-                )}
+                <div className="min-w-0">
+                  <span className="block truncate">{t(sourceLabel)}</span>
+                  {fetchedAt && (
+                    <span className="block opacity-60 truncate">
+                      {t(labels.lastFetched)}{" "}
+                      {formatRelativeTime(fetchedAt, lang)}
+                    </span>
+                  )}
+                </div>
               </div>
               <button
                 onClick={onRefresh}
                 disabled={loading}
-                className="flex items-center gap-1 px-2.5 py-1 rounded-lg bg-white/20 hover:bg-white/30 dark:bg-black/20 dark:hover:bg-black/30 transition-all font-medium cursor-pointer disabled:opacity-50"
+                className="shrink-0 flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-white/20 hover:bg-white/30 dark:bg-black/20 dark:hover:bg-black/30 transition-all font-medium cursor-pointer disabled:opacity-50"
                 aria-label={t(labels.refetch)}
               >
                 <RefreshCw
                   size={12}
                   className={loading ? "animate-spin" : ""}
                 />
-                {t(labels.refetch)}
+                <span className="hidden sm:inline">{t(labels.refetch)}</span>
               </button>
             </div>
           )}
