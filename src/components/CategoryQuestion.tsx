@@ -6,6 +6,7 @@ import { AnswerIndicator } from './AnswerIndicator'
 import { QuestionHeader } from './QuestionHeader'
 import { labels } from '../utils/labels'
 import { seededShuffle } from '../utils/shuffle'
+import { getQuestionAnswerStatus } from '../utils/questionStatus'
 
 interface CategoryQuestionProps {
   question: CategoryQuestionType
@@ -18,6 +19,7 @@ export function CategoryQuestion({ question, questionNumber }: CategoryQuestionP
 
   const assignments = (answers[question.id] as Record<string, string>) || {}
   const assignedCount = Object.keys(assignments).length
+  const status = getQuestionAnswerStatus(question, answers[question.id])
 
   // Shuffle statements deterministically per attempt + question
   const shuffledStatements = useMemo(
@@ -35,7 +37,7 @@ export function CategoryQuestion({ question, questionNumber }: CategoryQuestionP
 
       {/* Answer indicator */}
       <div className="mb-4">
-        <AnswerIndicator selected={assignedCount} required={question.statements.length} />
+        <AnswerIndicator selected={assignedCount} required={question.statements.length} status={status} />
       </div>
 
       {/* Category legend */}
