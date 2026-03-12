@@ -49,33 +49,20 @@ export function PickQuestion({ question, questionNumber }: PickQuestionProps) {
           return (
             <button
               key={option.id}
-              className={`option-card w-full text-left flex items-start gap-3 ${isSelected ? 'selected' : ''}`}
+              className={`option-card w-full text-left flex items-center gap-3 ${isSelected ? 'selected' : ''}`}
               onClick={() => togglePickAnswer(question.id, option.id)}
               role="checkbox"
               aria-checked={isSelected}
               tabIndex={0}
             >
-              {/* Checkbox indicator */}
-              <span className={`mt-0.5 shrink-0 w-5 h-5 rounded border-2 flex items-center justify-center transition-all duration-200 ${
+              <span className={`shrink-0 text-xs font-bold w-7 h-7 rounded-lg flex items-center justify-center transition-all duration-200 ${
                 isSelected
-                  ? 'bg-primary border-primary'
-                  : 'border-border'
+                  ? 'bg-primary text-white shadow-sm shadow-primary/25'
+                  : 'bg-surface-alt text-text-muted'
               }`}>
-                {isSelected && (
-                  <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                  </svg>
-                )}
+                {LETTERS[index]}
               </span>
-
-              <span className="flex-1">
-                <span className="inline-flex items-center gap-2">
-                  <span className="text-xs font-bold text-text-muted bg-surface-alt w-6 h-6 rounded-md flex items-center justify-center shrink-0">
-                    {LETTERS[index]}
-                  </span>
-                  <span className="text-sm">{t(option.text)}</span>
-                </span>
-              </span>
+              <span className="flex-1 text-sm">{t(option.text)}</span>
 
               {/* Keyboard shortcut hint */}
               <kbd className="hidden sm:inline-flex shrink-0 text-[10px] text-text-muted bg-surface-alt px-1.5 py-0.5 rounded border border-border font-mono">
