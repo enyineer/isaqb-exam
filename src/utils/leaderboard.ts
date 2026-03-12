@@ -176,7 +176,7 @@ interface DiscussionCommentAuthor {
 interface DiscussionComment {
   body: string
   created_at: string
-  author: DiscussionCommentAuthor
+  user: DiscussionCommentAuthor
   author_association: string
 }
 
@@ -436,7 +436,7 @@ export async function fetchLeaderboard(forceRefresh = false): Promise<Leaderboar
 export function parseLeaderboardComment(comment: DiscussionComment): LeaderboardEntry | null {
   // Only include comments from GitHub Actions bot or repo collaborators
   const validAssociations = ['COLLABORATOR', 'MEMBER', 'OWNER']
-  const isBot = comment.author.login === 'github-actions[bot]'
+  const isBot = comment.user.login === 'github-actions[bot]'
   if (!isBot && !validAssociations.includes(comment.author_association)) {
     return null
   }
@@ -461,8 +461,8 @@ export function parseLeaderboardComment(comment: DiscussionComment): Leaderboard
     // Extract the submitter's info from the comment body
     // The Action will include the submitter's username in the comment
     const userMatch = comment.body.match(/<!-- user:(\S+) avatar:(\S+) -->/)
-    const username = userMatch?.[1] ?? comment.author.login
-    const avatarUrl = userMatch?.[2] ?? comment.author.avatar_url
+    const username = userMatch?.[1] ?? comment.user.login
+    const avatarUrl = userMatch?.[2] ?? comment.user.avatar_url
 
     return {
       version: payload.v,

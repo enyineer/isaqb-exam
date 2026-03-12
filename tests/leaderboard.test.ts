@@ -52,7 +52,7 @@ function makeValidComment(overrides: {
       '```',
     ].join('\n'),
     created_at: payload.ts,
-    author: {
+    user: {
       login: overrides.login ?? 'github-actions[bot]',
       avatar_url: avatarUrl,
     },
@@ -227,7 +227,7 @@ describe('parseLeaderboardComment', () => {
   } = {}) => ({
     body: overrides.body ?? '',
     created_at: '2026-03-12T10:00:00Z',
-    author: {
+    user: {
       login: overrides.login ?? 'github-actions[bot]',
       avatar_url: overrides.avatar_url ?? 'https://avatars.githubusercontent.com/u/1234',
     },
