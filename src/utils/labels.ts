@@ -34,8 +34,8 @@ export const labels = {
     en: "Certified Professional for Software Architecture — Foundation Level",
   },
   examDescription: {
-    de: "Teste dein Wissen mit der offiziellen iSAQB-Probeprüfung. Die Fragen stammen aus dem offiziellen iSAQB Foundation Level Fragenkatalog.",
-    en: "Test your knowledge with the official iSAQB mock exam. Questions are sourced from the official iSAQB Foundation Level question catalog.",
+    de: "Teste dein Wissen mit der inoffiziellen iSAQB-Probeprüfung. Die Fragen stammen aus dem offiziellen iSAQB Foundation Level Fragenkatalog.",
+    en: "Test your knowledge with the inofficial iSAQB mock exam. Questions are sourced from the official iSAQB Foundation Level question catalog.",
   },
   totalQuestions: { de: "Fragen", en: "Questions" },
   totalPoints: { de: "Gesamtpunkte", en: "Total Points" },
@@ -110,22 +110,37 @@ export const labels = {
   },
   finishAnyway: { de: "Trotzdem abschließen", en: "Finish Anyway" },
   reviewFlagged: { de: "Überprüfen", en: "Review" },
-  unansweredQuestionsTitle: { de: "Unbeantwortete Fragen", en: "Unanswered Questions" },
+  unansweredQuestionsTitle: {
+    de: "Unbeantwortete Fragen",
+    en: "Unanswered Questions",
+  },
   unansweredQuestionsBody: {
     de: "Du hast noch unbeantwortete Fragen. Möchtest du die Prüfung trotzdem abschließen?",
     en: "You still have unanswered questions. Do you want to finish the exam anyway?",
   },
   noteLabel: { de: "Notizen", en: "Notes" },
-  notePlaceholder: { de: "Notizen für den Dozenten…", en: "Notes for the lecturer…" },
-  noteForLecturer: { de: "Notiz für den Dozenten", en: "Note for the lecturer" },
+  notePlaceholder: {
+    de: "Notizen für den Dozenten…",
+    en: "Notes for the lecturer…",
+  },
+  noteForLecturer: {
+    de: "Notiz für den Dozenten",
+    en: "Note for the lecturer",
+  },
   // Leaderboard
   leaderboard: { de: "Bestenliste", en: "Leaderboard" },
-  leaderboardEmpty: { de: "Noch keine Einträge vorhanden.", en: "No entries yet." },
+  leaderboardEmpty: {
+    de: "Noch keine Einträge vorhanden.",
+    en: "No entries yet.",
+  },
   leaderboardError: {
     de: "Bestenliste konnte nicht geladen werden. In einem gemeinsamen Netzwerk (z.B. Workshop) kann das GitHub-API-Limit schnell erreicht werden. Versuche es in ca. einer Stunde erneut oder nutze mobile Daten.",
     en: "Could not load the leaderboard. In a shared network (e.g. workshop), the GitHub API limit can be reached quickly. Try again in about an hour or use mobile data.",
   },
-  leaderboardLoading: { de: "Bestenliste wird geladen…", en: "Loading leaderboard…" },
+  leaderboardLoading: {
+    de: "Bestenliste wird geladen…",
+    en: "Loading leaderboard…",
+  },
   submitToLeaderboard: { de: "Ergebnis senden", en: "Submit Result" },
   viewLeaderboard: { de: "Bestenliste ansehen", en: "View Leaderboard" },
   leaderboardRank: { de: "#", en: "#" },
