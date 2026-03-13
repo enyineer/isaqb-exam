@@ -201,7 +201,7 @@ export function QuestionPage() {
   const headerControls = (
     <>
       {/* Live timer */}
-      <span className="flex items-center gap-1.5 text-sm text-text-muted font-mono tabular-nums">
+      <span className="flex items-center gap-1 sm:gap-1.5 text-xs sm:text-sm text-text-muted font-mono tabular-nums">
         <Clock size={14} />
         {formatTimer(elapsed)}
       </span>
@@ -212,7 +212,7 @@ export function QuestionPage() {
       {/* Flag button */}
       <button
         onClick={() => toggleFlag(question.id)}
-        className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-sm font-medium transition-all cursor-pointer ${
+        className={`size-9 sm:size-auto sm:px-2.5 sm:py-2 flex items-center justify-center sm:gap-1.5 rounded-lg text-sm font-medium transition-all cursor-pointer ${
           isFlagged
             ? 'bg-amber-500/15 text-amber-600 dark:text-amber-400 border-2 border-amber-500/40 shadow-sm shadow-amber-500/10'
             : 'border-2 border-border bg-surface hover:bg-surface-hover hover:border-amber-500/30 hover:text-amber-600 dark:hover:text-amber-400'
@@ -220,7 +220,7 @@ export function QuestionPage() {
         aria-label={isFlagged ? t(labels.unflagQuestion) : t(labels.flagQuestion)}
         title={isFlagged ? t(labels.unflagQuestion) : t(labels.flagQuestion)}
       >
-        <Bookmark size={14} className={isFlagged ? 'fill-current' : ''} />
+        <Bookmark size={16} className={isFlagged ? 'fill-current' : ''} />
         <span className="hidden sm:inline">{isFlagged ? t(labels.unflagQuestion) : t(labels.flagQuestion)}</span>
       </button>
     </>

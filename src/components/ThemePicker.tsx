@@ -25,12 +25,12 @@ export function ThemePicker() {
   return (
     <div className="relative" ref={ref}>
       <button
-        className="flex items-center gap-1.5 px-3 py-2 rounded-lg border-2 border-border bg-surface hover:bg-surface-hover transition-all duration-200 cursor-pointer"
+        className="size-9 sm:size-auto sm:h-10 sm:px-3 sm:py-2 flex items-center justify-center gap-1.5 rounded-lg border-2 border-border bg-surface hover:bg-surface-hover transition-all duration-200 cursor-pointer"
         onClick={() => setOpen(!open)}
         aria-label="Theme settings"
         aria-expanded={open}
       >
-        <Palette size={18} />
+        <Palette size={16} />
       </button>
 
       {open && (
@@ -92,10 +92,11 @@ export function LanguageToggle() {
   return (
     <button
       onClick={toggleLang}
-      className="flex items-center gap-1 px-3 py-2 rounded-lg border-2 border-border bg-surface hover:bg-surface-hover transition-all duration-200 text-sm font-semibold cursor-pointer"
+      className="size-9 sm:size-auto sm:px-3 sm:py-2 flex items-center justify-center gap-1 rounded-lg border-2 border-border bg-surface hover:bg-surface-hover transition-all duration-200 text-sm font-semibold cursor-pointer"
       aria-label={`Switch to ${lang === 'en' ? 'German' : 'English'}`}
     >
-      {lang === 'en' ? '🇩🇪 DE' : '🇬🇧 EN'}
+      {lang === 'en' ? '🇩🇪' : '🇬🇧'}
+      <span className="hidden sm:inline">{lang === 'en' ? 'DE' : 'EN'}</span>
     </button>
   )
 }

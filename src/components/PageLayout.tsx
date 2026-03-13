@@ -30,9 +30,9 @@ export function Header({ children, bottomSlot, className = "" }: HeaderProps) {
             onClick={() => navigate("/")}
             className="font-heading font-bold text-lg hover:text-primary transition-colors cursor-pointer"
           >
-            iSAQB
+            Mock Exam
           </button>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-1.5 sm:gap-3">
             {children}
             <LanguageToggle />
             <ThemePicker />
