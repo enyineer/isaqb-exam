@@ -2,7 +2,7 @@
 
 A web-based practice exam for the **iSAQB Certified Professional for Software Architecture — Foundation Level (CPSA-F)**.
 
-Questions are sourced from the [official iSAQB examination question catalog](https://github.com/isaqb-org/examination-foundation).
+Questions are sourced from the [official iSAQB examination question catalog](https://github.com/isaqb-org/foundation-exam-questions).
 
 ## Take the exam
 
