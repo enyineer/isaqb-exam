@@ -39,6 +39,49 @@ bun install
 bun run dev
 ```
 
+This starts the frontend only. Questions and leaderboard data are served from the production Worker.
+
+### Full-Stack Local Development
+
+To run both the frontend and the Cloudflare Worker locally:
+
+1. **Install dependencies** for both frontend and worker:
+   ```bash
+   bun install
+   cd worker && bun install
+   ```
+
+2. **Configure worker secrets** — copy the template and fill in your credentials:
+   ```bash
+   cp worker/.dev.vars.example worker/.dev.vars
+   ```
+   Edit `worker/.dev.vars` with your GitHub PAT, OAuth app credentials, and a JWT secret.
+
+3. **Set up OAuth apps for local testing** — register these in your GitHub/Google OAuth apps:
+   - **Authorized JavaScript origins:** `http://localhost:8787`
+   - **Authorized redirect URIs:**
+     - `http://localhost:8787/auth/github/callback`
+     - `http://localhost:8787/auth/google/callback`
+
+4. **Start both servers:**
+   ```bash
+   bun run dev:all
+   ```
+   - Frontend: `http://localhost:5173/isaqb-exam/`
+   - Worker: `http://localhost:8787`
+
+   The worker runs with local KV storage — no data is written to production.
+
+### Available Scripts
+
+| Script | Description |
+|--------|-------------|
+| `bun run dev` | Start frontend only |
+| `bun run dev:worker` | Start worker only (local KV) |
+| `bun run dev:all` | Start both frontend + worker |
+| `bun run build` | Production build |
+| `bun test` | Run tests |
+
 ## Testing
 
 ```bash
