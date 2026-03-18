@@ -4,7 +4,8 @@
  * Routes:
  *   GET  /api/questions     → questions proxy (cached by commit SHA)
  *   GET  /api/commit-sha    → latest upstream commit SHA
- *   GET  /api/leaderboard   → leaderboard entries
+ *   GET  /api/leaderboard   → leaderboard entries (optionally filtered by commitSha)
+ *   GET  /api/leaderboard/versions → available question versions
  *   POST /api/leaderboard   → submit score (requires auth)
  *   GET  /auth/github       → GitHub OAuth redirect
  *   GET  /auth/github/callback → GitHub OAuth callback
@@ -17,7 +18,7 @@
 import type { Env } from './types.ts'
 import { handleOptions, withCors } from './cors.ts'
 import { handleGetQuestions, handleGetCommitSha } from './questions.ts'
-import { handleGetLeaderboard, handleSubmitScore } from './leaderboard.ts'
+import { handleGetLeaderboard, handleGetLeaderboardVersions, handleSubmitScore } from './leaderboard.ts'
 import {
   handleGitHubLogin,
   handleGitHubCallback,
@@ -48,6 +49,8 @@ export default {
         response = await handleGetCommitSha(env)
       } else if (pathname === '/api/leaderboard' && method === 'GET') {
         response = await handleGetLeaderboard(request, env)
+      } else if (pathname === '/api/leaderboard/versions' && method === 'GET') {
+        response = await handleGetLeaderboardVersions(env)
       } else if (pathname === '/api/leaderboard' && method === 'POST') {
         response = await handleSubmitScore(request, env)
 
@@ -68,7 +71,7 @@ export default {
       // ─── Catch-all ────────────────────────────────────────────
       } else {
         response = Response.json(
-          { error: 'Not found', availableRoutes: ['/api/questions', '/api/commit-sha', '/api/leaderboard', '/auth/github', '/auth/google', '/auth/me'] },
+          { error: 'Not found', availableRoutes: ['/api/questions', '/api/commit-sha', '/api/leaderboard', '/api/leaderboard/versions', '/auth/github', '/auth/google', '/auth/me'] },
           { status: 404 },
         )
       }

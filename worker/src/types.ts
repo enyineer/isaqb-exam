@@ -1,5 +1,7 @@
-/** Cloudflare Worker environment bindings */
 export interface Env {
+  // Optional overrides (set in .dev.vars for local development)
+  FRONTEND_URL?: string
+  WORKER_URL?: string
   // KV Namespaces
   QUESTIONS_CACHE: KVNamespace
   LEADERBOARD: KVNamespace

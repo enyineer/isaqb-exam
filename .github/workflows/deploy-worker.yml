@@ -18,7 +18,10 @@ jobs:
 
       - uses: oven-sh/setup-bun@v2
 
-      - name: Install dependencies
+      - name: Install root dependencies
+        run: bun install
+
+      - name: Install worker dependencies
         run: bun install
         working-directory: worker
 

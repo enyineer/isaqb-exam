@@ -6,7 +6,17 @@
 import type { Env, SessionPayload } from './types.ts'
 import { createJwt, verifyJwt, getSessionFromCookie, buildSessionCookie, clearSessionCookie } from './jwt.ts'
 
-const FRONTEND_URL = 'https://enyineer.github.io/isaqb-exam'
+const DEFAULT_FRONTEND_URL = 'https://enyineer.github.io/isaqb-exam'
+
+/** Resolve the frontend URL — overridable via FRONTEND_URL env var for local dev */
+function getFrontendUrl(env: Env): string {
+  return env.FRONTEND_URL || DEFAULT_FRONTEND_URL
+}
+
+/** Resolve the worker origin for OAuth redirect URIs — overridable via WORKER_URL for local dev */
+function getWorkerOrigin(request: Request, env: Env): string {
+  return env.WORKER_URL || new URL(request.url).origin
+}
 
 /**
  * Sanitise the returnTo value to prevent open-redirect attacks.
@@ -20,8 +30,9 @@ function sanitizeReturnTo(raw: string): string {
 }
 
 /** Build a redirect URL with the token placed before the hash fragment */
-function buildRedirectWithToken(returnTo: string, token: string): string {
-  const base = returnTo ? `${FRONTEND_URL}${returnTo}` : `${FRONTEND_URL}/#/results`
+function buildRedirectWithToken(env: Env, returnTo: string, token: string): string {
+  const frontendUrl = getFrontendUrl(env)
+  const base = returnTo ? `${frontendUrl}${returnTo}` : `${frontendUrl}/#/results`
   const hashIdx = base.indexOf('#')
   const separator = base.includes('?') ? '&' : '?'
   if (hashIdx >= 0) {
@@ -42,7 +53,7 @@ export async function handleGitHubLogin(request: Request, env: Env): Promise<Res
 
   const params = new URLSearchParams({
     client_id: env.GITHUB_CLIENT_ID,
-    redirect_uri: `${new URL(request.url).origin}/auth/github/callback`,
+    redirect_uri: `${getWorkerOrigin(request, env)}/auth/github/callback`,
     scope: 'read:user',
     state,
   })
@@ -56,13 +67,13 @@ export async function handleGitHubCallback(request: Request, env: Env): Promise<
   const state = url.searchParams.get('state')
 
   if (!code || !state) {
-    return Response.redirect(`${FRONTEND_URL}/#auth-error`, 302)
+    return Response.redirect(`${getFrontendUrl(env)}/#auth-error`, 302)
   }
 
   // Validate state
   const returnTo = await env.SESSIONS.get(`oauth-state:${state}`)
   if (returnTo === null) {
-    return Response.redirect(`${FRONTEND_URL}/#auth-error`, 302)
+    return Response.redirect(`${getFrontendUrl(env)}/#auth-error`, 302)
   }
   await env.SESSIONS.delete(`oauth-state:${state}`)
 
@@ -81,12 +92,12 @@ export async function handleGitHubCallback(request: Request, env: Env): Promise<
   })
 
   if (!tokenRes.ok) {
-    return Response.redirect(`${FRONTEND_URL}/#auth-error`, 302)
+    return Response.redirect(`${getFrontendUrl(env)}/#auth-error`, 302)
   }
 
   const tokenData: { access_token?: string } = await tokenRes.json()
   if (!tokenData.access_token) {
-    return Response.redirect(`${FRONTEND_URL}/#auth-error`, 302)
+    return Response.redirect(`${getFrontendUrl(env)}/#auth-error`, 302)
   }
 
   // Fetch user info
@@ -98,7 +109,7 @@ export async function handleGitHubCallback(request: Request, env: Env): Promise<
   })
 
   if (!userRes.ok) {
-    return Response.redirect(`${FRONTEND_URL}/#auth-error`, 302)
+    return Response.redirect(`${getFrontendUrl(env)}/#auth-error`, 302)
   }
 
   const user: { id: number; login: string; avatar_url: string } = await userRes.json()
@@ -111,7 +122,7 @@ export async function handleGitHubCallback(request: Request, env: Env): Promise<
     avatar: user.avatar_url,
   }, env.JWT_SECRET)
 
-  return Response.redirect(buildRedirectWithToken(returnTo, jwt), 302)
+  return Response.redirect(buildRedirectWithToken(env, returnTo, jwt), 302)
 }
 
 // ─── Google OAuth ────────────────────────────────────────────────────
@@ -122,9 +133,11 @@ export async function handleGoogleLogin(request: Request, env: Env): Promise<Res
 
   await env.SESSIONS.put(`oauth-state:${state}`, returnTo, { expirationTtl: 300 })
 
+  const redirectUri = `${getWorkerOrigin(request, env)}/auth/google/callback`
+
   const params = new URLSearchParams({
     client_id: env.GOOGLE_CLIENT_ID,
-    redirect_uri: `${new URL(request.url).origin}/auth/google/callback`,
+    redirect_uri: redirectUri,
     response_type: 'code',
     scope: 'openid profile',
     state,
@@ -139,14 +152,16 @@ export async function handleGoogleCallback(request: Request, env: Env): Promise<
   const state = url.searchParams.get('state')
 
   if (!code || !state) {
-    return Response.redirect(`${FRONTEND_URL}/#auth-error`, 302)
+    return Response.redirect(`${getFrontendUrl(env)}/#auth-error`, 302)
   }
 
   const returnTo = await env.SESSIONS.get(`oauth-state:${state}`)
   if (returnTo === null) {
-    return Response.redirect(`${FRONTEND_URL}/#auth-error`, 302)
+    return Response.redirect(`${getFrontendUrl(env)}/#auth-error`, 302)
   }
   await env.SESSIONS.delete(`oauth-state:${state}`)
+
+  const callbackRedirectUri = `${getWorkerOrigin(request, env)}/auth/google/callback`
 
   // Exchange code for token
   const tokenRes = await fetch('https://oauth2.googleapis.com/token', {
@@ -156,18 +171,18 @@ export async function handleGoogleCallback(request: Request, env: Env): Promise<
       client_id: env.GOOGLE_CLIENT_ID,
       client_secret: env.GOOGLE_CLIENT_SECRET,
       code,
-      redirect_uri: `${new URL(request.url).origin}/auth/google/callback`,
+      redirect_uri: callbackRedirectUri,
       grant_type: 'authorization_code',
     }),
   })
 
   if (!tokenRes.ok) {
-    return Response.redirect(`${FRONTEND_URL}/#auth-error`, 302)
+    return Response.redirect(`${getFrontendUrl(env)}/#auth-error`, 302)
   }
 
   const tokenData: { access_token?: string } = await tokenRes.json()
   if (!tokenData.access_token) {
-    return Response.redirect(`${FRONTEND_URL}/#auth-error`, 302)
+    return Response.redirect(`${getFrontendUrl(env)}/#auth-error`, 302)
   }
 
   // Fetch user info
@@ -176,7 +191,7 @@ export async function handleGoogleCallback(request: Request, env: Env): Promise<
   })
 
   if (!userRes.ok) {
-    return Response.redirect(`${FRONTEND_URL}/#auth-error`, 302)
+    return Response.redirect(`${getFrontendUrl(env)}/#auth-error`, 302)
   }
 
   const user: { id: string; name: string; picture: string } = await userRes.json()
@@ -188,7 +203,7 @@ export async function handleGoogleCallback(request: Request, env: Env): Promise<
     avatar: user.picture,
   }, env.JWT_SECRET)
 
-  return Response.redirect(buildRedirectWithToken(returnTo, jwt), 302)
+  return Response.redirect(buildRedirectWithToken(env, returnTo, jwt), 302)
 }
 
 // ─── Session Management ──────────────────────────────────────────────

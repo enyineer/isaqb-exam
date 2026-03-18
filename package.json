@@ -5,6 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "dev:worker": "cd worker && npx wrangler dev --local",
+    "dev:all": "trap 'kill 0; exit 0' SIGINT; bun run dev & bun run dev:worker & wait",
     "build": "vite build",
     "preview": "vite preview"
   },

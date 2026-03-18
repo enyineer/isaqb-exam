@@ -5,7 +5,7 @@ import { useExam } from '../context/ExamContext'
 import { labels } from '../utils/labels'
 import { PageLayout } from '../components/PageLayout'
 import { Footer } from '../components/Footer'
-import { fetchLeaderboard, type LeaderboardEntry } from '../utils/leaderboard'
+import { fetchLeaderboard, fetchLeaderboardVersions, type LeaderboardEntry, type LeaderboardVersion } from '../utils/leaderboard'
 import {
   Trophy,
   ArrowLeft,
@@ -62,12 +62,21 @@ export function LeaderboardPage() {
   const [sortField, setSortField] = useState<SortField>('percentage')
   const [sortDir, setSortDir] = useState<SortDirection>('desc')
 
+  // Version filter: 'all' | specific commitSha
+  const [selectedVersion, setSelectedVersion] = useState<string>('all')
+  const [versions, setVersions] = useState<LeaderboardVersion[]>([])
+
+  // Fetch available versions on mount
+  useEffect(() => {
+    fetchLeaderboardVersions().then(setVersions)
+  }, [])
+
   const doFetch = useCallback((forceRefresh = false) => {
-    if (!questionsCommitSha) return
     setLoading(true)
     setError(null)
 
-    fetchLeaderboard(questionsCommitSha, forceRefresh)
+    const commitSha = selectedVersion === 'all' ? undefined : selectedVersion
+    fetchLeaderboard(commitSha, forceRefresh)
       .then((result) => {
         setEntries(result.entries)
         setFetchedAt(result.fetchedAt)
@@ -78,7 +87,7 @@ export function LeaderboardPage() {
       .finally(() => {
         setLoading(false)
       })
-  }, [questionsCommitSha])
+  }, [selectedVersion])
 
   useEffect(() => {
     doFetch()
@@ -138,6 +147,28 @@ export function LeaderboardPage() {
                 <span className="text-xs text-text-muted hidden sm:inline">
                   {t(labels.lastFetched)} {formatRelativeTime(fetchedAt, lang)}
                 </span>
+              )}
+              {versions.length > 0 && (
+                <select
+                  value={selectedVersion}
+                  onChange={(e) => setSelectedVersion(e.target.value)}
+                  className="px-2 py-1.5 rounded-lg border border-border bg-surface text-xs font-medium cursor-pointer appearance-none pr-6"
+                  style={{ backgroundImage: 'url("data:image/svg+xml,%3csvg xmlns=\'http://www.w3.org/2000/svg\' fill=\'none\' viewBox=\'0 0 20 20\'%3e%3cpath stroke=\'%236b7280\' stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'1.5\' d=\'M6 8l4 4 4-4\'/%3e%3c/svg%3e")', backgroundPosition: 'right 0.25rem center', backgroundRepeat: 'no-repeat', backgroundSize: '1.25em 1.25em' }}
+                >
+                  <option value="all">{t(labels.leaderboardAllVersions)}</option>
+                  {questionsCommitSha && versions.some(v => v.commitSha === questionsCommitSha) && (
+                    <option value={questionsCommitSha}>
+                      {t(labels.leaderboardCurrentVersion)} ({questionsCommitSha.slice(0, 7)})
+                    </option>
+                  )}
+                  {versions
+                    .filter(v => v.commitSha !== questionsCommitSha)
+                    .map(v => (
+                      <option key={v.commitSha} value={v.commitSha}>
+                        {v.commitSha.slice(0, 7)} ({v.entryCount})
+                      </option>
+                    ))}
+                </select>
               )}
               <button
                 onClick={() => doFetch(true)}
@@ -291,10 +322,7 @@ export function LeaderboardPage() {
               </table>
               </div>
 
-              {/* Max entries hint */}
-              <p className="text-xs text-text-muted text-center mt-3 opacity-60">
-                {t(labels.leaderboardMaxEntries)}
-              </p>
+
             </>
           )}
         </div>

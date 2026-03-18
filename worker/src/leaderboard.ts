@@ -51,15 +51,47 @@ function sortEntries(entries: StoredLeaderboardEntry[]): StoredLeaderboardEntry[
 
 // ─── Route Handlers ──────────────────────────────────────────────────
 
-/** GET /api/leaderboard?commitSha=... — Return leaderboard entries for a specific commit SHA */
+/** GET /api/leaderboard?commitSha=... — Return leaderboard entries, optionally filtered by commit SHA */
 export async function handleGetLeaderboard(request: Request, env: Env): Promise<Response> {
   const url = new URL(request.url)
   const commitSha = url.searchParams.get('commitSha')
-  if (!commitSha) {
-    return Response.json({ error: 'Missing commitSha query parameter' }, { status: 400 })
+
+  if (commitSha) {
+    // Specific version
+    const entries = await readEntries(env.LEADERBOARD, commitSha)
+    return Response.json({ entries: sortEntries(entries) })
   }
-  const entries = await readEntries(env.LEADERBOARD, commitSha)
-  return Response.json({ entries: sortEntries(entries) })
+
+  // All versions — list all leaderboard KV keys and merge entries
+  const allEntries: StoredLeaderboardEntry[] = []
+  let cursor: string | undefined
+  do {
+    const list = await env.LEADERBOARD.list({ prefix: 'leaderboard:', cursor })
+    for (const key of list.keys) {
+      const data = await env.LEADERBOARD.get<StoredLeaderboardEntry[]>(key.name, 'json')
+      if (data) allEntries.push(...data)
+    }
+    cursor = list.list_complete ? undefined : list.cursor
+  } while (cursor)
+
+  return Response.json({ entries: sortEntries(allEntries) })
+}
+
+/** GET /api/leaderboard/versions — List available commit SHAs with entry counts */
+export async function handleGetLeaderboardVersions(env: Env): Promise<Response> {
+  const versions: Array<{ commitSha: string; entryCount: number }> = []
+  let cursor: string | undefined
+  do {
+    const list = await env.LEADERBOARD.list({ prefix: 'leaderboard:', cursor })
+    for (const key of list.keys) {
+      const sha = key.name.replace('leaderboard:', '')
+      const data = await env.LEADERBOARD.get<StoredLeaderboardEntry[]>(key.name, 'json')
+      versions.push({ commitSha: sha, entryCount: data?.length ?? 0 })
+    }
+    cursor = list.list_complete ? undefined : list.cursor
+  } while (cursor)
+
+  return Response.json({ versions })
 }
 
 /** POST /api/leaderboard — Submit a new leaderboard entry (requires auth) */

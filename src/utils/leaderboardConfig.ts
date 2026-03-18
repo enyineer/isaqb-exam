@@ -1,7 +1,7 @@
 /** Leaderboard and API configuration constants */
 
-/** Worker API base URL */
-export const WORKER_BASE_URL = 'https://isaqb-exam.enking.dev'
+/** Worker API base URL (empty in local dev → requests go through Vite proxy) */
+export const WORKER_BASE_URL = import.meta.env.VITE_WORKER_URL ?? 'https://isaqb-exam.enking.dev'
 
 /** Upstream question source (used for commit links in the UI) */
 export const UPSTREAM_OWNER = 'isaqb-org'
