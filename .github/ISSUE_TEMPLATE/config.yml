@@ -4,7 +4,7 @@ contact_links:
     url: https://github.com/enyineer/isaqb-exam/discussions
     about: "Ask questions, share tips, or start a general discussion about the application."
   - name: "📚 Question Content Issue"
-    url: https://github.com/isaqb-org/examination-foundation/issues
+    url: https://github.com/isaqb-org/foundation-exam-questions/issues
     about: "Report incorrect answers, outdated content, or suggest changes to exam questions in the upstream source repository."
   - name: "🔒 Report a Security Vulnerability"
     url: https://github.com/enyineer/isaqb-exam/security/advisories/new
