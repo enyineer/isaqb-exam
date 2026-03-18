@@ -1,6 +1,7 @@
 import { useState, useEffect, useMemo, useCallback } from 'react'
 import { useLocation } from 'wouter'
 import { useLanguage } from '../context/LanguageContext'
+import { useExam } from '../context/ExamContext'
 import { labels } from '../utils/labels'
 import { PageLayout } from '../components/PageLayout'
 import { Footer } from '../components/Footer'
@@ -51,24 +52,25 @@ type SortDirection = 'asc' | 'desc'
 
 export function LeaderboardPage() {
   const { t, lang } = useLanguage()
+  const { questionsCommitSha } = useExam()
   const [, navigate] = useLocation()
   const [entries, setEntries] = useState<LeaderboardEntry[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [fetchedAt, setFetchedAt] = useState<number | null>(null)
-  const [rateLimited, setRateLimited] = useState(false)
+
   const [sortField, setSortField] = useState<SortField>('percentage')
   const [sortDir, setSortDir] = useState<SortDirection>('desc')
 
   const doFetch = useCallback((forceRefresh = false) => {
+    if (!questionsCommitSha) return
     setLoading(true)
     setError(null)
 
-    fetchLeaderboard(forceRefresh)
+    fetchLeaderboard(questionsCommitSha, forceRefresh)
       .then((result) => {
         setEntries(result.entries)
         setFetchedAt(result.fetchedAt)
-        setRateLimited(result.rateLimited)
       })
       .catch((err) => {
         setError((err as Error).message)
@@ -76,7 +78,7 @@ export function LeaderboardPage() {
       .finally(() => {
         setLoading(false)
       })
-  }, [])
+  }, [questionsCommitSha])
 
   useEffect(() => {
     doFetch()
@@ -149,14 +151,6 @@ export function LeaderboardPage() {
             </div>
           </div>
 
-          {/* Rate limit warning */}
-          {rateLimited && !loading && (
-            <div className="flex items-center gap-2 text-xs px-4 py-2.5 mb-4 rounded-xl bg-amber-500/10 text-amber-700 dark:text-amber-400 border border-amber-500/20">
-              <AlertTriangle size={14} className="shrink-0" />
-              <span>{t(labels.leaderboardRateLimited)}</span>
-            </div>
-          )}
-
           {/* Loading */}
           {loading && (
             <div className="text-center py-16">
@@ -227,7 +221,7 @@ export function LeaderboardPage() {
                     const isTop3 = rank <= 3
                     return (
                       <tr
-                        key={`${entry.username}-${entry.submittedAt}`}
+                        key={`${entry.id}-${entry.submittedAt}`}
                         className="border-b border-border last:border-b-0 hover:bg-surface-hover/50 transition-colors"
                       >
                         {/* Rank */}
@@ -250,11 +244,19 @@ export function LeaderboardPage() {
                             <img
                               src={entry.avatarUrl}
                               alt=""
-                              className="w-6 h-6 rounded-full"
+                              className="w-6 h-6 rounded-full bg-primary/20"
                               loading="lazy"
+                              onError={(e) => {
+                                const el = e.currentTarget;
+                                el.style.display = 'none';
+                                const fallback = document.createElement('span');
+                                fallback.className = 'w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center text-[10px] font-bold text-primary shrink-0';
+                                fallback.textContent = entry.displayName.charAt(0).toUpperCase();
+                                el.parentElement?.insertBefore(fallback, el);
+                              }}
                             />
                             <span className="font-medium truncate max-w-[120px] sm:max-w-none">
-                              {entry.username}
+                              {entry.displayName}
                             </span>
                             <span className={`text-[10px] px-1.5 py-0.5 rounded-full font-semibold ${
                               entry.passed

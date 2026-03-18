@@ -8,25 +8,24 @@ import { StartPage } from './pages/StartPage'
 import { QuestionPage } from './pages/QuestionPage'
 import { ResultsPage } from './pages/ResultsPage'
 import { LeaderboardPage } from './pages/LeaderboardPage'
-import { loadQuestions } from './data/xmlLoader'
+import { loadQuestions } from './data/questionLoader'
 import { useLanguage } from './context/LanguageContext'
 import { labels } from './utils/labels'
 import { Loader2 } from 'lucide-react'
 
 function AppContent() {
-  const { setQuestions, setDataSource, setFetchedAt, setQuestionsCommitSha, setLoading, setQuestionsRateLimited, loading } = useExam()
+  const { setQuestions, setDataSource, setFetchedAt, setQuestionsCommitSha, setLoading, loading } = useExam()
   const { t } = useLanguage()
 
   const doLoad = useCallback(async (forceRefresh = false) => {
     setLoading(true)
-    const { questions, source, fetchedAt, commitSha, rateLimited } = await loadQuestions(forceRefresh)
+    const { questions, source, fetchedAt, commitSha } = await loadQuestions(forceRefresh)
     setQuestions(questions)
     setDataSource(source)
     setFetchedAt(fetchedAt)
     setQuestionsCommitSha(commitSha)
-    setQuestionsRateLimited(rateLimited)
     setLoading(false)
-  }, [setQuestions, setDataSource, setFetchedAt, setQuestionsCommitSha, setLoading, setQuestionsRateLimited])
+  }, [setQuestions, setDataSource, setFetchedAt, setQuestionsCommitSha, setLoading])
 
   useEffect(() => {
     doLoad()
