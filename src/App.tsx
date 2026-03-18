@@ -8,6 +8,8 @@ import { StartPage } from './pages/StartPage'
 import { QuestionPage } from './pages/QuestionPage'
 import { ResultsPage } from './pages/ResultsPage'
 import { LeaderboardPage } from './pages/LeaderboardPage'
+import { AdminPage } from './pages/AdminPage'
+import { AuthErrorPage } from './pages/AuthErrorPage'
 import { loadQuestions } from './data/questionLoader'
 import { useLanguage } from './context/LanguageContext'
 import { labels } from './utils/labels'
@@ -57,6 +59,8 @@ function AppContent() {
         <Route path="/question/:number" component={QuestionPage} />
         <Route path="/results" component={ResultsPage} />
         <Route path="/leaderboard" component={LeaderboardPage} />
+        <Route path="/admin" component={AdminPage} />
+        <Route path="/auth-error" component={AuthErrorPage} />
         <Route>
           <StartPage onRefresh={() => doLoad(true)} />
         </Route>

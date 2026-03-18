@@ -14,6 +14,7 @@ import type { Answers } from '../../src/utils/scoring.ts'
 import { scoreExam } from '../../src/utils/scoring.ts'
 import { fetchQuestionsAtCommit } from './questions.ts'
 import { getSession } from './auth.ts'
+import { isBlocked } from './admin.ts'
 import { z } from 'zod'
 
 /** Zod schema for leaderboard submission body */
@@ -49,6 +50,11 @@ function sortEntries(entries: StoredLeaderboardEntry[]): StoredLeaderboardEntry[
   })
 }
 
+/** Strip private fields (user ID) from entries for the public API */
+function toPublicEntries(entries: StoredLeaderboardEntry[]): Omit<StoredLeaderboardEntry, 'id'>[] {
+  return entries.map(({ id: _id, ...rest }) => rest)
+}
+
 // ─── Route Handlers ──────────────────────────────────────────────────
 
 /** GET /api/leaderboard?commitSha=... — Return leaderboard entries, optionally filtered by commit SHA */
@@ -59,7 +65,7 @@ export async function handleGetLeaderboard(request: Request, env: Env): Promise<
   if (commitSha) {
     // Specific version
     const entries = await readEntries(env.LEADERBOARD, commitSha)
-    return Response.json({ entries: sortEntries(entries) })
+    return Response.json({ entries: toPublicEntries(sortEntries(entries)) })
   }
 
   // All versions — list all leaderboard KV keys and merge entries
@@ -74,7 +80,7 @@ export async function handleGetLeaderboard(request: Request, env: Env): Promise<
     cursor = list.list_complete ? undefined : list.cursor
   } while (cursor)
 
-  return Response.json({ entries: sortEntries(allEntries) })
+  return Response.json({ entries: toPublicEntries(sortEntries(allEntries)) })
 }
 
 /** GET /api/leaderboard/versions — List available commit SHAs with entry counts */
@@ -100,6 +106,11 @@ export async function handleSubmitScore(request: Request, env: Env): Promise<Res
   const session = await getSession(request, env)
   if (!session) {
     return Response.json({ error: 'Authentication required' }, { status: 401 })
+  }
+
+  // Reject blocked users
+  if (await isBlocked(session.sub, env)) {
+    return Response.json({ error: 'You are blocked from the leaderboard' }, { status: 403 })
   }
 
   // Parse and validate request body

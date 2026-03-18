@@ -1,41 +1,16 @@
 import { describe, it, expect, beforeEach } from 'bun:test'
-import { fetchLeaderboard, submitToLeaderboard, fetchAuthStatus, getLoginUrl, logout, type LeaderboardEntry } from '../src/utils/leaderboard'
+import {
+  fetchLeaderboard, submitToLeaderboard,
+  type LeaderboardEntry,
+} from '../src/utils/leaderboard'
 import { WORKER_BASE_URL } from '../src/utils/leaderboardConfig'
+import { storage, fetchCalls, mockFetch, resetMocks } from './helpers'
 
-// Mock localStorage
-const storage = new Map<string, string>()
-const mockLocalStorage = {
-  getItem: (key: string) => storage.get(key) ?? null,
-  setItem: (key: string, value: string) => storage.set(key, value),
-  removeItem: (key: string) => storage.delete(key),
-}
-Object.defineProperty(globalThis, 'localStorage', { value: mockLocalStorage, writable: true })
-
-// Track fetch calls
-let fetchCalls: Array<{ url: string; init?: RequestInit }> = []
-const originalFetch = globalThis.fetch
-
-beforeEach(() => {
-  storage.clear()
-  fetchCalls = []
-  globalThis.fetch = originalFetch
-})
-
-function mockFetch(handler: (url: string, init?: RequestInit) => Response | Promise<Response>) {
-  const mockFn = async (input: string | URL | Request, init?: RequestInit) => {
-    const url = typeof input === 'string' ? input : input instanceof URL ? input.href : input.url
-    fetchCalls.push({ url, init })
-    return handler(url, init)
-  }
-  // Bun adds a `preconnect` property to the fetch type
-  ;(mockFn as any).preconnect = () => {}
-  globalThis.fetch = mockFn as typeof fetch
-}
+beforeEach(() => resetMocks())
 
 // ─── Test Data ───────────────────────────────────────────────────────
 
 const makeEntry = (overrides: Partial<LeaderboardEntry> = {}): LeaderboardEntry => ({
-  id: 'github:123',
   provider: 'github' as const,
   displayName: 'Alice',
   avatarUrl: 'https://example.com/alice.png',
@@ -58,7 +33,7 @@ describe('fetchLeaderboard', () => {
   it('fetches entries from the Worker API', async () => {
     const entries = [
       makeEntry(),
-      makeEntry({ id: 'google:456', provider: 'google', displayName: 'Bob', percentage: 50, passed: false }),
+      makeEntry({ provider: 'google', displayName: 'Bob', percentage: 50, passed: false }),
     ]
 
     mockFetch(() => Response.json({ entries }))
@@ -70,7 +45,7 @@ describe('fetchLeaderboard', () => {
   })
 
   it('returns cached data when TTL is valid', async () => {
-    const entries = [makeEntry({ id: 'cached:1', displayName: 'Cached' })]
+    const entries = [makeEntry({ displayName: 'Cached' })]
     storage.set(cacheKey, JSON.stringify({
       entries,
       fetchedAt: Date.now(),
@@ -84,13 +59,13 @@ describe('fetchLeaderboard', () => {
   })
 
   it('skips cache when forceRefresh is true', async () => {
-    const oldEntries = [makeEntry({ id: 'old:1', displayName: 'Old' })]
+    const oldEntries = [makeEntry({ displayName: 'Old' })]
     storage.set(cacheKey, JSON.stringify({
       entries: oldEntries,
       fetchedAt: Date.now(),
     }))
 
-    const newEntries = [makeEntry({ id: 'new:1', displayName: 'New', percentage: 100 })]
+    const newEntries = [makeEntry({ displayName: 'New', percentage: 100 })]
     mockFetch(() => Response.json({ entries: newEntries }))
     const result = await fetchLeaderboard(testSha, true)
     expect(result.entries).toEqual(newEntries)
@@ -98,10 +73,10 @@ describe('fetchLeaderboard', () => {
   })
 
   it('returns stale cache on fetch failure', async () => {
-    const staleEntries = [makeEntry({ id: 'stale:1', displayName: 'Stale' })]
+    const staleEntries = [makeEntry({ displayName: 'Stale' })]
     storage.set(cacheKey, JSON.stringify({
       entries: staleEntries,
-      fetchedAt: Date.now() - 10 * 60 * 1000, // Expired TTL
+      fetchedAt: Date.now() - 10 * 60 * 1000,
     }))
 
     mockFetch(() => new Response(null, { status: 500 }))
@@ -140,47 +115,5 @@ describe('submitToLeaderboard', () => {
     mockFetch(() => new Response(JSON.stringify({ entry }), { status: 201, headers: { 'Content-Type': 'application/json' } }))
     await submitToLeaderboard(sha, {}, 1000)
     expect(storage.has(`isaqb-leaderboard-cache:${sha}`)).toBe(false)
-  })
-})
-
-// ─── Auth helpers ────────────────────────────────────────────────────
-
-describe('fetchAuthStatus', () => {
-  it('returns authenticated user info', async () => {
-    // Need a token in storage for fetchAuthStatus to make the request
-    storage.set('isaqb-auth-token', 'test-jwt-token')
-    mockFetch(() => Response.json({ authenticated: true, user: { id: 'github:1', provider: 'github', name: 'Alice', avatar: 'https://example.com/alice.png' } }))
-    const status = await fetchAuthStatus()
-    expect(status.authenticated).toBe(true)
-    if (status.authenticated) {
-      expect(status.user.name).toBe('Alice')
-    }
-    // Verify Authorization header was sent
-    expect(fetchCalls[0].init?.headers).toBeDefined()
-  })
-
-  it('returns unauthenticated when no token exists', async () => {
-    // No token in storage — should not make a fetch call
-    const status = await fetchAuthStatus()
-    expect(status.authenticated).toBe(false)
-    expect(fetchCalls).toHaveLength(0)
-  })
-})
-
-describe('getLoginUrl', () => {
-  it('returns GitHub login URL with returnTo param', () => {
-    expect(getLoginUrl('github', 'https://example.com')).toBe(`${WORKER_BASE_URL}/auth/github?returnTo=${encodeURIComponent('https://example.com')}`)
-  })
-
-  it('returns Google login URL with explicit returnTo', () => {
-    expect(getLoginUrl('google', 'https://example.com/results')).toBe(`${WORKER_BASE_URL}/auth/google?returnTo=${encodeURIComponent('https://example.com/results')}`)
-  })
-})
-
-describe('logout', () => {
-  it('clears the auth token from localStorage', async () => {
-    storage.set('isaqb-auth-token', 'some-jwt')
-    await logout()
-    expect(storage.has('isaqb-auth-token')).toBe(false)
   })
 })

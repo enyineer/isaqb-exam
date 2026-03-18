@@ -176,6 +176,14 @@ export const labels = {
     de: "Wird eingereicht…",
     en: "Submitting…",
   },
+  signInGitHub: {
+    de: "Mit GitHub anmelden",
+    en: "Sign in with GitHub",
+  },
+  signInGoogle: {
+    de: "Mit Google anmelden",
+    en: "Sign in with Google",
+  },
   signInWithGitHub: {
     de: "Mit GitHub-Konto einreichen",
     en: "Submit with GitHub",
@@ -184,4 +192,52 @@ export const labels = {
     de: "Mit Google-Konto einreichen",
     en: "Submit with Google",
   },
+
+  // Admin
+  adminTitle: { de: "Verwaltung", en: "Administration" },
+  adminAccessDenied: {
+    de: "Zugriff verweigert. Du hast keine Administratorrechte.",
+    en: "Access denied. You do not have admin privileges.",
+  },
+  adminNotLoggedIn: {
+    de: "Du bist nicht angemeldet.",
+    en: "You are not logged in.",
+  },
+  adminYourId: { de: "Deine Benutzer-ID", en: "Your User ID" },
+  adminYourIdHint: {
+    de: "Teile diese ID, damit ein Admin dich hinzufügen kann.",
+    en: "Share this ID so an admin can add you.",
+  },
+  adminEntries: { de: "Bestenlisten-Einträge", en: "Leaderboard Entries" },
+  adminEntriesEmpty: {
+    de: "Keine Einträge vorhanden.",
+    en: "No entries found.",
+  },
+  adminDelete: { de: "Löschen", en: "Delete" },
+  adminDeleteConfirm: {
+    de: "Diesen Eintrag wirklich löschen?",
+    en: "Really delete this entry?",
+  },
+  adminBlocked: { de: "Gesperrte Benutzer", en: "Blocked Users" },
+  adminBlockedEmpty: {
+    de: "Keine gesperrten Benutzer.",
+    en: "No blocked users.",
+  },
+  adminBlock: { de: "Sperren", en: "Block" },
+  adminUnblock: { de: "Entsperren", en: "Unblock" },
+  adminBlockPlaceholder: {
+    de: "Benutzer-ID (z.B. github:123)",
+    en: "User ID (e.g. github:123)",
+  },
+  adminAdmins: { de: "Administratoren", en: "Administrators" },
+  adminSeedAdmin: { de: "Basis-Admin", en: "Seed Admin" },
+  adminDynamicAdmin: { de: "Dynamisch", en: "Dynamic" },
+  adminAddAdmin: { de: "Admin hinzufügen", en: "Add Admin" },
+  adminRemoveAdmin: { de: "Entfernen", en: "Remove" },
+  adminAdminPlaceholder: {
+    de: "Benutzer-ID (z.B. github:123)",
+    en: "User ID (e.g. github:123)",
+  },
+  adminCopied: { de: "Kopiert!", en: "Copied!" },
+  adminLoading: { de: "Wird geladen…", en: "Loading…" },
 } as const;
