@@ -159,6 +159,14 @@ export const labels = {
     de: "GitHub-API-Limit erreicht — in einem gemeinsamen Netzwerk (z.B. Workshop) wird das Limit schneller verbraucht. Es werden zwischengespeicherte Daten angezeigt. Versuche es in ca. einer Stunde erneut oder nutze mobile Daten.",
     en: "GitHub API rate limit reached — in a shared network (e.g. workshop), the limit is consumed faster. Showing cached data. Try again in about an hour or use mobile data.",
   },
+  leaderboardAllVersions: {
+    de: "Alle Versionen",
+    en: "All Versions",
+  },
+  leaderboardCurrentVersion: {
+    de: "Aktuelle Version",
+    en: "Current Version",
+  },
 
   leaderboardSubmitSuccess: {
     de: "Ergebnis wurde erfolgreich eingereicht!",

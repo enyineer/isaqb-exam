@@ -82,13 +82,13 @@ interface CachedLeaderboard {
   fetchedAt: number
 }
 
-/** Fetch the leaderboard entries for a specific question version, with local caching */
-export async function fetchLeaderboard(commitSha: string, forceRefresh = false): Promise<{
+/** Fetch the leaderboard entries, optionally filtered by question version */
+export async function fetchLeaderboard(commitSha?: string, forceRefresh = false): Promise<{
   entries: LeaderboardEntry[]
   fromCache: boolean
   fetchedAt: number
 }> {
-  const cacheKey = `${CACHE_KEY_PREFIX}:${commitSha}`
+  const cacheKey = `${CACHE_KEY_PREFIX}:${commitSha ?? 'all'}`
 
   // Check local cache first
   if (!forceRefresh) {
@@ -105,7 +105,10 @@ export async function fetchLeaderboard(commitSha: string, forceRefresh = false):
 
   // Fetch from Worker API
   try {
-    const res = await fetch(`${WORKER_BASE_URL}/api/leaderboard?commitSha=${encodeURIComponent(commitSha)}`, {
+    const url = commitSha
+      ? `${WORKER_BASE_URL}/api/leaderboard?commitSha=${encodeURIComponent(commitSha)}`
+      : `${WORKER_BASE_URL}/api/leaderboard`
+    const res = await fetch(url, {
       headers: authHeaders(),
     })
     if (!res.ok) throw new Error(`HTTP ${res.status}`)
@@ -156,7 +159,27 @@ export async function submitToLeaderboard(
 
   // Clear cache for this commitSha so next fetch gets fresh data
   localStorage.removeItem(`${CACHE_KEY_PREFIX}:${commitSha}`)
+  localStorage.removeItem(`${CACHE_KEY_PREFIX}:all`)
   return res.json()
+}
+
+// ─── Versions ───────────────────────────────────────────────────────────
+
+export interface LeaderboardVersion {
+  commitSha: string
+  entryCount: number
+}
+
+/** Fetch available leaderboard versions (commit SHAs with entries) */
+export async function fetchLeaderboardVersions(): Promise<LeaderboardVersion[]> {
+  try {
+    const res = await fetch(`${WORKER_BASE_URL}/api/leaderboard/versions`)
+    if (!res.ok) return []
+    const data: { versions: LeaderboardVersion[] } = await res.json()
+    return data.versions
+  } catch {
+    return []
+  }
 }
 
 // ─── Auth ────────────────────────────────────────────────────────────
