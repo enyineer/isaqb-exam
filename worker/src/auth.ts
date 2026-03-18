@@ -8,9 +8,20 @@ import { createJwt, verifyJwt, getSessionFromCookie, buildSessionCookie, clearSe
 
 const FRONTEND_URL = 'https://enyineer.github.io/isaqb-exam'
 
+/**
+ * Sanitise the returnTo value to prevent open-redirect attacks.
+ * Only allows relative paths / hash fragments — never absolute URLs.
+ */
+function sanitizeReturnTo(raw: string): string {
+  const trimmed = raw.trim()
+  if (trimmed.includes('://') || trimmed.startsWith('//')) return ''
+  if (trimmed.startsWith('/') || trimmed.startsWith('#') || trimmed === '') return trimmed
+  return ''
+}
+
 /** Build a redirect URL with the token placed before the hash fragment */
 function buildRedirectWithToken(returnTo: string, token: string): string {
-  const base = returnTo || `${FRONTEND_URL}/#/results`
+  const base = returnTo ? `${FRONTEND_URL}${returnTo}` : `${FRONTEND_URL}/#/results`
   const hashIdx = base.indexOf('#')
   const separator = base.includes('?') ? '&' : '?'
   if (hashIdx >= 0) {
@@ -24,7 +35,7 @@ function buildRedirectWithToken(returnTo: string, token: string): string {
 
 export async function handleGitHubLogin(request: Request, env: Env): Promise<Response> {
   const state = crypto.randomUUID()
-  const returnTo = new URL(request.url).searchParams.get('returnTo') ?? ''
+  const returnTo = sanitizeReturnTo(new URL(request.url).searchParams.get('returnTo') ?? '')
 
   // Store state + returnTo in KV (5 min TTL)
   await env.SESSIONS.put(`oauth-state:${state}`, returnTo, { expirationTtl: 300 })
@@ -107,7 +118,7 @@ export async function handleGitHubCallback(request: Request, env: Env): Promise<
 
 export async function handleGoogleLogin(request: Request, env: Env): Promise<Response> {
   const state = crypto.randomUUID()
-  const returnTo = new URL(request.url).searchParams.get('returnTo') ?? ''
+  const returnTo = sanitizeReturnTo(new URL(request.url).searchParams.get('returnTo') ?? '')
 
   await env.SESSIONS.put(`oauth-state:${state}`, returnTo, { expirationTtl: 300 })
 

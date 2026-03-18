@@ -177,10 +177,10 @@ export async function fetchAuthStatus(): Promise<AuthStatus> {
   }
 }
 
-/** Get the OAuth login URL for a given provider, with returnTo defaulting to current page */
+/** Get the OAuth login URL for a given provider */
 export function getLoginUrl(provider: 'github' | 'google', returnTo?: string): string {
-  const target = returnTo ?? window.location.href
-  return `${WORKER_BASE_URL}/auth/${provider}?returnTo=${encodeURIComponent(target)}`
+  const hashRoute = returnTo ?? `/${window.location.hash}`
+  return `${WORKER_BASE_URL}/auth/${provider}?returnTo=${encodeURIComponent(hashRoute)}`
 }
 
 /** Log out (clear local token) */
