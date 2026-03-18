@@ -134,8 +134,8 @@ export const labels = {
     en: "No entries yet.",
   },
   leaderboardError: {
-    de: "Bestenliste konnte nicht geladen werden. In einem gemeinsamen Netzwerk (z.B. Workshop) kann das GitHub-API-Limit schnell erreicht werden. Versuche es in ca. einer Stunde erneut oder nutze mobile Daten.",
-    en: "Could not load the leaderboard. In a shared network (e.g. workshop), the GitHub API limit can be reached quickly. Try again in about an hour or use mobile data.",
+    de: "Bestenliste konnte nicht geladen werden.",
+    en: "Could not load the leaderboard.",
   },
   leaderboardLoading: {
     de: "Bestenliste wird geladen…",
@@ -151,10 +151,6 @@ export const labels = {
   leaderboardDate: { de: "Datum", en: "Date" },
   leaderboardPassedBadge: { de: "Bestanden", en: "Passed" },
   leaderboardFailedBadge: { de: "Nicht bestanden", en: "Failed" },
-  leaderboardSubmitInfo: {
-    de: "Dein Ergebnis wird über ein GitHub Issue eingereicht und automatisch verifiziert.",
-    en: "Your result is submitted via a GitHub Issue and verified automatically.",
-  },
   leaderboardOfflineWarning: {
     de: "Die Bestenliste ist nur mit Online-Fragen verfügbar (nicht mit Offline-/Fallback-Fragen).",
     en: "Leaderboard submission is only available with online questions (not offline/fallback).",
@@ -166,5 +162,21 @@ export const labels = {
   leaderboardMaxEntries: {
     de: "Es werden maximal die letzten 1.000 Einträge angezeigt.",
     en: "Showing up to the last 1,000 entries.",
+  },
+  leaderboardSubmitSuccess: {
+    de: "Ergebnis wurde erfolgreich eingereicht!",
+    en: "Score submitted successfully!",
+  },
+  leaderboardSubmitting: {
+    de: "Wird eingereicht…",
+    en: "Submitting…",
+  },
+  signInWithGitHub: {
+    de: "Mit GitHub-Konto einreichen",
+    en: "Submit with GitHub",
+  },
+  signInWithGoogle: {
+    de: "Mit Google-Konto einreichen",
+    en: "Submit with Google",
   },
 } as const;

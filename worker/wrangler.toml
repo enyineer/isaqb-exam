@@ -1,0 +1,38 @@
+name = "isaqb-exam-api"
+main = "src/index.ts"
+compatibility_date = "2025-03-14"
+workers_dev = false
+preview_urls = false
+
+# Custom domain
+[[routes]]
+pattern = "isaqb-exam.enking.dev"
+custom_domain = true
+
+[observability]
+enabled = true
+
+# KV Namespace bindings — create with:
+#   npx wrangler kv namespace create QUESTIONS_CACHE
+#   npx wrangler kv namespace create LEADERBOARD
+#   npx wrangler kv namespace create SESSIONS
+#
+[[kv_namespaces]]
+binding = "QUESTIONS_CACHE"
+id = "c7ad45c9977c4f01b7734f03c73c782a"
+
+[[kv_namespaces]]
+binding = "LEADERBOARD"
+id = "c27416dcc4ac4dbbafb56197748f4303"
+
+[[kv_namespaces]]
+binding = "SESSIONS"
+id = "0f9eba29a6ca4f55a761ed1798da1c67"
+
+# Secrets (set via `npx wrangler secret put <NAME>`):
+#   GITHUB_TOKEN          — GitHub PAT (public_repo scope) for API access
+#   GITHUB_CLIENT_ID      — GitHub OAuth App client ID
+#   GITHUB_CLIENT_SECRET  — GitHub OAuth App client secret
+#   GOOGLE_CLIENT_ID      — Google OAuth client ID
+#   GOOGLE_CLIENT_SECRET  — Google OAuth client secret
+#   JWT_SECRET            — Random secret for signing JWT session tokens

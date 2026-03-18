@@ -141,9 +141,6 @@ interface ExamContextValue {
   setQuestionsCommitSha: (s: string | null) => void
   loading: boolean
   setLoading: (l: boolean) => void
-  /** True if question loading was rate-limited by GitHub API */
-  questionsRateLimited: boolean
-  setQuestionsRateLimited: (r: boolean) => void
   answers: Answers
   togglePickAnswer: (questionId: string, optionId: string) => void
   setCategoryAnswer: (questionId: string, statementId: string, categoryLabel: string) => void
@@ -171,6 +168,8 @@ interface ExamContextValue {
   questionNotes: Record<string, string>
   /** Set or clear a note for a question */
   setNote: (questionId: string, note: string) => void
+  /** True after localStorage state has been restored (or determined to not exist) */
+  stateRestored: boolean
 }
 
 const ExamContext = createContext<ExamContextValue | null>(null)
@@ -181,7 +180,7 @@ export function ExamProvider({ children }: { children: ReactNode }) {
   const [fetchedAt, setFetchedAt] = useState<number | null>(null)
   const [questionsCommitSha, setQuestionsCommitSha] = useState<string | null>(null)
   const [loading, setLoading] = useState(true)
-  const [questionsRateLimited, setQuestionsRateLimited] = useState(false)
+
   const [answers, dispatch] = useReducer(answersReducer, {})
   const [examFinished, setExamFinished] = useState(false)
   const [accumulatedMs, setAccumulatedMs] = useState(0)
@@ -191,6 +190,7 @@ export function ExamProvider({ children }: { children: ReactNode }) {
   const [shuffleSeed, setShuffleSeed] = useState(() => Date.now())
   const [flaggedQuestions, setFlaggedQuestions] = useState<Set<string>>(new Set())
   const [questionNotes, setQuestionNotes] = useState<Record<string, string>>({})
+  const [stateRestored, setStateRestored] = useState(false)
 
   // Ref-based tracking for the currently viewed question
   const activeQuestionRef = useRef<string | null>(null)
@@ -217,6 +217,7 @@ export function ExamProvider({ children }: { children: ReactNode }) {
       }
       examActiveRef.current = true
     }
+    setStateRestored(true)
   }, [questions])
 
   /** Build the current persisted state snapshot and write it to localStorage */
@@ -360,7 +361,7 @@ export function ExamProvider({ children }: { children: ReactNode }) {
       fetchedAt, setFetchedAt,
       questionsCommitSha, setQuestionsCommitSha,
       loading, setLoading,
-      questionsRateLimited, setQuestionsRateLimited,
+
       answers,
       togglePickAnswer,
       setCategoryAnswer,
@@ -378,6 +379,7 @@ export function ExamProvider({ children }: { children: ReactNode }) {
       setNote,
       questionTimes,
       shuffleSeed,
+      stateRestored,
     }}>
       {children}
     </ExamContext.Provider>
