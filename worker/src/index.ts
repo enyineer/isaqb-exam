@@ -7,6 +7,15 @@
  *   GET  /api/leaderboard   → leaderboard entries (optionally filtered by commitSha)
  *   GET  /api/leaderboard/versions → available question versions
  *   POST /api/leaderboard   → submit score (requires auth)
+ *   GET  /api/admin/check   → check if current user is admin
+ *   GET  /api/admin/leaderboard/entries → all leaderboard entries (admin)
+ *   DELETE /api/admin/leaderboard/entry → delete a leaderboard entry (admin)
+ *   GET  /api/admin/leaderboard/blocked → list blocked users (admin)
+ *   POST /api/admin/leaderboard/blocked → block a user (admin)
+ *   DELETE /api/admin/leaderboard/blocked → unblock a user (admin)
+ *   GET  /api/admin/admins   → list admins (admin)
+ *   POST /api/admin/admins   → add admin (admin)
+ *   DELETE /api/admin/admins → remove admin (admin)
  *   GET  /auth/github       → GitHub OAuth redirect
  *   GET  /auth/github/callback → GitHub OAuth callback
  *   GET  /auth/google       → Google OAuth redirect
@@ -19,6 +28,17 @@ import type { Env } from './types.ts'
 import { handleOptions, withCors } from './cors.ts'
 import { handleGetQuestions, handleGetCommitSha } from './questions.ts'
 import { handleGetLeaderboard, handleGetLeaderboardVersions, handleSubmitScore } from './leaderboard.ts'
+import {
+  handleAdminCheck,
+  handleAdminGetEntries,
+  handleAdminDeleteEntry,
+  handleAdminGetBlocked,
+  handleAdminBlockUser,
+  handleAdminUnblockUser,
+  handleAdminGetAdmins,
+  handleAdminAddAdmin,
+  handleAdminRemoveAdmin,
+} from './admin.ts'
 import {
   handleGitHubLogin,
   handleGitHubCallback,
@@ -54,6 +74,26 @@ export default {
       } else if (pathname === '/api/leaderboard' && method === 'POST') {
         response = await handleSubmitScore(request, env)
 
+      // ─── Admin Routes ─────────────────────────────────────────
+      } else if (pathname === '/api/admin/check' && method === 'GET') {
+        response = await handleAdminCheck(request, env)
+      } else if (pathname === '/api/admin/leaderboard/entries' && method === 'GET') {
+        response = await handleAdminGetEntries(request, env)
+      } else if (pathname === '/api/admin/leaderboard/entry' && method === 'DELETE') {
+        response = await handleAdminDeleteEntry(request, env)
+      } else if (pathname === '/api/admin/leaderboard/blocked' && method === 'GET') {
+        response = await handleAdminGetBlocked(request, env)
+      } else if (pathname === '/api/admin/leaderboard/blocked' && method === 'POST') {
+        response = await handleAdminBlockUser(request, env)
+      } else if (pathname === '/api/admin/leaderboard/blocked' && method === 'DELETE') {
+        response = await handleAdminUnblockUser(request, env)
+      } else if (pathname === '/api/admin/admins' && method === 'GET') {
+        response = await handleAdminGetAdmins(request, env)
+      } else if (pathname === '/api/admin/admins' && method === 'POST') {
+        response = await handleAdminAddAdmin(request, env)
+      } else if (pathname === '/api/admin/admins' && method === 'DELETE') {
+        response = await handleAdminRemoveAdmin(request, env)
+
       // ─── Auth Routes ─────────────────────────────────────────
       } else if (pathname === '/auth/github' && method === 'GET') {
         return handleGitHubLogin(request, env)
@@ -71,7 +111,7 @@ export default {
       // ─── Catch-all ────────────────────────────────────────────
       } else {
         response = Response.json(
-          { error: 'Not found', availableRoutes: ['/api/questions', '/api/commit-sha', '/api/leaderboard', '/api/leaderboard/versions', '/auth/github', '/auth/google', '/auth/me'] },
+          { error: 'Not found', availableRoutes: ['/api/questions', '/api/commit-sha', '/api/leaderboard', '/api/leaderboard/versions', '/api/admin/check', '/auth/github', '/auth/google', '/auth/me'] },
           { status: 404 },
         )
       }

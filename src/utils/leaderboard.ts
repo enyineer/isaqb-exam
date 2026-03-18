@@ -1,12 +1,11 @@
 import { WORKER_BASE_URL } from './leaderboardConfig'
+import { authHeaders, clearToken } from './auth'
 import type { Answers } from './scoring'
 
 // ─── Types ───────────────────────────────────────────────────────────
 
-/** A single leaderboard entry */
+/** A single leaderboard entry (public — no user ID) */
 export interface LeaderboardEntry {
-  /** Unique user ID (provider:userId) */
-  id: string
   /** OAuth provider */
   provider: 'github' | 'google'
   /** Display name */
@@ -27,49 +26,6 @@ export interface LeaderboardEntry {
   submittedAt: string
   /** Upstream commit SHA of the questions used */
   commitSha: string
-}
-
-export type AuthStatus =
-  | { authenticated: false }
-  | { authenticated: true; user: { id: string; provider: string; name: string; avatar: string } }
-
-// ─── Token Management ────────────────────────────────────────────────
-
-const TOKEN_KEY = 'isaqb-auth-token'
-
-/** Store the auth token in localStorage */
-export function storeToken(token: string): void {
-  localStorage.setItem(TOKEN_KEY, token)
-}
-
-/** Get the stored auth token */
-export function getToken(): string | null {
-  return localStorage.getItem(TOKEN_KEY)
-}
-
-/** Clear the stored auth token */
-export function clearToken(): void {
-  localStorage.removeItem(TOKEN_KEY)
-}
-
-/** Build Authorization headers if a token exists */
-function authHeaders(): Record<string, string> {
-  const token = getToken()
-  return token ? { Authorization: `Bearer ${token}` } : {}
-}
-
-/** Extract token from URL query params (after OAuth redirect) */
-export function extractTokenFromUrl(): string | null {
-  const url = new URL(window.location.href)
-  const token = url.searchParams.get('token')
-  if (token) {
-    // Store the token
-    storeToken(token)
-    // Clean the token from the URL without losing the hash
-    url.searchParams.delete('token')
-    window.history.replaceState({}, '', url.toString())
-  }
-  return token
 }
 
 // ─── Leaderboard ─────────────────────────────────────────────────────
@@ -180,33 +136,4 @@ export async function fetchLeaderboardVersions(): Promise<LeaderboardVersion[]> 
   } catch {
     return []
   }
-}
-
-// ─── Auth ────────────────────────────────────────────────────────────
-
-/** Check current authentication status */
-export async function fetchAuthStatus(): Promise<AuthStatus> {
-  const token = getToken()
-  if (!token) return { authenticated: false }
-
-  try {
-    const res = await fetch(`${WORKER_BASE_URL}/auth/me`, {
-      headers: { Authorization: `Bearer ${token}` },
-    })
-    if (!res.ok) return { authenticated: false }
-    return res.json()
-  } catch {
-    return { authenticated: false }
-  }
-}
-
-/** Get the OAuth login URL for a given provider */
-export function getLoginUrl(provider: 'github' | 'google', returnTo?: string): string {
-  const hashRoute = returnTo ?? `/${window.location.hash}`
-  return `${WORKER_BASE_URL}/auth/${provider}?returnTo=${encodeURIComponent(hashRoute)}`
-}
-
-/** Log out (clear local token) */
-export async function logout(): Promise<void> {
-  clearToken()
 }

@@ -1,10 +1,10 @@
 import { useState, useCallback, type ReactNode } from 'react'
-import { createPortal } from 'react-dom'
 import { useLocation } from 'wouter'
 import { useLanguage } from '../context/LanguageContext'
 import { useExam } from '../context/ExamContext'
 import { labels } from '../utils/labels'
 import { getQuestionAnswerStatus } from '../utils/questionStatus'
+import { ConfirmModal } from './ConfirmModal'
 import { AlertTriangle, Bookmark, CheckCircle2, HelpCircle } from 'lucide-react'
 
 type ModalType = 'unanswered' | 'flagged' | null
@@ -62,24 +62,27 @@ export function FinishExamButton({ children }: FinishExamButtonProps) {
     doFinish()
   }, [flaggedQuestions.size, doFinish])
 
-  const modalContent = (
+  const questionLabel = (count: number) =>
+    count === 1
+      ? t({ de: 'Frage', en: 'question' })
+      : t({ de: 'Fragen', en: 'questions' })
+
+  return (
     <>
+      {children(handleFinish)}
+
       {/* Unanswered questions modal */}
       {modal === 'unanswered' && (
         <ConfirmModal
           icon={<HelpCircle size={20} className="text-blue-500" />}
           iconBg="bg-blue-500/15"
           title={t(labels.unansweredQuestionsTitle)}
-          body={t(labels.unansweredQuestionsBody)}
-          count={unansweredCount}
-          countLabel={
-            unansweredCount === 1
-              ? t({ de: 'Frage', en: 'question' })
-              : t({ de: 'Fragen', en: 'questions' })
-          }
+          body={<><p className="mb-2">{t(labels.unansweredQuestionsBody)}</p><p>{unansweredCount} {questionLabel(unansweredCount)}</p></>}
           cancelIcon={<HelpCircle size={14} />}
           cancelLabel={t(labels.reviewFlagged)}
           onCancel={() => setModal(null)}
+          confirmIcon={<CheckCircle2 size={14} />}
+          confirmLabel={t(labels.finishAnyway)}
           onConfirm={handleAfterUnanswered}
         />
       )}
@@ -90,95 +93,15 @@ export function FinishExamButton({ children }: FinishExamButtonProps) {
           icon={<AlertTriangle size={20} className="text-amber-500" />}
           iconBg="bg-amber-500/15"
           title={t(labels.flaggedQuestionsTitle)}
-          body={t(labels.flaggedQuestionsBody)}
-          count={flaggedQuestions.size}
-          countLabel={
-            flaggedQuestions.size === 1
-              ? t({ de: 'Frage', en: 'question' })
-              : t({ de: 'Fragen', en: 'questions' })
-          }
+          body={<><p className="mb-2">{t(labels.flaggedQuestionsBody)}</p><p>{flaggedQuestions.size} {questionLabel(flaggedQuestions.size)}</p></>}
           cancelIcon={<Bookmark size={14} />}
           cancelLabel={t(labels.reviewFlagged)}
           onCancel={() => setModal(null)}
+          confirmIcon={<CheckCircle2 size={14} />}
+          confirmLabel={t(labels.finishAnyway)}
           onConfirm={doFinish}
         />
       )}
     </>
-  )
-
-  return (
-    <>
-      {children(handleFinish)}
-      {modal && createPortal(modalContent, document.body)}
-    </>
-  )
-}
-
-/* ── Shared confirmation modal ──────────────────────────────── */
-
-interface ConfirmModalProps {
-  icon: ReactNode
-  iconBg: string
-  title: string
-  body: string
-  count: number
-  countLabel: string
-  cancelIcon: ReactNode
-  cancelLabel: string
-  onCancel: () => void
-  onConfirm: () => void
-}
-
-function ConfirmModal({
-  icon,
-  iconBg,
-  title,
-  body,
-  count,
-  countLabel,
-  cancelIcon,
-  cancelLabel,
-  onCancel,
-  onConfirm,
-}: ConfirmModalProps) {
-  const { t } = useLanguage()
-
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-      {/* Backdrop */}
-      <div
-        className="absolute inset-0 bg-black/50 backdrop-blur-sm"
-        onClick={onCancel}
-      />
-      {/* Modal */}
-      <div className="relative bg-bg border border-border rounded-2xl shadow-2xl max-w-sm w-full p-6 animate-in">
-        <div className="flex items-center gap-3 mb-4">
-          <div className={`w-10 h-10 rounded-xl ${iconBg} flex items-center justify-center`}>
-            {icon}
-          </div>
-          <h2 className="font-heading font-semibold text-lg">{title}</h2>
-        </div>
-        <p className="text-sm text-text-muted mb-2">{body}</p>
-        <p className="text-sm text-text-muted mb-6">
-          {count} {countLabel}
-        </p>
-        <div className="flex gap-3">
-          <button
-            onClick={onCancel}
-            className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 border-2 border-border bg-surface rounded-xl font-medium text-sm transition-all hover:bg-surface-hover cursor-pointer"
-          >
-            {cancelIcon}
-            {cancelLabel}
-          </button>
-          <button
-            onClick={onConfirm}
-            className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-success text-white rounded-xl font-medium text-sm transition-all hover:opacity-90 cursor-pointer"
-          >
-            <CheckCircle2 size={14} />
-            {t(labels.finishAnyway)}
-          </button>
-        </div>
-      </div>
-    </div>
   )
 }

@@ -32,6 +32,11 @@ binding = "SESSIONS"
 id = "0f9eba29a6ca4f55a761ed1798da1c67"
 preview_id = "0f9eba29a6ca4f55a761ed1798da1c67"
 
+[[kv_namespaces]]
+binding = "ADMIN"
+id = "f6f5c071473248cc84eca55b6db30940"
+preview_id = "f6f5c071473248cc84eca55b6db30940"
+
 # Secrets (set via `npx wrangler secret put <NAME>`):
 #   GITHUB_TOKEN          — GitHub PAT (public_repo scope) for API access
 #   GITHUB_CLIENT_ID      — GitHub OAuth App client ID

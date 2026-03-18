@@ -6,9 +6,12 @@ export interface Env {
   QUESTIONS_CACHE: KVNamespace
   LEADERBOARD: KVNamespace
   SESSIONS: KVNamespace
+  ADMIN: KVNamespace
 
   // Secrets
   GITHUB_TOKEN: string
+  /** Comma-separated list of initial admin user IDs (e.g. "github:123,google:456") */
+  ADMIN_USER_IDS: string
   GITHUB_CLIENT_ID: string
   GITHUB_CLIENT_SECRET: string
   GOOGLE_CLIENT_ID: string

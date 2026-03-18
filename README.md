@@ -19,14 +19,16 @@ You can take the exam [here](https://enyineer.github.io/isaqb-exam/). Please rep
 - 🖨️ Print/export results for your lecturer (including notes)
 - 🔵 Skipped vs wrong answer distinction in results (no penalty for skipped)
 - 🏆 Leaderboard — submit scores via OAuth, verified server-side by a Cloudflare Worker
+- 🛡️ Admin panel — manage leaderboard entries, block users, and add/remove administrators
 - 🌍 German & English
 - 🎨 Multiple color themes + dark mode
 - ⌨️ Full keyboard navigation
 - 🔗 Hash-based routing — works on GitHub Pages without server config
 
-## Leaderboard Architecture
+## Architecture
 
-See [leaderboard-architecture.md](leaderboard-architecture.md) for the full architecture documentation (sequence diagrams, data model, authentication, and Worker secrets).
+- [Leaderboard Architecture](leaderboard-architecture.md) — sequence diagrams, data model, authentication, and Worker secrets
+- [Admin Interface](admin-interface.md) — access control, features, API endpoints, and setup
 
 ## Tech Stack
 
@@ -55,7 +57,9 @@ To run both the frontend and the Cloudflare Worker locally:
    ```bash
    cp worker/.dev.vars.example worker/.dev.vars
    ```
-   Edit `worker/.dev.vars` with your GitHub PAT, OAuth app credentials, and a JWT secret.
+   Edit `worker/.dev.vars` with your GitHub PAT, OAuth app credentials, JWT secret, and initial admin user IDs.
+
+   > **Admin access:** Set `ADMIN_USER_IDS` to a comma-separated list of user IDs (e.g. `google:123,github:456`) to grant initial admin privileges. See [admin-interface.md](admin-interface.md) for details.
 
 3. **Set up OAuth apps for local testing** — register these in your GitHub/Google OAuth apps:
    - **Authorized JavaScript origins:** `http://localhost:8787`

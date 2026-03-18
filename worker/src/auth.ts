@@ -31,8 +31,10 @@ function sanitizeReturnTo(raw: string): string {
 
 /** Build a redirect URL with the token placed before the hash fragment */
 function buildRedirectWithToken(env: Env, returnTo: string, token: string): string {
-  const frontendUrl = getFrontendUrl(env)
-  const base = returnTo ? `${frontendUrl}${returnTo}` : `${frontendUrl}/#/results`
+  let frontendUrl = getFrontendUrl(env)
+  // Ensure trailing slash so /isaqb-exam becomes /isaqb-exam/ (Vite needs this)
+  if (!frontendUrl.endsWith('/')) frontendUrl += '/'
+  const base = returnTo ? `${frontendUrl}${returnTo}` : `${frontendUrl}#/results`
   const hashIdx = base.indexOf('#')
   const separator = base.includes('?') ? '&' : '?'
   if (hashIdx >= 0) {
@@ -67,13 +69,13 @@ export async function handleGitHubCallback(request: Request, env: Env): Promise<
   const state = url.searchParams.get('state')
 
   if (!code || !state) {
-    return Response.redirect(`${getFrontendUrl(env)}/#auth-error`, 302)
+    return Response.redirect(`${getFrontendUrl(env)}/#/auth-error`, 302)
   }
 
   // Validate state
   const returnTo = await env.SESSIONS.get(`oauth-state:${state}`)
   if (returnTo === null) {
-    return Response.redirect(`${getFrontendUrl(env)}/#auth-error`, 302)
+    return Response.redirect(`${getFrontendUrl(env)}/#/auth-error`, 302)
   }
   await env.SESSIONS.delete(`oauth-state:${state}`)
 
@@ -92,12 +94,12 @@ export async function handleGitHubCallback(request: Request, env: Env): Promise<
   })
 
   if (!tokenRes.ok) {
-    return Response.redirect(`${getFrontendUrl(env)}/#auth-error`, 302)
+    return Response.redirect(`${getFrontendUrl(env)}/#/auth-error`, 302)
   }
 
   const tokenData: { access_token?: string } = await tokenRes.json()
   if (!tokenData.access_token) {
-    return Response.redirect(`${getFrontendUrl(env)}/#auth-error`, 302)
+    return Response.redirect(`${getFrontendUrl(env)}/#/auth-error`, 302)
   }
 
   // Fetch user info
@@ -109,7 +111,7 @@ export async function handleGitHubCallback(request: Request, env: Env): Promise<
   })
 
   if (!userRes.ok) {
-    return Response.redirect(`${getFrontendUrl(env)}/#auth-error`, 302)
+    return Response.redirect(`${getFrontendUrl(env)}/#/auth-error`, 302)
   }
 
   const user: { id: number; login: string; avatar_url: string } = await userRes.json()
@@ -152,12 +154,12 @@ export async function handleGoogleCallback(request: Request, env: Env): Promise<
   const state = url.searchParams.get('state')
 
   if (!code || !state) {
-    return Response.redirect(`${getFrontendUrl(env)}/#auth-error`, 302)
+    return Response.redirect(`${getFrontendUrl(env)}/#/auth-error`, 302)
   }
 
   const returnTo = await env.SESSIONS.get(`oauth-state:${state}`)
   if (returnTo === null) {
-    return Response.redirect(`${getFrontendUrl(env)}/#auth-error`, 302)
+    return Response.redirect(`${getFrontendUrl(env)}/#/auth-error`, 302)
   }
   await env.SESSIONS.delete(`oauth-state:${state}`)
 
@@ -177,12 +179,12 @@ export async function handleGoogleCallback(request: Request, env: Env): Promise<
   })
 
   if (!tokenRes.ok) {
-    return Response.redirect(`${getFrontendUrl(env)}/#auth-error`, 302)
+    return Response.redirect(`${getFrontendUrl(env)}/#/auth-error`, 302)
   }
 
   const tokenData: { access_token?: string } = await tokenRes.json()
   if (!tokenData.access_token) {
-    return Response.redirect(`${getFrontendUrl(env)}/#auth-error`, 302)
+    return Response.redirect(`${getFrontendUrl(env)}/#/auth-error`, 302)
   }
 
   // Fetch user info
@@ -191,7 +193,7 @@ export async function handleGoogleCallback(request: Request, env: Env): Promise<
   })
 
   if (!userRes.ok) {
-    return Response.redirect(`${getFrontendUrl(env)}/#auth-error`, 302)
+    return Response.redirect(`${getFrontendUrl(env)}/#/auth-error`, 302)
   }
 
   const user: { id: string; name: string; picture: string } = await userRes.json()
