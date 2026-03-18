@@ -20,14 +20,17 @@ enabled = true
 [[kv_namespaces]]
 binding = "QUESTIONS_CACHE"
 id = "c7ad45c9977c4f01b7734f03c73c782a"
+preview_id = "c7ad45c9977c4f01b7734f03c73c782a"
 
 [[kv_namespaces]]
 binding = "LEADERBOARD"
 id = "c27416dcc4ac4dbbafb56197748f4303"
+preview_id = "c27416dcc4ac4dbbafb56197748f4303"
 
 [[kv_namespaces]]
 binding = "SESSIONS"
 id = "0f9eba29a6ca4f55a761ed1798da1c67"
+preview_id = "0f9eba29a6ca4f55a761ed1798da1c67"
 
 # Secrets (set via `npx wrangler secret put <NAME>`):
 #   GITHUB_TOKEN          — GitHub PAT (public_repo scope) for API access
