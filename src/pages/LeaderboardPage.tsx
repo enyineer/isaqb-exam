@@ -252,7 +252,7 @@ export function LeaderboardPage() {
                     const isTop3 = rank <= 3
                     return (
                       <tr
-                        key={`${entry.id}-${entry.submittedAt}`}
+                        key={`${entry.displayName}-${entry.submittedAt}`}
                         className="border-b border-border last:border-b-0 hover:bg-surface-hover/50 transition-colors"
                       >
                         {/* Rank */}
