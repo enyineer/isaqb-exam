@@ -6,7 +6,7 @@ import { PageLayout } from '../components/PageLayout'
 import { Footer } from '../components/Footer'
 import { LoginButtons } from '../components/LoginButtons'
 import { ConfirmModal } from '../components/ConfirmModal'
-import { useAuth } from '../hooks/useAuth'
+import { useAuth } from '../context/AuthContext'
 import {
   adminFetchEntries,
   adminDeleteEntry,
@@ -25,6 +25,7 @@ import {
   Loader2,
   ShieldX,
   LogIn,
+  LogOut,
   Trash2,
   UserX,
   UserCheck,
@@ -60,7 +61,7 @@ export function AdminPage() {
   const [, navigate] = useLocation()
 
   // Auth & admin state
-  const { authStatus, isAdmin, authLoading } = useAuth()
+  const { authStatus, isAdmin, authLoading, logout } = useAuth()
   const loading = authLoading
 
   // Data
@@ -210,12 +211,19 @@ export function AdminPage() {
               </div>
             )}
 
-            <div className="mt-4">
+            <div className="mt-4 flex items-center justify-center gap-3">
               <button
                 onClick={() => navigate('/')}
                 className="px-4 py-2 rounded-lg bg-primary text-white font-medium cursor-pointer hover:opacity-90 transition-opacity"
               >
                 {t(labels.backToStart)}
+              </button>
+              <button
+                onClick={logout}
+                className="flex items-center gap-1.5 px-4 py-2 rounded-lg border-2 border-border bg-surface hover:bg-surface-hover transition-colors cursor-pointer text-sm font-medium"
+              >
+                <LogOut size={14} />
+                {t({ de: 'Abmelden', en: 'Log out' })}
               </button>
             </div>
           </div>
@@ -245,6 +253,13 @@ export function AdminPage() {
                 {t(labels.adminTitle)}
               </h1>
             </div>
+            <button
+              onClick={logout}
+              className="ml-auto flex items-center gap-1.5 px-3 py-1.5 rounded-lg border-2 border-border bg-surface hover:bg-surface-hover transition-colors cursor-pointer text-sm font-medium"
+            >
+              <LogOut size={14} />
+              {t({ de: 'Abmelden', en: 'Log out' })}
+            </button>
           </div>
 
           {/* ─── Entries Table ──────────────────────────────────────── */}

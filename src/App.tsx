@@ -3,6 +3,7 @@ import { Route, Switch, Router } from 'wouter'
 import { useHashLocation } from 'wouter/use-hash-location'
 import { ThemeProvider } from './context/ThemeContext'
 import { LanguageProvider } from './context/LanguageContext'
+import { AuthProvider } from './context/AuthContext'
 import { ExamProvider, useExam } from './context/ExamContext'
 import { StartPage } from './pages/StartPage'
 import { QuestionPage } from './pages/QuestionPage'
@@ -74,9 +75,11 @@ export default function App() {
     <Router hook={useHashLocation}>
       <ThemeProvider>
         <LanguageProvider>
-          <ExamProvider>
-            <AppContent />
-          </ExamProvider>
+          <AuthProvider>
+            <ExamProvider>
+              <AppContent />
+            </ExamProvider>
+          </AuthProvider>
         </LanguageProvider>
       </ThemeProvider>
     </Router>
