@@ -31,7 +31,7 @@ import { Footer } from "../components/Footer";
 import {
   submitToLeaderboard,
 } from "../utils/leaderboard";
-import { useAuth } from "../hooks/useAuth";
+import { useAuth } from "../context/AuthContext";
 import { LoginButtons } from "../components/LoginButtons";
 import confetti from "canvas-confetti";
 
