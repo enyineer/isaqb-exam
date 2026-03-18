@@ -291,10 +291,7 @@ export function LeaderboardPage() {
               </table>
               </div>
 
-              {/* Max entries hint */}
-              <p className="text-xs text-text-muted text-center mt-3 opacity-60">
-                {t(labels.leaderboardMaxEntries)}
-              </p>
+
             </>
           )}
         </div>
