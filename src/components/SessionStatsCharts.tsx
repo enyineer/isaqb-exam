@@ -137,47 +137,72 @@ function PickDistribution({ questionStats, question, totalSubmissions }: { quest
 
 // ─── Answer Distribution Chart (Category) ────────────────────────────
 
-function CategoryDistribution({ questionStats, question }: { questionStats: QuestionStats; question: CategoryQuestion }) {
+function CategoryDistribution({ questionStats, question, totalSubmissions }: { questionStats: QuestionStats; question: CategoryQuestion; totalSubmissions: number }) {
   const { t } = useLanguage()
+  const total = Math.max(totalSubmissions, 1)
 
   return (
     <div className="space-y-3">
+      {/* Category legend */}
+      <div className="flex flex-wrap gap-2">
+        {question.categories.map(cat => (
+          <span key={cat.label} className="text-[11px] font-medium px-2.5 py-1 rounded-lg bg-surface-alt text-text-muted">
+            {t(cat.text)}
+          </span>
+        ))}
+      </div>
+
+      {/* Statement cards */}
       {question.statements.map(stmt => {
         const dist = questionStats.categoryDistribution[stmt.id] ?? {}
-        const totalForStmt = Object.values(dist).reduce((s, c) => s + c, 0) || 1
 
         return (
-          <div key={stmt.id} className="space-y-1">
-            <p className="text-xs text-text-muted truncate">{t(stmt.text)}</p>
-            <div className="flex gap-0.5 h-5 rounded-md overflow-hidden bg-surface-alt">
-              {question.categories.map(cat => {
+          <div key={stmt.id} className="rounded-xl border border-border bg-surface overflow-hidden">
+            {/* Statement text */}
+            <div className="flex items-start gap-2.5 px-3.5 py-2.5">
+              <span className="shrink-0 text-[10px] font-bold w-5 h-5 rounded-md bg-surface-alt text-text-muted flex items-center justify-center">
+                {stmt.id}
+              </span>
+              <span className="text-xs leading-relaxed flex-1">{t(stmt.text)}</span>
+            </div>
+
+            {/* Category distribution cells */}
+            <div className="flex border-t border-border">
+              {question.categories.map((cat, catIdx) => {
                 const count = dist[cat.label] ?? 0
-                const pct = (count / totalForStmt) * 100
+                const pct = (count / total) * 100
                 const isCorrect = cat.label === stmt.correctCategory
 
-                return pct > 0 ? (
+                return (
                   <div
                     key={cat.label}
-                    className="h-full transition-all duration-300 relative group"
-                    style={{
-                      width: `${pct}%`,
-                      background: isCorrect ? 'var(--color-success)' : 'var(--theme-primary-light)',
-                      opacity: isCorrect ? 1 : 0.4,
-                    }}
-                    title={`${t(cat.text)}: ${count} (${Math.round(pct)}%)`}
-                  />
-                ) : null
-              })}
-            </div>
-            <div className="flex gap-2 text-[10px] text-text-muted/70">
-              {question.categories.map(cat => {
-                const count = dist[cat.label] ?? 0
-                const isCorrect = cat.label === stmt.correctCategory
-                return count > 0 ? (
-                  <span key={cat.label} className={isCorrect ? 'font-semibold text-success' : ''}>
-                    {t(cat.text)}: {count}
-                  </span>
-                ) : null
+                    className={`flex-1 py-2 text-center transition-all ${catIdx > 0 ? 'border-l border-border' : ''} ${
+                      isCorrect
+                        ? 'bg-green-500/15'
+                        : count > 0
+                          ? 'bg-red-500/10'
+                          : 'bg-surface-alt/50'
+                    }`}
+                  >
+                    <div className={`text-sm font-bold tabular-nums ${
+                      isCorrect
+                        ? 'text-green-600 dark:text-green-400'
+                        : count > 0
+                          ? 'text-red-500/80 dark:text-red-400/80'
+                          : 'text-text-muted/30'
+                    }`}>
+                      {count > 0 ? count : '–'}
+                    </div>
+                    <div className="text-[10px] text-text-muted mt-0.5">
+                      {t(cat.text)}
+                    </div>
+                    {count > 0 && (
+                      <div className="text-[9px] text-text-muted/60 tabular-nums">
+                        {Math.round(pct)}%
+                      </div>
+                    )}
+                  </div>
+                )
               })}
             </div>
           </div>
@@ -340,7 +365,7 @@ export function SessionStatsView({ stats, questions, submissions }: SessionStats
                     {q.type === 'pick' ? (
                       <PickDistribution questionStats={qs} question={q as PickQuestion} totalSubmissions={stats.totalSubmissions} />
                     ) : (
-                      <CategoryDistribution questionStats={qs} question={q as CategoryQuestion} />
+                      <CategoryDistribution questionStats={qs} question={q as CategoryQuestion} totalSubmissions={stats.totalSubmissions} />
                     )}
                   </div>
 
