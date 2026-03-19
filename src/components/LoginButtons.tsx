@@ -40,17 +40,17 @@ export function LoginButtons({ returnTo, variant = 'signIn', className = '' }: L
   const googleLabel = variant === 'submit' ? t(labels.signInWithGoogle) : t(labels.signInGoogle)
 
   return (
-    <div className={`flex flex-col sm:flex-row items-center justify-center gap-3 ${className}`}>
+    <div className={`flex flex-col sm:flex-row items-stretch justify-center gap-3 w-full ${className}`}>
       <a
         href={getLoginUrl('github', returnTo)}
-        className="flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-gray-900/10 dark:bg-white/10 border-2 border-gray-900/20 dark:border-white/20 hover:bg-gray-900/20 dark:hover:bg-white/20 transition-all duration-200 text-sm font-medium sm:flex-1 sm:min-w-0"
+        className="flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-gray-900/10 dark:bg-white/10 border-2 border-gray-900/20 dark:border-white/20 hover:bg-gray-900/20 dark:hover:bg-white/20 transition-all duration-200 text-sm font-medium whitespace-nowrap sm:flex-1"
       >
         <GitHubIcon />
         <span>{githubLabel}</span>
       </a>
       <a
         href={getLoginUrl('google', returnTo)}
-        className="flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-blue-500/10 border-2 border-blue-500/20 hover:bg-blue-500/20 transition-all duration-200 text-sm font-medium text-blue-700 dark:text-blue-400 sm:flex-1 sm:min-w-0"
+        className="flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-blue-500/10 border-2 border-blue-500/20 hover:bg-blue-500/20 transition-all duration-200 text-sm font-medium text-blue-700 dark:text-blue-400 whitespace-nowrap sm:flex-1"
       >
         <GoogleIcon />
         <span>{googleLabel}</span>
