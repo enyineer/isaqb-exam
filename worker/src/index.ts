@@ -16,6 +16,14 @@
  *   GET  /api/admin/admins   → list admins (admin)
  *   POST /api/admin/admins   → add admin (admin)
  *   DELETE /api/admin/admins → remove admin (admin)
+ *   POST /api/sessions       → create exam session (auth)
+ *   GET  /api/sessions       → list user's sessions (auth)
+ *   GET  /api/sessions/:idOrSlug → get session details (public)
+ *   PUT  /api/sessions/:id   → update session (owner)
+ *   DELETE /api/sessions/:id → delete session (owner)
+ *   POST /api/sessions/:idOrSlug/submit → submit exam to session
+ *   GET  /api/sessions/:id/submissions → list submissions (owner)
+ *   GET  /api/sessions/:id/stats → aggregated stats (owner)
  *   GET  /auth/github       → GitHub OAuth redirect
  *   GET  /auth/github/callback → GitHub OAuth callback
  *   GET  /auth/google       → Google OAuth redirect
@@ -47,6 +55,33 @@ import {
   handleMe,
   handleLogout,
 } from './auth.ts'
+import {
+  handleCreateSession,
+  handleListSessions,
+  handleGetSession,
+  handleUpdateSession,
+  handleDeleteSession,
+} from './sessions.ts'
+import {
+  handleSessionSubmit,
+  handleGetSubmissions,
+  handleGetSessionStats,
+} from './sessionSubmissions.ts'
+
+/**
+ * Extract a path parameter from a URL pathname.
+ * E.g. extractPathParam('/api/sessions/abc/submit', '/api/sessions/', '/submit') → 'abc'
+ */
+function extractPathParam(pathname: string, prefix: string, suffix = ''): string | null {
+  if (!pathname.startsWith(prefix)) return null
+  const rest = pathname.slice(prefix.length)
+  if (suffix) {
+    if (!rest.endsWith(suffix)) return null
+    return decodeURIComponent(rest.slice(0, -suffix.length)) || null
+  }
+  // No further slashes — the rest IS the param
+  return rest.includes('/') ? null : (decodeURIComponent(rest) || null)
+}
 
 export default {
   async fetch(request: Request, env: Env): Promise<Response> {
@@ -94,6 +129,30 @@ export default {
       } else if (pathname === '/api/admin/admins' && method === 'DELETE') {
         response = await handleAdminRemoveAdmin(request, env)
 
+      // ─── Session Routes ────────────────────────────────────────
+      } else if (pathname === '/api/sessions' && method === 'POST') {
+        response = await handleCreateSession(request, env)
+      } else if (pathname === '/api/sessions' && method === 'GET') {
+        response = await handleListSessions(request, env)
+      } else if ((() => { const id = extractPathParam(pathname, '/api/sessions/', '/submit'); return id && method === 'POST' ? id : null })()) {
+        const idOrSlug = extractPathParam(pathname, '/api/sessions/', '/submit')!
+        response = await handleSessionSubmit(idOrSlug, request, env)
+      } else if ((() => { const id = extractPathParam(pathname, '/api/sessions/', '/submissions'); return id && method === 'GET' ? id : null })()) {
+        const id = extractPathParam(pathname, '/api/sessions/', '/submissions')!
+        response = await handleGetSubmissions(id, request, env)
+      } else if ((() => { const id = extractPathParam(pathname, '/api/sessions/', '/stats'); return id && method === 'GET' ? id : null })()) {
+        const id = extractPathParam(pathname, '/api/sessions/', '/stats')!
+        response = await handleGetSessionStats(id, request, env)
+      } else if ((() => { const id = extractPathParam(pathname, '/api/sessions/'); return id && method === 'PUT' ? id : null })()) {
+        const id = extractPathParam(pathname, '/api/sessions/')!
+        response = await handleUpdateSession(id, request, env)
+      } else if ((() => { const id = extractPathParam(pathname, '/api/sessions/'); return id && method === 'DELETE' ? id : null })()) {
+        const id = extractPathParam(pathname, '/api/sessions/')!
+        response = await handleDeleteSession(id, request, env)
+      } else if ((() => { const id = extractPathParam(pathname, '/api/sessions/'); return id && method === 'GET' ? id : null })()) {
+        const idOrSlug = extractPathParam(pathname, '/api/sessions/')!
+        response = await handleGetSession(idOrSlug, env)
+
       // ─── Auth Routes ─────────────────────────────────────────
       } else if (pathname === '/auth/github' && method === 'GET') {
         return handleGitHubLogin(request, env)
@@ -111,7 +170,7 @@ export default {
       // ─── Catch-all ────────────────────────────────────────────
       } else {
         response = Response.json(
-          { error: 'Not found', availableRoutes: ['/api/questions', '/api/commit-sha', '/api/leaderboard', '/api/leaderboard/versions', '/api/admin/check', '/auth/github', '/auth/google', '/auth/me'] },
+          { error: 'Not found', availableRoutes: ['/api/questions', '/api/commit-sha', '/api/leaderboard', '/api/leaderboard/versions', '/api/sessions', '/api/admin/check', '/auth/github', '/auth/google', '/auth/me'] },
           { status: 404 },
         )
       }

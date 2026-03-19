@@ -1,7 +1,9 @@
 import { useMemo } from "react";
 import { useLanguage } from "../context/LanguageContext";
 import { useExam, getSavedExamInfo } from "../context/ExamContext";
+import { useAuth } from "../context/AuthContext";
 import { PageLayout } from "../components/PageLayout";
+import { LoginButtons } from "../components/LoginButtons";
 import { useLocation } from "wouter";
 import { labels } from "../utils/labels";
 import {
@@ -19,6 +21,7 @@ import {
   Shield,
   Ban,
   AlertTriangle,
+  Users,
 } from "lucide-react";
 import { ExternalLink } from "../components/ExternalLink";
 import { Footer } from "../components/Footer";
@@ -49,6 +52,7 @@ export function StartPage({ onRefresh }: StartPageProps) {
   const { t, lang } = useLanguage();
   const { questions, dataSource, fetchedAt, loading, resetExam, continueExam } =
     useExam();
+  const { authStatus } = useAuth();
   const [, navigate] = useLocation();
 
   const totalPoints = questions.reduce((sum, q) => sum + q.points, 0);
@@ -282,6 +286,36 @@ export function StartPage({ onRefresh }: StartPageProps) {
               <Trophy size={13} />
               {t(labels.viewLeaderboard)}
             </button>
+          </div>
+
+          {/* Sessions section — always visible */}
+          <div className="mb-8 p-5 rounded-2xl border border-border/50 bg-surface/40 backdrop-blur-sm">
+            <div className="flex items-center gap-3 mb-3">
+              <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center shrink-0">
+                <Users size={20} className="text-primary-light" />
+              </div>
+              <div>
+                <h2 className="font-heading font-semibold text-base">{t(labels.sessionsTitle)}</h2>
+              </div>
+            </div>
+            <p className="text-sm text-text-muted leading-relaxed mb-4">
+              {t(labels.sessionsDescription)}
+            </p>
+            {authStatus.authenticated ? (
+              <button
+                onClick={() => navigate('/sessions')}
+                className="flex items-center justify-center gap-2 w-full px-4 py-2.5 rounded-xl border-2 border-primary/20 bg-primary/5 text-primary font-medium text-sm hover:bg-primary/10 transition-all cursor-pointer"
+              >
+                <Users size={16} />
+                {t(labels.sessionsManage)}
+                <ArrowRight size={14} />
+              </button>
+            ) : (
+              <div className="space-y-3">
+                <p className="text-xs text-text-muted/70">{t(labels.sessionsSignInPrompt)}</p>
+                <LoginButtons returnTo="#/sessions" />
+              </div>
+            )}
           </div>
 
           {/* Keyboard hints — hidden on mobile */}

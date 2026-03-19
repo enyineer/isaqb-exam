@@ -7,6 +7,7 @@ export interface Env {
   LEADERBOARD: KVNamespace
   SESSIONS: KVNamespace
   ADMIN: KVNamespace
+  EXAM_SESSIONS: KVNamespace
 
   // Secrets
   GITHUB_TOKEN: string
