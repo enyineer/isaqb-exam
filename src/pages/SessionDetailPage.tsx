@@ -23,6 +23,7 @@ import {
 import type { ExamSession, SessionSubmission, SessionStats } from '../data/sessionSchema'
 import { getSessionStatus } from '../data/sessionSchema'
 import type { Question } from '../data/schema'
+import { WORKER_BASE_URL } from '../utils/leaderboardConfig'
 import {
   ArrowLeft, Loader2, Copy, Check, Trash2, Pencil, Save,
   ChevronDown, ChevronUp, BarChart3, MessageSquare, Users, Download, X,
@@ -312,6 +313,17 @@ export function SessionDetailPage() {
       setSession(sessionRes.session)
       setSubmissions(submissionsRes.submissions)
       if (statsRes.stats) setStats(statsRes.stats)
+
+      // Fetch questions at the session's specific commit SHA
+      if (sessionRes.session.commitSha) {
+        try {
+          const qRes = await fetch(`${WORKER_BASE_URL}/api/questions?commitSha=${sessionRes.session.commitSha}`)
+          if (qRes.ok) {
+            const { questions: qs } = await qRes.json()
+            setQuestions(qs)
+          }
+        } catch { /* questions are optional for display */ }
+      }
     } catch (err) {
       setError((err as Error).message)
     } finally {
@@ -488,7 +500,7 @@ export function SessionDetailPage() {
               )
             )}
 
-            {activeTab === 'stats' && stats && <SessionStatsView stats={stats} questions={questions} />}
+            {activeTab === 'stats' && stats && <SessionStatsView stats={stats} questions={questions} submissions={submissions} />}
             {activeTab === 'stats' && !stats && <p className="text-center text-text-muted py-8">{t(labels.sessionNoSubmissions)}</p>}
 
             {activeTab === 'notes' && <NotesView submissions={submissions} questions={questions} />}

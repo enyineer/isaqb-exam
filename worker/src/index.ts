@@ -99,7 +99,7 @@ export default {
 
       // ─── API Routes ──────────────────────────────────────────
       if (pathname === '/api/questions' && method === 'GET') {
-        response = await handleGetQuestions(env)
+        response = await handleGetQuestions(request, env)
       } else if (pathname === '/api/commit-sha' && method === 'GET') {
         response = await handleGetCommitSha(env)
       } else if (pathname === '/api/leaderboard' && method === 'GET') {

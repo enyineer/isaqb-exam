@@ -74,11 +74,12 @@ async function fetchQuestionsAtCommit(commitSha: string, token: string): Promise
 
 // ─── Route Handlers ──────────────────────────────────────────────────
 
-/** GET /api/questions — Returns cached questions JSON, refreshes on new commits */
-export async function handleGetQuestions(env: Env): Promise<Response> {
+/** GET /api/questions — Returns cached questions JSON. Accepts optional ?commitSha= to fetch at a specific commit. */
+export async function handleGetQuestions(request: Request, env: Env): Promise<Response> {
   try {
-    // Get latest commit SHA
-    const commitSha = await fetchLatestCommitSha(env.GITHUB_TOKEN)
+    // Use explicit commitSha from query param, or fall back to latest
+    const url = new URL(request.url)
+    const commitSha = url.searchParams.get('commitSha') || await fetchLatestCommitSha(env.GITHUB_TOKEN)
 
     // Check KV cache by commit SHA
     const cacheKey = `questions:${commitSha}`
