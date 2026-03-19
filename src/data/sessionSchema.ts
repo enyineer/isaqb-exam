@@ -86,6 +86,8 @@ export interface QuestionStats {
   answerDistribution: Record<string, number>
   /** For category questions: statement ID → { category label → count } */
   categoryDistribution: Record<string, Record<string, number>>
+  /** Number of submissions that selected more options than allowed (pick questions only) */
+  invalidCount: number
   /** Time percentiles in ms */
   timePercentiles: { p10: number; p25: number; p50: number; p75: number; p90: number }
   averageTimeMs: number

@@ -125,6 +125,12 @@ function PickDistribution({ questionStats, question, totalSubmissions }: { quest
           </div>
         )
       })}
+      {questionStats.invalidCount > 0 && (
+        <div className="flex items-center gap-2 mt-2 px-3 py-1.5 rounded-lg bg-amber-500/10 border border-amber-500/20 text-xs text-amber-600 dark:text-amber-400">
+          <span className="font-semibold">{questionStats.invalidCount}</span>
+          <span>{questionStats.invalidCount === 1 ? 'participant' : 'participants'} selected too many options (invalid, 0 points)</span>
+        </div>
+      )}
     </div>
   )
 }

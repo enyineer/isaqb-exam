@@ -49,6 +49,7 @@ function computeStats(submissions: SessionSubmission[], questions: Question[]): 
     const answerDistribution: Record<string, number> = {}
     const categoryDistribution: Record<string, Record<string, number>> = {}
     const times: number[] = []
+    let invalidCount = 0
 
     for (const sub of submissions) {
       // Time tracking
@@ -60,7 +61,10 @@ function computeStats(submissions: SessionSubmission[], questions: Question[]): 
         const selected = Array.isArray(answer) ? answer : []
         const correctCount = q.options.filter((o: { correct: boolean }) => o.correct).length
         // Skip invalid submissions (selected more than allowed → always 0 points)
-        if (selected.length > correctCount) continue
+        if (selected.length > correctCount) {
+          invalidCount++
+          continue
+        }
         for (const optionId of selected) {
           answerDistribution[optionId] = (answerDistribution[optionId] ?? 0) + 1
         }
@@ -82,6 +86,7 @@ function computeStats(submissions: SessionSubmission[], questions: Question[]): 
       questionId: q.id,
       answerDistribution,
       categoryDistribution,
+      invalidCount,
       timePercentiles: {
         p10: percentile(sorted, 10),
         p25: percentile(sorted, 25),
