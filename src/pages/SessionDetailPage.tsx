@@ -23,7 +23,7 @@ import {
 import type { ExamSession, SessionSubmission, SessionStats } from '../data/sessionSchema'
 import { getSessionStatus } from '../data/sessionSchema'
 import type { Question } from '../data/schema'
-import { WORKER_BASE_URL } from '../utils/leaderboardConfig'
+import { WORKER_BASE_URL } from '../utils/config'
 import {
   ArrowLeft, Loader2, Copy, Check, Trash2, Pencil, Save,
   ChevronDown, ChevronUp, BarChart3, MessageSquare, Users, Download, X,

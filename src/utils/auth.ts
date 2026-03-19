@@ -3,7 +3,7 @@
  * and authentication status checks.
  */
 
-import { WORKER_BASE_URL } from './leaderboardConfig'
+import { WORKER_BASE_URL } from './config'
 
 // ─── Types ───────────────────────────────────────────────────────────
 

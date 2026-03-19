@@ -3,7 +3,7 @@
  * Follows the same patterns as leaderboard.ts (DRY).
  */
 
-import { WORKER_BASE_URL } from './leaderboardConfig'
+import { WORKER_BASE_URL } from './config'
 import { authHeaders, clearToken } from './auth'
 import type { ExamSession, SessionSubmission, SessionStats } from '../data/sessionSchema'
 import type { Answers } from './scoring'

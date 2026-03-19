@@ -1,7 +1,7 @@
 import type { Question } from './schema'
 import { validateQuestions } from './schema'
 import fallbackQuestions from './fallbackQuestions.json'
-import { WORKER_BASE_URL } from '../utils/leaderboardConfig'
+import { WORKER_BASE_URL } from '../utils/config'
 
 const CACHE_KEY = 'isaqb-questions-cache'
 const CACHE_TTL_MS = 60 * 60 * 1000 // 60 minutes
