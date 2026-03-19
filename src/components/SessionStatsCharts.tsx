@@ -82,36 +82,45 @@ export function PassRateChart({ stats }: PassRateChartProps) {
 
 // ─── Answer Distribution Chart (Pick) ────────────────────────────────
 
-function PickDistribution({ questionStats, question }: { questionStats: QuestionStats; question: PickQuestion }) {
+function PickDistribution({ questionStats, question, totalSubmissions }: { questionStats: QuestionStats; question: PickQuestion; totalSubmissions: number }) {
   const { t } = useLanguage()
-  const totalResponses = Math.max(1, ...Object.values(questionStats.answerDistribution))
+  const total = Math.max(totalSubmissions, 1)
 
   return (
-    <div className="space-y-1.5">
+    <div className="space-y-2">
       {question.options.map(opt => {
         const count = questionStats.answerDistribution[opt.id] ?? 0
-        const pct = (count / totalResponses) * 100
+        const pct = (count / total) * 100
         const isCorrect = opt.correct
 
         return (
-          <div key={opt.id} className="space-y-0.5">
-            <div className="flex items-baseline justify-between gap-2 text-xs">
-              <span className={`truncate ${isCorrect ? 'font-semibold text-success' : 'text-text-muted'}`}>
-                {isCorrect && '✓ '}{t(opt.text)}
+          <div key={opt.id} className="group">
+            <div className="flex items-start gap-2 mb-1">
+              <span className={`shrink-0 mt-0.5 w-4 h-4 flex items-center justify-center rounded text-[10px] font-bold ${isCorrect ? 'bg-green-500/20 text-green-600 dark:text-green-400' : 'bg-surface-alt text-text-muted/50'}`}>
+                {isCorrect ? '✓' : ''}
               </span>
-              <span className={`shrink-0 tabular-nums ${isCorrect ? 'font-semibold text-success' : 'text-text-muted'}`}>
-                {count}
+              <span className={`flex-1 text-xs leading-relaxed ${isCorrect ? 'font-medium' : 'text-text-muted'}`}>
+                {t(opt.text)}
               </span>
             </div>
-            <div className="h-4 bg-surface-alt rounded-md overflow-hidden">
-              <div
-                className="h-full rounded-md transition-all duration-500"
-                style={{
-                  width: `${Math.max(pct, 1)}%`,
-                  background: isCorrect ? 'var(--color-success)' : 'var(--theme-primary-light)',
-                  opacity: isCorrect ? 1 : 0.5,
-                }}
-              />
+            <div className="flex items-center gap-2 pl-6">
+              <div className="flex-1 h-5 bg-surface-alt rounded-md overflow-hidden">
+                <div
+                  className="h-full rounded-md transition-all duration-500 flex items-center justify-end pr-1.5"
+                  style={{
+                    width: `${Math.max(pct, pct > 0 ? 8 : 0)}%`,
+                    background: isCorrect ? 'var(--color-success)' : 'var(--color-error)',
+                    opacity: isCorrect ? 0.7 : 0.35,
+                  }}
+                >
+                  {pct >= 15 && (
+                    <span className="text-[10px] font-semibold text-white/90">{Math.round(pct)}%</span>
+                  )}
+                </div>
+              </div>
+              <span className={`shrink-0 w-12 text-right text-xs tabular-nums ${isCorrect ? 'font-semibold text-success' : 'text-text-muted'}`}>
+                {count}/{total}
+              </span>
             </div>
           </div>
         )
@@ -323,7 +332,7 @@ export function SessionStatsView({ stats, questions, submissions }: SessionStats
                   <div>
                     <h4 className="text-xs font-semibold text-text-muted mb-2">{t(labels.sessionAnswerDistribution)}</h4>
                     {q.type === 'pick' ? (
-                      <PickDistribution questionStats={qs} question={q as PickQuestion} />
+                      <PickDistribution questionStats={qs} question={q as PickQuestion} totalSubmissions={stats.totalSubmissions} />
                     ) : (
                       <CategoryDistribution questionStats={qs} question={q as CategoryQuestion} />
                     )}

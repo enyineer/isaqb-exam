@@ -58,6 +58,9 @@ function computeStats(submissions: SessionSubmission[], questions: Question[]): 
       const answer = sub.answers[q.id]
       if (q.type === 'pick') {
         const selected = Array.isArray(answer) ? answer : []
+        const correctCount = q.options.filter((o: { correct: boolean }) => o.correct).length
+        // Skip invalid submissions (selected more than allowed → always 0 points)
+        if (selected.length > correctCount) continue
         for (const optionId of selected) {
           answerDistribution[optionId] = (answerDistribution[optionId] ?? 0) + 1
         }
