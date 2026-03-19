@@ -15,7 +15,7 @@ import {
   fetchSessionStats,
   getSessionLink,
 } from '../src/utils/sessions'
-import { WORKER_BASE_URL } from '../src/utils/leaderboardConfig'
+import { WORKER_BASE_URL } from '../src/utils/config'
 import { storage, fetchCalls, mockFetch, resetMocks } from './helpers'
 import type { ExamSession } from '../src/data/sessionSchema'
 
