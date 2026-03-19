@@ -9,7 +9,7 @@ import type { Answers } from '../../src/utils/scoring.ts'
 import type { ExamSession, SessionSubmission, SessionStats, QuestionStats } from '../../src/data/sessionSchema.ts'
 import { sessionSubmitSchema } from '../../src/data/sessionSchema.ts'
 import { scoreExam } from '../../src/utils/scoring.ts'
-import { fetchQuestionsAtCommit } from './questions.ts'
+import { getQuestionsWithCache } from './questions.ts'
 import { getSession } from './auth.ts'
 import { resolveSession } from './sessions.ts'
 import { z } from 'zod'
@@ -163,10 +163,10 @@ export async function handleSessionSubmit(idOrSlug: string, request: Request, en
     return Response.json({ error: 'You have already submitted to this session' }, { status: 409 })
   }
 
-  // Server-side scoring — fetch questions at the session's commit and score
+  // Server-side scoring — fetch questions at the session's commit (KV-cached)
   let questions: Question[]
   try {
-    questions = await fetchQuestionsAtCommit(examSession.commitSha, env.GITHUB_TOKEN) as Question[]
+    questions = await getQuestionsWithCache(examSession.commitSha, env) as Question[]
   } catch (err) {
     return Response.json(
       { error: `Could not score submission: ${(err as Error).message}` },
@@ -234,10 +234,10 @@ export async function handleGetSessionStats(id: string, request: Request, env: E
 
   const submissions = await readSubmissions(env.EXAM_SESSIONS, id)
 
-  // Fetch questions to build stats
+  // Fetch questions to build stats (KV-cached)
   let questions: Question[]
   try {
-    questions = await fetchQuestionsAtCommit(examSession.commitSha, env.GITHUB_TOKEN) as Question[]
+    questions = await getQuestionsWithCache(examSession.commitSha, env) as Question[]
   } catch (err) {
     return Response.json(
       { error: `Could not compute stats: ${(err as Error).message}` },

@@ -81,34 +81,11 @@ export async function handleGetQuestions(request: Request, env: Env): Promise<Re
     const url = new URL(request.url)
     const commitSha = url.searchParams.get('commitSha') || await fetchLatestCommitSha(env.GITHUB_TOKEN)
 
-    // Check KV cache by commit SHA
-    const cacheKey = `questions:${commitSha}`
-    const cached = await env.QUESTIONS_CACHE.get<CachedQuestions>(cacheKey, 'json')
-
-    if (cached) {
-      return Response.json({
-        questions: cached.questions,
-        commitSha: cached.commitSha,
-        cachedAt: cached.cachedAt,
-      })
-    }
-
-    // Cache miss — fetch, parse, and store
-    const questions = await fetchQuestionsAtCommit(commitSha, env.GITHUB_TOKEN)
-
-    const cacheData: CachedQuestions = {
-      questions,
-      commitSha,
-      cachedAt: new Date().toISOString(),
-    }
-
-    // Store in KV (no TTL — immutable per commit SHA)
-    await env.QUESTIONS_CACHE.put(cacheKey, JSON.stringify(cacheData))
+    const questions = await getQuestionsWithCache(commitSha, env)
 
     return Response.json({
-      questions: cacheData.questions,
-      commitSha: cacheData.commitSha,
-      cachedAt: cacheData.cachedAt,
+      questions,
+      commitSha,
     })
   } catch (err) {
     return Response.json(
@@ -129,6 +106,29 @@ export async function handleGetCommitSha(env: Env): Promise<Response> {
       { status: 502 },
     )
   }
+}
+
+/**
+ * Get questions at a specific commit, using KV cache when available.
+ * On a cache miss, fetches from GitHub and writes results to KV for future calls.
+ */
+export async function getQuestionsWithCache(commitSha: string, env: Env): Promise<unknown[]> {
+  const cacheKey = `questions:${commitSha}`
+  const cached = await env.QUESTIONS_CACHE.get<CachedQuestions>(cacheKey, 'json')
+
+  if (cached) return cached.questions
+
+  // Cache miss — fetch from GitHub, parse, save to KV
+  const questions = await fetchQuestionsAtCommit(commitSha, env.GITHUB_TOKEN)
+
+  const cacheData: CachedQuestions = {
+    questions,
+    commitSha,
+    cachedAt: new Date().toISOString(),
+  }
+  await env.QUESTIONS_CACHE.put(cacheKey, JSON.stringify(cacheData))
+
+  return questions
 }
 
 /** Fetch questions at a specific commit (used by leaderboard scoring) */
