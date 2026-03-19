@@ -26,12 +26,12 @@ import type { Question } from '../data/schema'
 import { WORKER_BASE_URL } from '../utils/config'
 import {
   ArrowLeft, Loader2, Copy, Check, Trash2, Pencil, Save,
-  ChevronDown, ChevronUp, BarChart3, MessageSquare, Users, Download, X,
+  ChevronDown, ChevronUp, BarChart3, Users, Download, X,
 } from 'lucide-react'
 
 // ─── Tabs ────────────────────────────────────────────────────────────
 
-type Tab = 'submissions' | 'stats' | 'notes'
+type Tab = 'submissions' | 'stats'
 
 // ─── Helpers ─────────────────────────────────────────────────────────
 
@@ -232,53 +232,7 @@ function downloadCsv(submissions: SessionSubmission[], title: string) {
   URL.revokeObjectURL(url)
 }
 
-// ─── Notes View ──────────────────────────────────────────────────────
 
-interface NotesViewProps {
-  submissions: SessionSubmission[]
-  questions: Question[]
-}
-
-function NotesView({ submissions, questions }: NotesViewProps) {
-  const { t } = useLanguage()
-
-  // Group notes by question
-  const notesByQuestion: Record<string, Array<{ author: string; note: string }>> = {}
-  for (const sub of submissions) {
-    for (const [qId, note] of Object.entries(sub.questionNotes)) {
-      if (!note.trim()) continue
-      if (!notesByQuestion[qId]) notesByQuestion[qId] = []
-      notesByQuestion[qId].push({ author: sub.participantName, note })
-    }
-  }
-
-  const questionIds = Object.keys(notesByQuestion)
-  if (questionIds.length === 0) {
-    return <p className="text-center text-text-muted py-8">{t(labels.sessionNoNotes)}</p>
-  }
-
-  return (
-    <div className="space-y-6">
-      {questions.map((q, idx) => {
-        const notes = notesByQuestion[q.id]
-        if (!notes?.length) return null
-        return (
-          <div key={q.id} className="p-4 rounded-xl border border-border bg-surface space-y-3">
-            <h4 className="font-heading font-semibold text-sm">
-              {t(labels.question)} {idx + 1}
-            </h4>
-            {notes.map((n, i) => (
-              <div key={i} className="bg-surface-alt px-3 py-2 rounded-lg text-sm">
-                <span className="font-medium text-primary text-xs">{n.author}:</span>
-                <p className="text-text-muted mt-0.5">{n.note}</p>
-              </div>
-            ))}
-          </div>
-        )
-      })}
-    </div>
-  )
-}
 
 // ─── Page ────────────────────────────────────────────────────────────
 
@@ -462,7 +416,6 @@ export function SessionDetailPage() {
               {[
                 { key: 'submissions' as Tab, label: labels.sessionSubmissions, icon: Users, count: submissions.length },
                 { key: 'stats' as Tab, label: labels.sessionStats, icon: BarChart3 },
-                { key: 'notes' as Tab, label: labels.sessionNotes, icon: MessageSquare },
               ].map(tab => (
                 <button
                   key={tab.key}
@@ -502,8 +455,6 @@ export function SessionDetailPage() {
 
             {activeTab === 'stats' && stats && <SessionStatsView stats={stats} questions={questions} submissions={submissions} />}
             {activeTab === 'stats' && !stats && <p className="text-center text-text-muted py-8">{t(labels.sessionNoSubmissions)}</p>}
-
-            {activeTab === 'notes' && <NotesView submissions={submissions} questions={questions} />}
           </>
         )}
 
