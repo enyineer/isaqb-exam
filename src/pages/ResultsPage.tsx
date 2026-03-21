@@ -364,7 +364,7 @@ export function ResultsPage() {
                 </button>
               </div>
             ) : questionsCommitSha ? (
-              <div className="flex flex-col gap-2 sm:flex-row sm:gap-3">
+              <div className="flex flex-col gap-2 sm:flex-row sm:gap-2">
                 {authStatus.authenticated ? (
                   <button
                     onClick={async () => {
@@ -389,23 +389,21 @@ export function ResultsPage() {
                       }
                     }}
                     disabled={submitting}
-                    className="flex items-center justify-center gap-2 px-4 py-2.5 sm:py-3 rounded-xl bg-amber-500/10 border-2 border-amber-500/30 hover:bg-amber-500/20 transition-all duration-200 text-sm sm:text-base font-medium text-amber-700 dark:text-amber-400 cursor-pointer disabled:opacity-50 sm:flex-1 sm:min-w-0"
+                    className="flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl bg-amber-500/10 border-2 border-amber-500/30 hover:bg-amber-500/20 transition-all duration-200 text-xs font-medium text-amber-700 dark:text-amber-400 cursor-pointer disabled:opacity-50 sm:flex-1 whitespace-nowrap"
                   >
-                    <Trophy size={16} className="shrink-0" />
-                    <span className="truncate">
-                      {submitting
-                        ? t(labels.leaderboardSubmitting)
-                        : t(labels.submitToLeaderboard)}
-                    </span>
+                    <Trophy size={14} className="shrink-0" />
+                    {submitting
+                      ? t(labels.leaderboardSubmitting)
+                      : t(labels.submitToLeaderboard)}
                   </button>
                 ) : (
                   <LoginButtons variant="submit" />
                 )}
                 <button
                   onClick={() => navigate("/leaderboard")}
-                  className="flex items-center justify-center gap-2 px-4 py-2.5 sm:py-3 rounded-xl border-2 border-border bg-surface hover:bg-surface-hover transition-all duration-200 text-sm sm:text-base font-medium cursor-pointer sm:shrink-0 sm:whitespace-nowrap"
+                  className="flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl border-2 border-border bg-surface hover:bg-surface-hover transition-all duration-200 text-xs font-medium cursor-pointer whitespace-nowrap"
                 >
-                  <Trophy size={16} className="text-amber-500" />
+                  <Trophy size={14} className="text-amber-500" />
                   {t(labels.viewLeaderboard)}
                 </button>
               </div>
