@@ -21,6 +21,17 @@ function formatTime(ms: number): string {
   return `${minutes}:${secs.toString().padStart(2, '0')}`
 }
 
+/** Returns a CSS color that scales from red (score=0) to neutral text (score=max). */
+function scoreColor(score: number, maxPoints: number): string {
+  const ratio = maxPoints > 0 ? Math.min(score / maxPoints, 1) : 0
+  // Interpolate: 0 → hsl(0, 80%, 55%) (red), 1 → inherit (no override)
+  if (ratio >= 1) return 'var(--theme-text)'
+  // Red at 0%, transitioning via saturation/lightness fade toward neutral
+  const saturation = Math.round(80 - ratio * 60) // 80% → 20%
+  const lightness = Math.round(55 + ratio * 15)   // 55% → 70%
+  return `hsl(0 ${saturation}% ${lightness}%)`
+}
+
 // ─── Pass Rate Chart ─────────────────────────────────────────────────
 
 interface PassRateChartProps {
@@ -342,8 +353,8 @@ export function SessionStatsView({ stats, questions, submissions }: SessionStats
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-medium leading-snug">{t(q.stem)}</p>
                   <div className="flex items-center gap-3 mt-1 text-xs text-text-muted">
-                    <span>{t(labels.sessionAvgScoreLabel)}: <span className="font-semibold text-text tabular-nums">{qs.averageScore.toFixed(2)}</span></span>
-                    <span>{t(labels.sessionMinScoreLabel)}: <span className={`font-semibold tabular-nums ${qs.minScore === 0 ? 'text-error' : 'text-text'}`}>{qs.minScore.toFixed(2)}</span></span>
+                    <span>{t(labels.sessionAvgScoreLabel)}: <span className="font-semibold tabular-nums" style={{ color: scoreColor(qs.averageScore, q.points) }}>{qs.averageScore.toFixed(2)}</span><span className="text-text-muted">/{q.points}</span></span>
+                    <span>{t(labels.sessionMinScoreLabel)}: <span className="font-semibold tabular-nums" style={{ color: scoreColor(qs.minScore, q.points) }}>{qs.minScore.toFixed(2)}</span><span className="text-text-muted">/{q.points}</span></span>
                     {hasNotes && (
                       <span className="flex items-center gap-0.5 text-amber-600 dark:text-amber-400">
                         <StickyNote size={11} />
