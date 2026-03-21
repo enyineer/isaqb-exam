@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach } from 'bun:test'
 import { fetchAuthStatus, getLoginUrl, logout } from '../src/utils/auth'
-import { WORKER_BASE_URL } from '../src/utils/leaderboardConfig'
+import { WORKER_BASE_URL } from '../src/utils/config'
 import { storage, fetchCalls, mockFetch, resetMocks } from './helpers'
 
 beforeEach(() => resetMocks())

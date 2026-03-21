@@ -20,6 +20,7 @@ You can take the exam [here](https://enyineer.github.io/isaqb-exam/). Please rep
 - 🔵 Skipped vs wrong answer distinction in results (no penalty for skipped)
 - 🏆 Leaderboard — submit scores via OAuth, verified server-side by a Cloudflare Worker
 - 🛡️ Admin panel — manage leaderboard entries, block users, and add/remove administrators
+- 🎓 Exam sessions — lecturers create timed sessions, share via link/QR, view submissions and per-question statistics
 - 🌍 German & English
 - 🎨 Multiple color themes + dark mode
 - ⌨️ Full keyboard navigation
@@ -29,6 +30,7 @@ You can take the exam [here](https://enyineer.github.io/isaqb-exam/). Please rep
 
 - [Leaderboard Architecture](leaderboard-architecture.md) — sequence diagrams, data model, authentication, and Worker secrets
 - [Admin Interface](admin-interface.md) — access control, features, API endpoints, and setup
+- [Session Management](session-management.md) — timed exam sessions, participant flow, statistics, and deployment
 
 ## Tech Stack
 

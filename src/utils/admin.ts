@@ -3,7 +3,7 @@
  * manage leaderboard entries, blocked users, and admin users.
  */
 
-import { WORKER_BASE_URL } from './leaderboardConfig'
+import { WORKER_BASE_URL } from './config'
 import { authHeaders } from './auth'
 import type { LeaderboardEntry } from './leaderboard'
 

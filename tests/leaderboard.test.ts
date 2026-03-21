@@ -3,7 +3,7 @@ import {
   fetchLeaderboard, submitToLeaderboard,
   type LeaderboardEntry,
 } from '../src/utils/leaderboard'
-import { WORKER_BASE_URL } from '../src/utils/leaderboardConfig'
+import { WORKER_BASE_URL } from '../src/utils/config'
 import { storage, fetchCalls, mockFetch, resetMocks } from './helpers'
 
 beforeEach(() => resetMocks())

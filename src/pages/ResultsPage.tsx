@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useRef } from "react";
 import { useLanguage } from "../context/LanguageContext";
 import { useExam } from "../context/ExamContext";
 import { useLocation } from "wouter";
@@ -31,6 +31,8 @@ import { Footer } from "../components/Footer";
 import {
   submitToLeaderboard,
 } from "../utils/leaderboard";
+import { submitSessionExam } from "../utils/sessions";
+import { getSessionContext, clearSessionContext } from "./SessionExamPage";
 import { useAuth } from "../context/AuthContext";
 import { LoginButtons } from "../components/LoginButtons";
 import confetti from "canvas-confetti";
@@ -61,6 +63,11 @@ export function ResultsPage() {
   const [submitted, setSubmitted] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
 
+  // Session submission state
+  const [sessionSubmitted, setSessionSubmitted] = useState(false);
+  const [sessionSubmitError, setSessionSubmitError] = useState<string | null>(null);
+  const sessionSubmitRef = useRef(false);
+
   const result = useMemo(
     () => scoreExam(questions, answers),
     [questions, answers],
@@ -70,6 +77,27 @@ export function ResultsPage() {
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, []);
+
+  // Auto-submit to session endpoint if session context exists
+  useEffect(() => {
+    if (!examFinished || sessionSubmitRef.current) return;
+    const ctx = getSessionContext();
+    if (!ctx) return;
+    sessionSubmitRef.current = true;
+
+    submitSessionExam(
+      ctx.sessionId,
+      { answers, questionTimes, questionNotes, elapsedMs: elapsedMs ?? 0 },
+      ctx.nickname ?? undefined,
+    )
+      .then(() => {
+        setSessionSubmitted(true);
+        clearSessionContext();
+      })
+      .catch((err) => {
+        setSessionSubmitError((err as Error).message);
+      });
+  }, [examFinished, answers, questionTimes, questionNotes, elapsedMs]);
 
   useEffect(() => {
     // Wait for state to be restored from localStorage before checking
@@ -304,6 +332,20 @@ export function ResultsPage() {
               </span>
             </button>
           </div>
+
+          {/* Session submission status */}
+          {sessionSubmitted && (
+            <div className="flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-blue-500/10 border-2 border-blue-500/20 text-sm font-medium text-blue-700 dark:text-blue-400 mb-4 print:hidden">
+              <CheckCircle2 size={16} />
+              {t(labels.sessionSubmitted)}
+            </div>
+          )}
+          {sessionSubmitError && (
+            <div className="flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-red-500/10 border-2 border-red-500/20 text-sm font-medium text-red-700 dark:text-red-400 mb-4 print:hidden">
+              <XCircle size={16} />
+              Session submission failed: {sessionSubmitError}
+            </div>
+          )}
 
           {/* Leaderboard buttons */}
           <div className="flex flex-col gap-3 mb-10 print:hidden">

@@ -1,4 +1,4 @@
-import { WORKER_BASE_URL } from './leaderboardConfig'
+import { WORKER_BASE_URL } from './config'
 import { authHeaders, clearToken } from './auth'
 import type { Answers } from './scoring'
 

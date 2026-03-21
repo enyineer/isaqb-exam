@@ -240,4 +240,133 @@ export const labels = {
   },
   adminCopied: { de: "Kopiert!", en: "Copied!" },
   adminLoading: { de: "Wird geladen…", en: "Loading…" },
+
+  // Sessions — General
+  sessionsTitle: { de: "Prüfungssitzungen", en: "Exam Sessions" },
+  sessionsEmpty: {
+    de: "Noch keine Sitzungen erstellt.",
+    en: "No sessions created yet.",
+  },
+  sessionsLoading: { de: "Sitzungen werden geladen…", en: "Loading sessions…" },
+  sessionsDescription: {
+    de: "Erstelle zeitgesteuerte Prüfungssitzungen für deine Studierenden. Verfolge Ergebnisse, sieh dir Statistiken an und lies die Notizen der Teilnehmer.",
+    en: "Create timed exam sessions for your students. Track results, view statistics, and read participant notes.",
+  },
+  sessionsSignInPrompt: {
+    de: "Melde dich an, um Prüfungssitzungen zu erstellen und zu verwalten.",
+    en: "Sign in to create and manage exam sessions.",
+  },
+  sessionsManage: { de: "Sitzungen verwalten", en: "Manage Sessions" },
+
+  // Sessions — Create / Edit
+  sessionCreate: { de: "Sitzung erstellen", en: "Create Session" },
+  sessionEdit: { de: "Sitzung bearbeiten", en: "Edit Session" },
+  sessionTitle: { de: "Titel", en: "Title" },
+  sessionTitlePlaceholder: {
+    de: "z.B. Workshop März 2026",
+    en: "e.g. Workshop March 2026",
+  },
+  sessionDescription: { de: "Beschreibung", en: "Description" },
+  sessionDescriptionPlaceholder: {
+    de: "Optionale Beschreibung…",
+    en: "Optional description…",
+  },
+  sessionSlug: { de: "Kurz-Link (optional)", en: "Short Link (optional)" },
+  sessionSlugPlaceholder: {
+    de: "z.B. workshop-maerz",
+    en: "e.g. workshop-march",
+  },
+  sessionSlugHint: {
+    de: "Nur Kleinbuchstaben, Zahlen und Bindestriche",
+    en: "Lowercase letters, numbers, and hyphens only",
+  },
+  sessionSlugTaken: {
+    de: "Dieser Kurz-Link ist bereits vergeben.",
+    en: "This short link is already taken.",
+  },
+  sessionStartTime: { de: "Startzeit", en: "Start Time" },
+  sessionEndTime: { de: "Endzeit", en: "End Time" },
+  sessionSave: { de: "Speichern", en: "Save" },
+  sessionCancel: { de: "Abbrechen", en: "Cancel" },
+  sessionDelete: { de: "Sitzung löschen", en: "Delete Session" },
+  sessionDeleteConfirm: {
+    de: "Diese Sitzung und alle Einreichungen wirklich löschen?",
+    en: "Really delete this session and all submissions?",
+  },
+  sessionCreated: { de: "Sitzung erstellt!", en: "Session created!" },
+
+  // Sessions — Status
+  sessionStatusUpcoming: { de: "Geplant", en: "Upcoming" },
+  sessionStatusActive: { de: "Aktiv", en: "Active" },
+  sessionStatusEnded: { de: "Beendet", en: "Ended" },
+
+  // Sessions — Detail
+  sessionLink: { de: "Sitzungs-Link", en: "Session Link" },
+  sessionLinkCopied: { de: "Link kopiert!", en: "Link copied!" },
+  sessionQrCode: { de: "QR-Code", en: "QR Code" },
+  sessionParticipants: { de: "Teilnehmer", en: "Participants" },
+  sessionSubmissions: { de: "Einreichungen", en: "Submissions" },
+  sessionNoSubmissions: {
+    de: "Noch keine Einreichungen.",
+    en: "No submissions yet.",
+  },
+  sessionStats: { de: "Statistiken", en: "Statistics" },
+  sessionNotes: { de: "Notizen", en: "Notes" },
+  sessionNoNotes: { de: "Keine Notizen vorhanden.", en: "No notes available." },
+  sessionPassRate: { de: "Bestehensquote", en: "Pass Rate" },
+  sessionAvgScore: { de: "Durchschnitt", en: "Average" },
+  sessionAnswerDistribution: {
+    de: "Antwortverteilung",
+    en: "Answer Distribution",
+  },
+  sessionTimePerQuestion: { de: "Zeitverteilung", en: "Time Distribution" },
+  sessionDuplicate: { de: "Duplizieren", en: "Duplicate" },
+  sessionExportCsv: { de: "CSV exportieren", en: "Export CSV" },
+
+  // Sessions — Participant Flow
+  sessionJoin: { de: "Sitzung beitreten", en: "Join Session" },
+  sessionNotStarted: {
+    de: "Diese Sitzung hat noch nicht begonnen.",
+    en: "This session has not started yet.",
+  },
+  sessionEnded: {
+    de: "Diese Sitzung ist beendet.",
+    en: "This session has ended.",
+  },
+  sessionStartsIn: { de: "Beginnt in", en: "Starts in" },
+  sessionNickname: { de: "Spitzname", en: "Nickname" },
+  sessionNicknamePlaceholder: {
+    de: "Dein Anzeigename…",
+    en: "Your display name…",
+  },
+  sessionJoinAsGuest: { de: "Als Gast beitreten", en: "Join as Guest" },
+  sessionOrSignIn: { de: "oder melde dich an:", en: "or sign in:" },
+  sessionAlreadySubmitted: {
+    de: "Du hast bereits eingereicht.",
+    en: "You have already submitted.",
+  },
+  sessionSubmitting: { de: "Wird eingereicht…", en: "Submitting…" },
+  sessionSubmitted: {
+    de: "Erfolgreich eingereicht!",
+    en: "Successfully submitted!",
+  },
+  sessionNotFound: { de: "Sitzung nicht gefunden.", en: "Session not found." },
+
+  // Sessions — Optional times & timezone
+  sessionStartTimeOptional: {
+    de: "Startzeit (optional)",
+    en: "Start Time (optional)",
+  },
+  sessionEndTimeOptional: {
+    de: "Endzeit (optional)",
+    en: "End Time (optional)",
+  },
+  sessionOpenEnded: { de: "Kein Ende", en: "Open-ended" },
+  sessionImmediate: { de: "Sofort verfügbar", en: "Available immediately" },
+  sessionAlwaysOpen: { de: "Immer verfügbar", en: "Always open" },
+  sessionTimezone: { de: "Zeitzone", en: "Timezone" },
+
+  // Sessions — Stats (per-question)
+  sessionAvgScoreLabel: { de: "Ø", en: "Ø" },
+  sessionMinScoreLabel: { de: "Min", en: "Min" },
 } as const;
