@@ -56,6 +56,45 @@ function fromLocalDatetimeInput(value: string): string {
   return new Date(value).toISOString()
 }
 
+/** Get the browser's timezone abbreviation, e.g. "CET", "EST" */
+function getBrowserTimezone(): string {
+  return Intl.DateTimeFormat().resolvedOptions().timeZone
+}
+
+// ─── Clearable DateTime Input ────────────────────────────────────────
+
+interface ClearableDateTimeProps {
+  label: string
+  value: string
+  onChange: (value: string) => void
+}
+
+function ClearableDateTimeInput({ label, value, onChange }: ClearableDateTimeProps) {
+  return (
+    <div className="space-y-1">
+      <label className="text-sm font-medium">{label}</label>
+      <div className="flex items-center gap-1">
+        <input
+          type="datetime-local"
+          value={value}
+          onChange={e => onChange(e.target.value)}
+          className="flex-1 px-3 py-2 rounded-xl border border-border bg-surface-alt text-sm focus:outline-2 focus:outline-primary"
+        />
+        {value && (
+          <button
+            type="button"
+            onClick={() => onChange('')}
+            className="p-2 rounded-lg hover:bg-surface-hover text-text-muted hover:text-error transition-colors cursor-pointer shrink-0"
+            title="Clear"
+          >
+            <X size={14} />
+          </button>
+        )}
+      </div>
+    </div>
+  )
+}
+
 // ─── Edit Form ───────────────────────────────────────────────────────
 
 interface EditFormProps {
@@ -69,8 +108,8 @@ function EditSessionForm({ session, onSaved, onCancel }: EditFormProps) {
   const [title, setTitle] = useState(session.title)
   const [description, setDescription] = useState(session.description)
   const [slug, setSlug] = useState(session.slug ?? '')
-  const [startTime, setStartTime] = useState(toLocalDatetimeInput(session.startTime))
-  const [endTime, setEndTime] = useState(toLocalDatetimeInput(session.endTime))
+  const [startTime, setStartTime] = useState(session.startTime ? toLocalDatetimeInput(session.startTime) : '')
+  const [endTime, setEndTime] = useState(session.endTime ? toLocalDatetimeInput(session.endTime) : '')
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
@@ -83,8 +122,8 @@ function EditSessionForm({ session, onSaved, onCancel }: EditFormProps) {
         title: title.trim(),
         description: description.trim(),
         slug: slug.trim() || null,
-        startTime: fromLocalDatetimeInput(startTime),
-        endTime: fromLocalDatetimeInput(endTime),
+        startTime: startTime ? fromLocalDatetimeInput(startTime) : null,
+        endTime: endTime ? fromLocalDatetimeInput(endTime) : null,
       })
       onSaved(updated)
     } catch (err) {
@@ -128,22 +167,16 @@ function EditSessionForm({ session, onSaved, onCancel }: EditFormProps) {
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <div className="space-y-1">
-          <label className="text-sm font-medium">{t(labels.sessionStartTime)}</label>
-          <input
-            type="datetime-local" value={startTime} onChange={e => setStartTime(e.target.value)}
-            className="w-full px-3 py-2 rounded-xl border border-border bg-surface-alt text-sm focus:outline-2 focus:outline-primary"
-            required
-          />
-        </div>
-        <div className="space-y-1">
-          <label className="text-sm font-medium">{t(labels.sessionEndTime)}</label>
-          <input
-            type="datetime-local" value={endTime} onChange={e => setEndTime(e.target.value)}
-            className="w-full px-3 py-2 rounded-xl border border-border bg-surface-alt text-sm focus:outline-2 focus:outline-primary"
-            required
-          />
-        </div>
+        <ClearableDateTimeInput
+          label={t(labels.sessionStartTimeOptional)}
+          value={startTime}
+          onChange={setStartTime}
+        />
+        <ClearableDateTimeInput
+          label={t(labels.sessionEndTimeOptional)}
+          value={endTime}
+          onChange={setEndTime}
+        />
       </div>
 
       {error && <p className="text-sm text-error font-medium">{error}</p>}
@@ -232,7 +265,30 @@ function downloadCsv(submissions: SessionSubmission[], title: string) {
   URL.revokeObjectURL(url)
 }
 
+// ─── Date Range Display ──────────────────────────────────────────────
 
+function SessionDateRange({ session }: { session: ExamSession }) {
+  const { t } = useLanguage()
+  const tz = getBrowserTimezone()
+
+  if (!session.startTime && !session.endTime) {
+    return <span className="italic">{t(labels.sessionAlwaysOpen)}</span>
+  }
+
+  const parts: string[] = []
+  if (session.startTime) parts.push(formatDateTime(session.startTime))
+  else parts.push(t(labels.sessionImmediate))
+  parts.push('→')
+  if (session.endTime) parts.push(formatDateTime(session.endTime))
+  else parts.push(t(labels.sessionOpenEnded))
+
+  return (
+    <span>
+      {parts.join(' ')}{' '}
+      <span className="text-xs text-text-muted/60">({tz})</span>
+    </span>
+  )
+}
 
 // ─── Page ────────────────────────────────────────────────────────────
 
@@ -386,7 +442,7 @@ export function SessionDetailPage() {
               </div>
 
               <div className="flex flex-wrap items-center gap-4 text-sm text-text-muted mb-4">
-                <span>{formatDateTime(session.startTime)} → {formatDateTime(session.endTime)}</span>
+                <SessionDateRange session={session} />
                 <span className={`px-2.5 py-0.5 rounded-full text-xs font-semibold ${status === 'active' ? 'bg-green-500/15 text-green-600 dark:text-green-400' : status === 'upcoming' ? 'bg-yellow-500/15 text-yellow-600 dark:text-yellow-400' : 'bg-red-500/15 text-red-600 dark:text-red-400'}`}>
                   {t(labels[status === 'active' ? 'sessionStatusActive' : status === 'upcoming' ? 'sessionStatusUpcoming' : 'sessionStatusEnded'])}
                 </span>

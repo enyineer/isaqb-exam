@@ -20,10 +20,15 @@ export const createSessionSchema = z.object({
   title: z.string().min(1).max(200),
   description: z.string().max(2000).default(''),
   slug: sessionSlugSchema.nullable().optional(),
-  startTime: z.iso.datetime(),
-  endTime: z.iso.datetime(),
+  startTime: z.iso.datetime().nullable().optional().default(null),
+  endTime: z.iso.datetime().nullable().optional().default(null),
   commitSha: z.string().min(1),
-}).refine(d => new Date(d.startTime) < new Date(d.endTime), {
+}).refine(d => {
+  if (d.startTime && d.endTime) {
+    return new Date(d.startTime) < new Date(d.endTime)
+  }
+  return true
+}, {
   message: 'Start time must be before end time',
   path: ['endTime'],
 })
@@ -32,8 +37,8 @@ export const updateSessionSchema = z.object({
   title: z.string().min(1).max(200).optional(),
   description: z.string().max(2000).optional(),
   slug: sessionSlugSchema.nullable().optional(),
-  startTime: z.iso.datetime().optional(),
-  endTime: z.iso.datetime().optional(),
+  startTime: z.iso.datetime().nullable().optional(),
+  endTime: z.iso.datetime().nullable().optional(),
 })
 
 // ─── Session Submission (participant → worker) ───────────────────────
@@ -57,8 +62,8 @@ export interface ExamSession {
   creatorName: string
   title: string
   description: string
-  startTime: string
-  endTime: string
+  startTime: string | null
+  endTime: string | null
   commitSha: string
   createdAt: string
   updatedAt: string
@@ -91,6 +96,10 @@ export interface QuestionStats {
   /** Time percentiles in ms */
   timePercentiles: { p10: number; p25: number; p50: number; p75: number; p90: number }
   averageTimeMs: number
+  /** Average score across all submissions (rounded to 2 decimals) */
+  averageScore: number
+  /** Minimum score across all submissions (rounded to 2 decimals) */
+  minScore: number
 }
 
 export interface SessionStats {
@@ -104,9 +113,11 @@ export interface SessionStats {
 export type SessionStatus = 'upcoming' | 'active' | 'ended'
 
 export function getSessionStatus(session: ExamSession, now = Date.now()): SessionStatus {
-  const start = new Date(session.startTime).getTime()
-  const end = new Date(session.endTime).getTime()
-  if (now < start) return 'upcoming'
-  if (now > end) return 'ended'
+  const start = session.startTime ? new Date(session.startTime).getTime() : null
+  const end = session.endTime ? new Date(session.endTime).getTime() : null
+
+  // No start → never "upcoming"; no end → never "ended"; both null → always "active"
+  if (start && now < start) return 'upcoming'
+  if (end && now > end) return 'ended'
   return 'active'
 }

@@ -177,21 +177,15 @@ function CategoryDistribution({ questionStats, question, totalSubmissions }: { q
                   <div
                     key={cat.label}
                     className={`flex-1 py-2 text-center transition-all ${catIdx > 0 ? 'border-l border-border' : ''} ${
-                      isCorrect
-                        ? 'bg-green-500/15'
-                        : count > 0
-                          ? 'bg-red-500/10'
-                          : 'bg-surface-alt/50'
+                      isCorrect ? 'bg-green-500/15' : 'bg-red-500/10'
                     }`}
                   >
                     <div className={`text-sm font-bold tabular-nums ${
                       isCorrect
                         ? 'text-green-600 dark:text-green-400'
-                        : count > 0
-                          ? 'text-red-500/80 dark:text-red-400/80'
-                          : 'text-text-muted/30'
+                        : 'text-red-500/80 dark:text-red-400/80'
                     }`}>
-                      {count > 0 ? count : '–'}
+                      {count}/{total}
                     </div>
                     <div className="text-[10px] text-text-muted mt-0.5">
                       {t(cat.text)}
@@ -333,6 +327,7 @@ export function SessionStatsView({ stats, questions, submissions }: SessionStats
           const qs = stats.questionStats.find(s => s.questionId === q.id)
           if (!qs) return null
           const expanded = expandedIds.has(q.id)
+          const hasNotes = submissions.some(s => s.questionNotes[q.id]?.trim())
 
           return (
             <div key={q.id} className="rounded-xl border border-border bg-surface overflow-hidden">
@@ -346,10 +341,15 @@ export function SessionStatsView({ stats, questions, submissions }: SessionStats
                 </span>
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-medium leading-snug">{t(q.stem)}</p>
-                  <p className="text-xs text-text-muted mt-1">
-                    {q.type === 'pick' ? `Pick ${(q as PickQuestion).options.filter(o => o.correct).length} of ${(q as PickQuestion).options.length}` : `${(q as CategoryQuestion).statements.length} statements → ${(q as CategoryQuestion).categories.length} categories`}
-                    {' · '}Median: {formatTime(qs.timePercentiles.p50)}
-                  </p>
+                  <div className="flex items-center gap-3 mt-1 text-xs text-text-muted">
+                    <span>{t(labels.sessionAvgScoreLabel)}: <span className="font-semibold text-text tabular-nums">{qs.averageScore.toFixed(2)}</span></span>
+                    <span>{t(labels.sessionMinScoreLabel)}: <span className={`font-semibold tabular-nums ${qs.minScore === 0 ? 'text-error' : 'text-text'}`}>{qs.minScore.toFixed(2)}</span></span>
+                    {hasNotes && (
+                      <span className="flex items-center gap-0.5 text-amber-600 dark:text-amber-400">
+                        <StickyNote size={11} />
+                      </span>
+                    )}
+                  </div>
                 </div>
                 <span className="shrink-0 mt-1 text-text-muted">
                   {expanded ? <ChevronUp size={14} /> : <ChevronDown size={14} />}

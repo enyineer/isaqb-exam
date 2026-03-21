@@ -9,6 +9,8 @@ import type { Answers } from '../../src/utils/scoring.ts'
 import type { ExamSession, SessionSubmission, SessionStats, QuestionStats } from '../../src/data/sessionSchema.ts'
 import { sessionSubmitSchema } from '../../src/data/sessionSchema.ts'
 import { scoreExam } from '../../src/utils/scoring.ts'
+import type { PickQuestion, CategoryQuestion } from '../../src/data/schema.ts'
+import { scorePickQuestion, scoreCategoryQuestion } from '../../src/utils/scoring.ts'
 import { getQuestionsWithCache } from './questions.ts'
 import { getSession } from './auth.ts'
 import { resolveSession } from './sessions.ts'
@@ -95,8 +97,37 @@ function computeStats(submissions: SessionSubmission[], questions: Question[]): 
         p90: percentile(sorted, 90),
       },
       averageTimeMs: Math.round(avg),
+      averageScore: 0, // placeholder — computed below
+      minScore: 0,     // placeholder — computed below
     }
   })
+
+  // Compute per-question average and min scores
+  for (const qs of questionStats) {
+    const q = questions.find(q => q.id === qs.questionId)
+    if (!q) continue
+
+    const scores: number[] = []
+    for (const sub of submissions) {
+      const answer = sub.answers[q.id]
+      if (q.type === 'pick') {
+        const selected = Array.isArray(answer) ? answer : []
+        const result = scorePickQuestion(q as PickQuestion, selected)
+        scores.push(result.score)
+      } else {
+        const assignments = (answer && typeof answer === 'object' && !Array.isArray(answer))
+          ? answer as Record<string, string>
+          : {}
+        const result = scoreCategoryQuestion(q as CategoryQuestion, assignments)
+        scores.push(result.score)
+      }
+    }
+
+    if (scores.length > 0) {
+      qs.averageScore = Math.round((scores.reduce((s, v) => s + v, 0) / scores.length) * 100) / 100
+      qs.minScore = Math.round(Math.min(...scores) * 100) / 100
+    }
+  }
 
   return {
     totalSubmissions,
@@ -116,15 +147,19 @@ export async function handleSessionSubmit(idOrSlug: string, request: Request, en
     return Response.json({ error: 'Session not found' }, { status: 404 })
   }
 
-  // Check time window
+  // Check time window (skip checks for null start/end)
   const now = Date.now()
-  const start = new Date(examSession.startTime).getTime()
-  const end = new Date(examSession.endTime).getTime()
-  if (now < start) {
-    return Response.json({ error: 'Session has not started yet' }, { status: 403 })
+  if (examSession.startTime) {
+    const start = new Date(examSession.startTime).getTime()
+    if (now < start) {
+      return Response.json({ error: 'Session has not started yet' }, { status: 403 })
+    }
   }
-  if (now > end) {
-    return Response.json({ error: 'Session has ended' }, { status: 403 })
+  if (examSession.endTime) {
+    const end = new Date(examSession.endTime).getTime()
+    if (now > end) {
+      return Response.json({ error: 'Session has ended' }, { status: 403 })
+    }
   }
 
   // Resolve participant identity — JWT or nickname

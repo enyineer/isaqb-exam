@@ -17,7 +17,7 @@ import type { ExamSession } from '../data/sessionSchema'
 import { getSessionStatus, type SessionStatus } from '../data/sessionSchema'
 import {
   Plus, Loader2, Copy, Check, Trash2, CalendarClock,
-  Clock, Users, ExternalLink, X,
+  Clock, Users, X,
 } from 'lucide-react'
 
 // ─── Status Badge ────────────────────────────────────────────────────
@@ -52,6 +52,40 @@ function fromLocalDatetimeInput(value: string): string {
   return new Date(value).toISOString()
 }
 
+// ─── Clearable DateTime Input ────────────────────────────────────────
+
+interface ClearableDateTimeProps {
+  label: string
+  value: string
+  onChange: (value: string) => void
+}
+
+function ClearableDateTimeInput({ label, value, onChange }: ClearableDateTimeProps) {
+  return (
+    <div className="space-y-1">
+      <label className="text-sm font-medium">{label}</label>
+      <div className="flex items-center gap-1">
+        <input
+          type="datetime-local"
+          value={value}
+          onChange={e => onChange(e.target.value)}
+          className="flex-1 px-3 py-2 rounded-xl border border-border bg-surface-alt text-sm focus:outline-2 focus:outline-primary transition-all"
+        />
+        {value && (
+          <button
+            type="button"
+            onClick={() => onChange('')}
+            className="p-2 rounded-lg hover:bg-surface-hover text-text-muted hover:text-error transition-colors cursor-pointer shrink-0"
+            title="Clear"
+          >
+            <X size={14} />
+          </button>
+        )}
+      </div>
+    </div>
+  )
+}
+
 // ─── Create Session Form ─────────────────────────────────────────────
 
 interface CreateFormProps {
@@ -72,7 +106,7 @@ function CreateSessionForm({ commitSha, onCreated, onCancel }: CreateFormProps) 
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!title.trim() || !startTime || !endTime) return
+    if (!title.trim()) return
     setSubmitting(true)
     setError(null)
     try {
@@ -80,8 +114,8 @@ function CreateSessionForm({ commitSha, onCreated, onCancel }: CreateFormProps) 
         title: title.trim(),
         description: description.trim(),
         slug: slug.trim() || null,
-        startTime: fromLocalDatetimeInput(startTime),
-        endTime: fromLocalDatetimeInput(endTime),
+        startTime: startTime ? fromLocalDatetimeInput(startTime) : null,
+        endTime: endTime ? fromLocalDatetimeInput(endTime) : null,
         commitSha,
       })
       onCreated(session)
@@ -128,22 +162,16 @@ function CreateSessionForm({ commitSha, onCreated, onCancel }: CreateFormProps) 
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <div className="space-y-1">
-          <label className="text-sm font-medium">{t(labels.sessionStartTime)}</label>
-          <input
-            type="datetime-local" value={startTime} onChange={e => setStartTime(e.target.value)}
-            className="w-full px-3 py-2 rounded-xl border border-border bg-surface-alt text-sm focus:outline-2 focus:outline-primary transition-all"
-            required
-          />
-        </div>
-        <div className="space-y-1">
-          <label className="text-sm font-medium">{t(labels.sessionEndTime)}</label>
-          <input
-            type="datetime-local" value={endTime} onChange={e => setEndTime(e.target.value)}
-            className="w-full px-3 py-2 rounded-xl border border-border bg-surface-alt text-sm focus:outline-2 focus:outline-primary transition-all"
-            required
-          />
-        </div>
+        <ClearableDateTimeInput
+          label={t(labels.sessionStartTimeOptional)}
+          value={startTime}
+          onChange={setStartTime}
+        />
+        <ClearableDateTimeInput
+          label={t(labels.sessionEndTimeOptional)}
+          value={endTime}
+          onChange={setEndTime}
+        />
       </div>
 
       {error && <p className="text-sm text-error font-medium">{error}</p>}
@@ -156,7 +184,7 @@ function CreateSessionForm({ commitSha, onCreated, onCancel }: CreateFormProps) 
           {t(labels.sessionCancel)}
         </button>
         <button
-          type="submit" disabled={submitting || !title.trim() || !startTime || !endTime}
+          type="submit" disabled={submitting || !title.trim()}
           className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-primary text-white font-medium text-sm hover:opacity-90 transition-all cursor-pointer disabled:opacity-50"
         >
           {submitting ? <Loader2 size={16} className="animate-spin" /> : <Plus size={16} />}
@@ -208,14 +236,21 @@ function SessionCard({ session, onDelete }: SessionCardProps) {
         )}
 
         <div className="flex items-center gap-4 text-xs text-text-muted mb-3">
-          <span className="flex items-center gap-1">
-            <CalendarClock size={13} />
-            {formatDateTime(session.startTime)}
-          </span>
-          <span className="flex items-center gap-1">
-            <Clock size={13} />
-            {formatDateTime(session.endTime)}
-          </span>
+          {session.startTime && (
+            <span className="flex items-center gap-1">
+              <CalendarClock size={13} />
+              {formatDateTime(session.startTime)}
+            </span>
+          )}
+          {session.endTime && (
+            <span className="flex items-center gap-1">
+              <Clock size={13} />
+              {formatDateTime(session.endTime)}
+            </span>
+          )}
+          {!session.startTime && !session.endTime && (
+            <span className="text-xs text-text-muted italic">{t(labels.sessionAlwaysOpen)}</span>
+          )}
         </div>
 
         {/* Session link + actions */}

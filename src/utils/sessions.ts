@@ -15,8 +15,8 @@ export async function createSession(data: {
   title: string
   description?: string
   slug?: string | null
-  startTime: string
-  endTime: string
+  startTime?: string | null
+  endTime?: string | null
   commitSha: string
 }): Promise<{ session: ExamSession }> {
   const res = await fetch(`${WORKER_BASE_URL}/api/sessions`, {
@@ -57,8 +57,8 @@ export async function updateSession(id: string, data: {
   title?: string
   description?: string
   slug?: string | null
-  startTime?: string
-  endTime?: string
+  startTime?: string | null
+  endTime?: string | null
 }): Promise<{ session: ExamSession }> {
   const res = await fetch(`${WORKER_BASE_URL}/api/sessions/${encodeURIComponent(id)}`, {
     method: 'PUT',

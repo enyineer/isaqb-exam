@@ -89,8 +89,8 @@ export async function handleCreateSession(request: Request, env: Env): Promise<R
     creatorName: session.name,
     title: body.title,
     description: body.description,
-    startTime: body.startTime,
-    endTime: body.endTime,
+    startTime: body.startTime ?? null,
+    endTime: body.endTime ?? null,
     commitSha: body.commitSha,
     createdAt: now,
     updatedAt: now,
@@ -158,10 +158,10 @@ export async function handleUpdateSession(id: string, request: Request, env: Env
   }
   const body = parsed.data
 
-  // Validate time ordering if both or either time is being updated
-  const newStart = body.startTime ?? existing.startTime
-  const newEnd = body.endTime ?? existing.endTime
-  if (new Date(newStart) >= new Date(newEnd)) {
+  // Validate time ordering — only when both are non-null
+  const newStart = body.startTime !== undefined ? body.startTime : existing.startTime
+  const newEnd = body.endTime !== undefined ? body.endTime : existing.endTime
+  if (newStart && newEnd && new Date(newStart) >= new Date(newEnd)) {
     return Response.json({ error: 'Start time must be before end time' }, { status: 400 })
   }
 
@@ -188,8 +188,8 @@ export async function handleUpdateSession(id: string, request: Request, env: Env
     title: body.title ?? existing.title,
     description: body.description ?? existing.description,
     slug: body.slug !== undefined ? body.slug ?? null : existing.slug,
-    startTime: newStart,
-    endTime: newEnd,
+    startTime: newStart ?? null,
+    endTime: newEnd ?? null,
     updatedAt: new Date().toISOString(),
   }
 

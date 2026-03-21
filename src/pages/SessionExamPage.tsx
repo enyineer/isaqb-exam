@@ -134,8 +134,8 @@ export function SessionExamPage() {
 
   const status = getSessionStatus(session)
 
-  // ── Upcoming: show countdown ──
-  if (status === 'upcoming') {
+  // ── Upcoming: show countdown (only when startTime is set) ──
+  if (status === 'upcoming' && session.startTime) {
     return (
       <PageLayout>
         <main className="flex-1 max-w-md mx-auto w-full px-4 py-12 text-center page-enter">
@@ -145,7 +145,7 @@ export function SessionExamPage() {
     )
   }
 
-  // ── Ended ──
+  // ── Ended (only when endTime is set) ──
   if (status === 'ended') {
     return (
       <PageLayout>
@@ -204,7 +204,7 @@ export function SessionExamPage() {
 
 function SessionCountdown({ session }: { session: ExamSession }) {
   const { t } = useLanguage()
-  const { formatted, remaining } = useCountdown(session.startTime)
+  const { formatted, remaining } = useCountdown(session.startTime!)
 
   return (
     <>
