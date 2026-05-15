@@ -2,6 +2,10 @@ import type { PickQuestion, CategoryQuestion, Question } from '../data/schema'
 
 export const PASS_THRESHOLD = 0.6
 
+// Round to 10 decimals to strip IEEE-754 accumulation noise
+// (e.g. 6 × (2/6) summing to 1.9999999999999998 instead of 2).
+const roundScore = (n: number) => Math.round(n * 1e10) / 1e10
+
 export interface OptionResult {
   id: string
   isSelected: boolean
@@ -70,7 +74,7 @@ export function scorePickQuestion(question: PickQuestion, selectedIds: string[])
   })
 
   // Selecting more options than correct answers always results in 0 points
-  const finalScore = tooManySelected ? 0 : Math.max(0, rawScore)
+  const finalScore = tooManySelected ? 0 : Math.max(0, roundScore(rawScore))
 
   return {
     questionId: question.id,
@@ -114,7 +118,7 @@ export function scoreCategoryQuestion(
   return {
     questionId: question.id,
     type: 'category',
-    score: Math.max(0, rawScore),
+    score: Math.max(0, roundScore(rawScore)),
     maxPoints: question.points,
     rawScore,
     statementResults,
