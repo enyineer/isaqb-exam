@@ -184,6 +184,25 @@ describe('submitSessionExam', () => {
 
     expect(fetchCalls[0].init?.headers).toHaveProperty('X-Participant-Nickname', 'Bob')
   })
+
+  it('percent-encodes non-ASCII nicknames so umlauts survive the HTTP header (issue #35)', async () => {
+    mockFetch(() => Response.json(
+      { submission: { score: 15, maxScore: 20, percentage: 75, passed: true } },
+      { status: 201 },
+    ))
+
+    await submitSessionExam('test-slug', {
+      answers: { q1: ['a'] },
+      questionTimes: { q1: 5000 },
+      questionNotes: {},
+      elapsedMs: 20000,
+    }, 'Schüler')
+
+    const header = (fetchCalls[0].init?.headers as Record<string, string>)['X-Participant-Nickname']
+    expect(header).toBe('Sch%C3%BCler')
+    // Round-trips back to the original on the server side.
+    expect(decodeURIComponent(header)).toBe('Schüler')
+  })
 })
 
 // ─── fetchSessionSubmissions ────────────────────────────────────────

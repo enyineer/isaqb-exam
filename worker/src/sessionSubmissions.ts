@@ -16,6 +16,22 @@ import { getSession } from './auth.ts'
 import { resolveSession } from './sessions.ts'
 import { z } from 'zod'
 
+// ─── Helpers ─────────────────────────────────────────────────────────
+
+/**
+ * Decode the participant nickname from its HTTP header. The client percent-encodes
+ * the value so non-ASCII characters (e.g. umlauts like "Schüler") survive transmission.
+ * Falls back to the raw value if it isn't valid percent-encoding (e.g. older clients).
+ */
+function decodeNicknameHeader(raw: string | null): string | undefined {
+  if (raw == null) return undefined
+  try {
+    return decodeURIComponent(raw).trim()
+  } catch {
+    return raw.trim()
+  }
+}
+
 // ─── KV Helpers ──────────────────────────────────────────────────────
 
 function submissionsKey(sessionId: string): string {
@@ -169,7 +185,7 @@ export async function handleSessionSubmit(idOrSlug: string, request: Request, en
   let authMethod: 'github' | 'google' | 'nickname'
 
   const jwtSession = await getSession(request, env)
-  const nickname = request.headers.get('X-Participant-Nickname')?.trim()
+  const nickname = decodeNicknameHeader(request.headers.get('X-Participant-Nickname'))
 
   if (jwtSession) {
     participantId = jwtSession.sub
