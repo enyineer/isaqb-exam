@@ -22,9 +22,9 @@ async function main() {
 
   console.log(`Found ${filenames.length} question files\n`)
 
-  // linkedom DOMParser for server-side XML parsing
+  // linkedom DOMParser for server-side XML parsing — structurally satisfies XmlDomParser
   const { DOMParser } = await import('linkedom')
-  const domParser = new DOMParser() as unknown as globalThis.DOMParser
+  const domParser = new DOMParser()
 
   const questions = []
 

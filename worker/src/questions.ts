@@ -50,9 +50,8 @@ async function fetchQuestionsAtCommit(commitSha: string, token: string): Promise
 
   if (xmlFiles.length === 0) throw new Error('No XML question files found')
 
-  // @xmldom/xmldom's DOMParser is compatible with parseQuestionXml's parameter type
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const domParser = new DOMParser() as any
+  // @xmldom/xmldom's DOMParser structurally satisfies parseQuestionXml's XmlDomParser param
+  const domParser = new DOMParser()
 
   const questions = await Promise.all(
     xmlFiles.map(async (file) => {

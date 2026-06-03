@@ -10,6 +10,36 @@
  */
 import type { Question } from './schema'
 
+/**
+ * Minimal structural shape of the DOM subset this parser touches. Declared locally
+ * so the module is self-contained and typechecks identically everywhere it runs —
+ * the browser, the Worker (@xmldom/xmldom) and Node (linkedom) each ship a different
+ * ambient `Element`/`DOMParser`, and the Worker's tsconfig has no DOM lib at all.
+ * `children`/`childNodes` are typed as `ArrayLike<unknown>` because each node is
+ * narrowed by tag name before use; entries are cast to `XmlElement` at the call site.
+ */
+interface XmlElement {
+  readonly tagName: string
+  readonly localName: string | null
+  readonly textContent: string | null
+  readonly children?: ArrayLike<unknown>
+  readonly childNodes: ArrayLike<unknown>
+  getAttribute(qualifiedName: string): string | null
+  getAttributeNS?(namespace: string, localName: string): string | null
+  hasAttribute(qualifiedName: string): boolean
+  getElementsByTagName(qualifiedName: string): ArrayLike<XmlElement>
+}
+
+interface XmlDocument {
+  readonly documentElement: XmlElement | null
+  getElementsByTagName(qualifiedName: string): ArrayLike<XmlElement>
+}
+
+/** Spec-compatible DOMParser subset — browser-native, @xmldom/xmldom or linkedom. */
+export interface XmlDomParser {
+  parseFromString(source: string, type: string): XmlDocument
+}
+
 interface BilingualTexts {
   de: string
   en: string
@@ -19,12 +49,12 @@ interface BilingualTexts {
  * Extract bilingual {de, en} text from a parent element
  * that contains `<text xml:lang="de">...</text>` children.
  */
-export function getTexts(element: Element | null): BilingualTexts {
+export function getTexts(element: XmlElement | null): BilingualTexts {
   if (!element) return { de: '', en: '' }
   const result: BilingualTexts = { de: '', en: '' }
 
   for (const child of Array.from(element.children ?? element.childNodes)) {
-    const el = child as Element
+    const el = child as XmlElement
     if (el.localName === 'text' || el.tagName === 'text') {
       const lang =
         el.getAttribute('xml:lang') ??
@@ -39,15 +69,15 @@ export function getTexts(element: Element | null): BilingualTexts {
 }
 
 /** Get the first element matching a tag name (recursive, like querySelector) */
-function getFirstByTag(parent: Element, tagName: string): Element | null {
+function getFirstByTag(parent: XmlElement, tagName: string): XmlElement | null {
   const results = parent.getElementsByTagName(tagName)
   return results.length > 0 ? results[0] : null
 }
 
 /** Get all elements matching a tag name (recursive, like querySelectorAll) */
-function getAllByTag(parent: Element, tagName: string): Element[] {
+function getAllByTag(parent: XmlElement, tagName: string): XmlElement[] {
   const results = parent.getElementsByTagName(tagName)
-  const out: Element[] = []
+  const out: XmlElement[] = []
   for (let i = 0; i < results.length; i++) {
     out.push(results[i])
   }
@@ -59,7 +89,7 @@ function getAllByTag(parent: Element, tagName: string): Element[] {
  * Accepts a DOMParser instance so the caller can provide either
  * the browser-native DOMParser or @xmldom/xmldom's equivalent.
  */
-export function parseQuestionXml(xmlText: string, domParser: DOMParser): Question {
+export function parseQuestionXml(xmlText: string, domParser: XmlDomParser): Question {
   const doc = domParser.parseFromString(xmlText, 'text/xml')
 
   // Check for parse errors — browser uses <parsererror>, xmldom may throw
@@ -67,6 +97,7 @@ export function parseQuestionXml(xmlText: string, domParser: DOMParser): Questio
   if (parseErrors.length > 0) throw new Error(`XML parse error: ${parseErrors[0].textContent}`)
 
   const root = doc.documentElement
+  if (!root) throw new Error('XML document has no root element')
   const tagName = root.localName
   const id = root.getAttribute('id') ?? ''
   const points = parseInt(root.getAttribute('points') ?? '1', 10)
