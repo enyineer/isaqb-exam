@@ -14,6 +14,7 @@ import { scorePickQuestion, scoreCategoryQuestion } from '../../src/utils/scorin
 import { getQuestionsWithCache } from './questions.ts'
 import { getSession } from './auth.ts'
 import { resolveSession } from './sessions.ts'
+import { isValidNickname } from '../../src/utils/nickname.ts'
 import { z } from 'zod'
 
 // ─── Helpers ─────────────────────────────────────────────────────────
@@ -192,7 +193,13 @@ export async function handleSessionSubmit(idOrSlug: string, request: Request, en
     participantName = jwtSession.name
     participantAvatar = jwtSession.avatar
     authMethod = jwtSession.provider
-  } else if (nickname && nickname.length >= 1 && nickname.length <= 50) {
+  } else if (nickname !== undefined) {
+    if (!isValidNickname(nickname)) {
+      return Response.json(
+        { error: 'Invalid nickname. Use 1–50 characters without control or invisible characters.' },
+        { status: 400 },
+      )
+    }
     participantId = `nickname:${nickname}`
     participantName = nickname
     authMethod = 'nickname'

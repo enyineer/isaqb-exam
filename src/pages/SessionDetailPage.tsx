@@ -28,6 +28,7 @@ import {
   ArrowLeft, Loader2, Copy, Check, Trash2, Pencil, Save,
   ChevronDown, ChevronUp, BarChart3, Users, Download, X,
 } from 'lucide-react'
+import { toCsvRow } from '../utils/csv'
 
 // ─── Tabs ────────────────────────────────────────────────────────────
 
@@ -254,7 +255,7 @@ function SubmissionRow({ submission, index }: SubmissionRowProps) {
 function downloadCsv(submissions: SessionSubmission[], title: string) {
   const header = 'Name,Auth Method,Score,Max Score,Percentage,Passed,Time (ms),Submitted At\n'
   const rows = submissions.map(s =>
-    [s.participantName, s.authMethod, s.score, s.maxScore, s.percentage, s.passed, s.elapsedMs, s.submittedAt].join(','),
+    toCsvRow([s.participantName, s.authMethod, s.score, s.maxScore, s.percentage, s.passed, s.elapsedMs, s.submittedAt]),
   ).join('\n')
   const blob = new Blob([header + rows], { type: 'text/csv' })
   const url = URL.createObjectURL(blob)
