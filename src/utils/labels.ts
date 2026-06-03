@@ -339,6 +339,10 @@ export const labels = {
     de: "Dein Anzeigename…",
     en: "Your display name…",
   },
+  sessionNicknameInvalid: {
+    de: "Bitte nur sichtbare Zeichen verwenden (1-50).",
+    en: "Please use visible characters only (1-50).",
+  },
   sessionJoinAsGuest: { de: "Als Gast beitreten", en: "Join as Guest" },
   sessionOrSignIn: { de: "oder melde dich an:", en: "or sign in:" },
   sessionAlreadySubmitted: {

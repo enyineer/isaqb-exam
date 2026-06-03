@@ -12,6 +12,7 @@ import { useAuth } from '../context/AuthContext'
 import { useExam } from '../context/ExamContext'
 import { useLanguage } from '../context/LanguageContext'
 import { labels } from '../utils/labels'
+import { isValidNickname } from '../utils/nickname'
 import { fetchSession } from '../utils/sessions'
 import type { ExamSession } from '../data/sessionSchema'
 import { getSessionStatus } from '../data/sessionSchema'
@@ -176,11 +177,14 @@ export function SessionExamPage() {
             placeholder={t(labels.sessionNicknamePlaceholder)}
             className="w-full px-3 py-2 rounded-xl border border-border bg-surface-alt text-sm focus:outline-2 focus:outline-primary"
             maxLength={50}
-            onKeyDown={e => { if (e.key === 'Enter' && nickname.trim()) startSessionExam(nickname.trim()) }}
+            onKeyDown={e => { if (e.key === 'Enter' && isValidNickname(nickname)) startSessionExam(nickname.trim()) }}
           />
+          {nickname.trim().length > 0 && !isValidNickname(nickname) && (
+            <p className="text-xs text-error text-left">{t(labels.sessionNicknameInvalid)}</p>
+          )}
           <button
             onClick={() => startSessionExam(nickname.trim())}
-            disabled={!nickname.trim()}
+            disabled={!isValidNickname(nickname)}
             className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-primary text-white font-medium text-sm hover:opacity-90 transition-all cursor-pointer disabled:opacity-50"
           >
             <User size={16} />

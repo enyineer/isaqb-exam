@@ -104,7 +104,9 @@ export async function submitSessionExam(
     ...authHeaders(),
   }
   if (nickname) {
-    headers['X-Participant-Nickname'] = nickname
+    // HTTP header values must be ASCII; percent-encode so non-ASCII characters
+    // (e.g. umlauts like "Schüler") survive transmission intact. Decoded server-side.
+    headers['X-Participant-Nickname'] = encodeURIComponent(nickname)
   }
 
   const res = await fetch(`${WORKER_BASE_URL}/api/sessions/${encodeURIComponent(idOrSlug)}/submit`, {
