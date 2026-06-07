@@ -141,6 +141,17 @@ export function ResultsPage() {
     navigate("/question/1");
   };
 
+  const scrollToQuestion = (questionId: string) => {
+    const el = document.getElementById(`question-review-${questionId}`);
+    if (!el) return;
+    el.scrollIntoView({ behavior: "smooth", block: "start" });
+    el.classList.add("ring-2", "ring-primary");
+    window.setTimeout(
+      () => el.classList.remove("ring-2", "ring-primary"),
+      1500,
+    );
+  };
+
   return (
     <PageLayout headerClassName="print:hidden">
       <main
@@ -270,9 +281,15 @@ export function ResultsPage() {
                     const isLong =
                       timeMs > ((elapsedMs ?? 0) / questions.length) * 1.5; // > 1.5x average
                     return (
-                      <div
+                      <button
                         key={q.id}
-                        className="flex items-center gap-2 text-xs"
+                        type="button"
+                        onClick={() => scrollToQuestion(q.id)}
+                        title={t(labels.jumpToQuestion).replace(
+                          "{n}",
+                          String(i + 1),
+                        )}
+                        className="flex w-full items-center gap-2 text-xs rounded-md px-1 -mx-1 py-0.5 hover:bg-surface-hover focus-visible:outline-2 focus-visible:outline-primary transition-colors cursor-pointer"
                       >
                         <span className="w-6 text-right font-mono text-text-muted shrink-0">
                           {i + 1}
@@ -294,7 +311,7 @@ export function ResultsPage() {
                         >
                           {formatElapsed(timeMs)}
                         </span>
-                      </div>
+                      </button>
                     );
                   })}
                 </div>
@@ -433,7 +450,7 @@ export function ResultsPage() {
                 {t(labels.questionsReview)}
               </h2>
               <div className="space-y-4">
-                {result.questionResults.map((qr) => {
+                {result.questionResults.map((qr, i) => {
                   const question = questions.find(
                     (q) => q.id === qr.questionId,
                   )!;
@@ -443,7 +460,8 @@ export function ResultsPage() {
                   return (
                     <div
                       key={qr.questionId}
-                      className="bg-surface border-2 border-border rounded-xl p-3.5 sm:p-5"
+                      id={`question-review-${qr.questionId}`}
+                      className="bg-surface border-2 border-border rounded-xl p-3.5 sm:p-5 scroll-mt-20 transition-shadow"
                     >
                       {/* Question header */}
                       <div className="flex items-start gap-2 sm:gap-3 mb-3">
@@ -466,6 +484,9 @@ export function ResultsPage() {
                         </span>
                         <div className="flex-1 min-w-0">
                           <p className="text-[13px] sm:text-sm font-medium mb-1">
+                            <span className="font-mono text-text-muted mr-1.5">
+                              {i + 1}.
+                            </span>
                             {t(question.stem)}
                           </p>
                           <p className="text-xs text-text-muted">

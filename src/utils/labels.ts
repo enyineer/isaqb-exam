@@ -82,6 +82,10 @@ export const labels = {
     de: "Fragen, die länger gedauert haben, deuten auf Themen hin, die du nochmals wiederholen solltest.",
     en: "Questions that took longer may indicate topics worth revisiting.",
   },
+  jumpToQuestion: {
+    de: "Zur Frage {n} springen",
+    en: "Jump to question {n}",
+  },
   disclaimer: {
     de: "Dieses Tool und sein Autor sind nicht mit der iSAQB e.V. verbunden.\nEs wird keine Gewähr für die Richtigkeit der Fragen oder des Tests selbst übernommen.",
     en: "This tool and its author are not affiliated with iSAQB e.V.\nNo guarantee is provided for the correctness of the questions or the test itself.",
